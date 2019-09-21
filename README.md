@@ -1,3 +1,5 @@
+疯狂源自梦想，技术成就辉煌
+
 # 关于我
 一个热爱技术、乐于分享、不断追求程序完美的程序猿。
 
@@ -7,7 +9,7 @@
 
 专注分享技术干货，包括Java核心技术、Spring Boot、Spring Cloud、Docker、微服务、数据库、缓存技术、架构设计、运维、面试题/汇总、最新IT行业资讯等。
 
-![程序猿技术大咖](https://github.com/xcbeyond/xcbeyond.github.io/images/程序猿技术大咖二维码.jpg "微信扫码关注")
+![程序猿技术大咖](https://github.com/xcbeyond/xcbeyond.github.io/blob/master/images/%E7%A8%8B%E5%BA%8F%E7%8C%BF%E6%8A%80%E6%9C%AF%E5%A4%A7%E5%92%96%E4%BA%8C%E7%BB%B4%E7%A0%81.jpg?raw=true "微信扫码关注")
 
 # 文章分类
 ## Java
