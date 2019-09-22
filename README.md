@@ -15,14 +15,15 @@
 ## Java
 
 ## Spring Boot
- * [【SpringBoot 系列】一、SpringBoot项目搭建](https://blog.csdn.net/xcbeyond/article/details/80760206)
+ * [【SpringBoot系列】一、SpringBoot项目搭建](https://blog.csdn.net/xcbeyond/article/details/80760206)
  * [【SpringBoot系列】二、如何灵活使用SpringBoot](https://blog.csdn.net/xcbeyond/article/details/80946911)
  * [【SpringBoot系列】三、SpringBoot特性_SpringApplication类(自定义Banner)](https://blog.csdn.net/xcbeyond/article/details/80978561)
  * [【SpringBoot系列】四、SpringBoot特性_外部化配置(properties文件配置)](https://blog.csdn.net/xcbeyond/article/details/81000132)
- * [【SpringBoot系列】五、SpringBoot 日志配置(logback)](https://blog.csdn.net/xcbeyond/article/details/81004331)
- * [【SpringBoot系列】六、SpringBoot 数据库操作(集成MyBatis)](https://blog.csdn.net/xcbeyond/article/details/81012296)
- * [【SpringBoot系列】七、SpringBoot 中使用Redis缓存](https://blog.csdn.net/xcbeyond/article/details/81116600)
- * [【SpringBoot系列】八、SpringBoot 中的事务处理](https://blog.csdn.net/xcbeyond/article/details/81235995)
+ * [【SpringBoot系列】五、SpringBoot日志配置(logback)](https://blog.csdn.net/xcbeyond/article/details/81004331)
+ * [【SpringBoot系列】六、SpringBoot数据库操作(集成MyBatis)](https://blog.csdn.net/xcbeyond/article/details/81012296)
+ * [【SpringBoot系列】七、SpringBoot中使用Redis缓存](https://blog.csdn.net/xcbeyond/article/details/81116600)
+ * [【SpringBoot系列】八、SpringBoot中的事务处理](https://blog.csdn.net/xcbeyond/article/details/81235995)
+ * [【SpringBoot系列】九、SpringBoot中服务间接口调用 **更新中]
 
 ## Spring Cloud
 
@@ -54,6 +55,14 @@
 ## 架构
  * [如何写出完美的接口：接口规范定义、接口管理工具推荐](https://blog.csdn.net/xcbeyond/article/details/95163525)
 
-### 微服务架构实践
- * [微服务架构实践 (一)：微服务架构下各类项目的顺势崛起](https://blog.csdn.net/xcbeyond/article/details/97503091)
- * [微服务架构实践 (二)：微服务架构的设计原则和核心话题](https://blog.csdn.net/xcbeyond/article/details/98392304)
+### 微服务架构下的核心话题
+ * [微服务架构下的核心话题 (一)：微服务架构下各类项目的顺势崛起](https://blog.csdn.net/xcbeyond/article/details/97503091)
+ * [微服务架构下的核心话题 (二)：微服务架构的设计原则和核心话题](https://blog.csdn.net/xcbeyond/article/details/98392304)
+ * [微服务架构下的核心话题 (三)：微服务架构的技术选型 **更新中]
+ * [微服务架构下的核心话题 (四)：微服务的注册与发现 **更新中]
+ * [微服务架构下的核心话题 (六)：微服务中的API网关 **更新中]
+ * [微服务架构下的核心话题 (五)：微服务的通讯方式 **更新中]
+ * [微服务架构下的核心话题 (七)：微服务的集中化配置 **更新中]
+ * [微服务架构下的核心话题 (八)：微服务的部署与发布 **更新中]
+ * [微服务架构下的核心话题 (九): 微服务的日志与监控 **更新中]
+ * [微服务架构下的核心话题 (十)：微服务中的熔断机制 **更新中]
