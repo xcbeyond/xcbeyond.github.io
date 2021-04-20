@@ -5,6 +5,10 @@
     <link>https://xcbeyond.github.io/categories/</link>
     <description>Recent content in Categories on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://xcbeyond.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    
+	<atom:link href="https://xcbeyond.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
   </channel>
 </rss>
