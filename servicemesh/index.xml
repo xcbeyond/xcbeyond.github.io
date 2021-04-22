@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
-    <link>https://xcbeyond.github.io/</link>
-    <description>Recent content on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
+    <title>Service Mesh on xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
+    <link>https://xcbeyond.github.io/servicemesh/</link>
+    <description>Recent content in Service Mesh on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 21 Apr 2021 23:33:52 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>关于我</title>
-      <link>https://xcbeyond.github.io/about/</link>
-      <pubDate>Tue, 20 Apr 2021 10:45:56 +0800</pubDate>
-      
-      <guid>https://xcbeyond.github.io/about/</guid>
-      <description>xcbeyond，现任某公司架构师，微信公众号《程序猿技术大咖》号主， 拥有多年研发、架构经验，乐于技术输出、分享，现阶段从事微服务架构产品研发、中台建设工作，涉及架构设计、技术选型、业务研发等工作。对于Java、微服务、数据库、Docker有深入了解，并有大量的调优经验。</description>
-    </item>
-    
+    <lastBuildDate>Wed, 21 Apr 2021 23:33:52 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/servicemesh/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
       <link>https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/</link>

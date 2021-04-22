@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
+  <meta name="author" content="xcbeyond" />
+  
+  
+  
+  
+  <meta name="keywords" content="devows, hugo, go">
+  
+  
+  <meta name="description" content="Site template made by devcows using hugo">
+
+  <meta name="generator" content="Hugo 0.81.0" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="https://xcbeyond.github.io/index.xml" type="application/rss+xml" title="xcbeyond | 疯狂源自梦想，技术成就辉煌!">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:site_name" content="xcbeyond | 疯狂源自梦想，技术成就辉煌!">
+  <meta property="og:title" content="构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/" />
+  <meta property="og:description" content="Site template made by devcows using hugo">
+  <meta property="og:image" content="https://xcbeyond.github.io/images/banner/913cb0407aa9b161980095570b13824c023867cd.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="1152">
+    <meta property="og:image:height" content="720">
+  
+  
+  <meta property="og:updated_time" content="2021-04-09T14:50:21&#43;0800">
+  
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@GoHugoIO">
+  <meta name="twitter:title" content="构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路">
+  
+  <meta name="twitter:image" content="https://xcbeyond.github.io/images/banner/913cb0407aa9b161980095570b13824c023867cd.jpg">
+  
+  <meta name="twitter:description" content="Site template made by devcows using hugo">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header class="navbar-affixed-top" data-spy="affix" data-offset-top="62">
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">    
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/logo.png" alt="构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路 logo" class="hidden-xs hidden-sm">
+                    <img src="/img/logo-small.png" alt="构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路 logo" class="visible-xs visible-sm">
+                    <span class="sr-only">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路 - 跳到主页</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">切换导航</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">主页</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">微服务 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      
+                        <li><a href="/servicemesh/">Service Mesh</a></li>
+                      
+                    </ul>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/faq/">FAQ</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/about/">关于</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">    
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</header>
+
+
+
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h1>
+                <span></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        
+                          <p class="text-muted text-uppercase mb-small text-right">
+                            作者 xcbeyond
+                             | 
+                            2021-04-09
+                          </p>
+                        
+
+                        <div id="post-content">
+                          <p>作为新一代微服务架构体系，<code>Service Mesh</code> 技术有效地解决了 <code>Spring Cloud</code> 微服务架构和服务治理过程中的痛点问题，一经推出便引起了很大的反响。近一年来，伴随着云原生的热火朝天，<code>Service Mesh</code> 被推向了巅峰，从陌生走向大家的视界，甚至一些初创企业都想从中获得第一桶金。对于初创企业或全新产品，选择 <code>Service Mesh</code> 变得相对轻松很多，毕竟不存在迁移的问题。但对于大部分企业或成熟的产品体系，这样大的架构转型就变得很难以实施，需要多加权衡利弊，面对 <code>Service Mesh</code> 带来的好处，不得不迫使向它靠拢。</p>
+<p>目前很多企业还是采用基于 <code>SDK</code> 的传统微服务框架（例如，<code>Dubbo</code>、<code>Spring Cloud</code>）进行服务治理，而随着 <code>Service Mesh</code> 的普及，越来越多的企业开始布局自己的 <code>Service Mesh</code> 框架体系，但多数企业刚开始不会激进地将所有业务迁移至 <code>Serivice Mesh</code>，毕竟这样风险太大、收益太慢。像 Java 技术栈应用依然保留原框架，而非 Java 技术栈应用采用 <code>Service Mesh</code> 框架，不同开发语言可以用不同的技术框架，但业务不能被框架割裂，那么在这两种架构体系下应用服务如何互联互通？微服务如何统一治理？传统微服务又如何平滑迁移至 <code>Service Mesh</code> 呢？</p>
+<p>如何解决上述问题呢？今天我们就针对构建基于 <code>Spring Cloud</code> 向 <code>Service Mesh</code> 框架迁移过程中的诸多问题展开讨论，尽可能提供一套完善的解决方案和迁移思路，供大家参考。</p>
+<h1 id="1背景">1、背景</h1>
+<p>微服务是近些年来软件架构中的热名词，也是一个很大的概念，不同人对它的理解都各不相同，甚至在早期微服务架构中出现了一批四不像的微服务架构产品，有人把单纯引入<code>Spring Boot</code>、<code>Spring Cloud</code>框架也叫做微服务架构，却只是将它作为服务的Web容器而已。</p>
+<p>随着微服务的火热，越来越多的团队开始实践，将微服务纷纷落地，并投入生产。但随着微服务规模的不断壮大，每增加一个微服务，就可能会增加一些依赖的基础设施和第三方的配置，比如 <code>Kafka</code> 实例等，相应 <code>CI/CD</code> 的配置也会增加或调整。 同时随着微服务数量增多、业务复杂性的提升及需求的多样性等（如，对接第三方异构系统等），服务间通信的错综复杂，一步步地将微服务变得更加臃肿，服务治理也是难上加难，而这些问题在单体架构中很容易解决。为此，有人开始怀疑当初微服务化是否是明智之选，甚至考虑回归到传统单体应用。</p>
+<p>正如下图所示，PPT 中的微服务总是美好的，但现实中的微服务却是一团糟糕，想甩甩不掉，越看越糟心。难道就没有办法了么？</p>
+<p><img src="./%E7%8E%B0%E5%AE%9E%E4%B8%ADvsPPT%E4%B8%AD%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1.png" alt=""></p>
+<h2 id="11-传统微服务架构面临的挑战">1.1 传统微服务架构面临的挑战</h2>
+<p>面对上述暴露出的问题，并在传统微服务架构下，经过实践的不断冲击，面临了更多新的挑战，综上所述，产生这些问题的原因有以下这几点：</p>
+<ul>
+<li><strong>过于绑定特定技术栈。</strong> 当面对异构系统时，需要花费大量精力来进行代码的改造，不同异构系统可能面临不同的改造。</li>
+<li><strong>代码侵入度过高。</strong> 开发者往往需要花费大量的精力来考虑如何与框架或 <code>SDK</code> 结合，并在业务中更好的深度融合，对于大部分开发者而言都是一个高曲线的学习过程。</li>
+<li><strong>多语言支持受限。</strong> 微服务提倡不同组件可以使用最适合它的语言开发，但是在 <code>Spring Cloud</code> 框架下就是Java的天下，多语言的支持难度很大。这也就导致在面对异构系统对接时的无奈，或退而求其次的方案了。</li>
+<li><strong>老旧系统维护难。</strong> 面对老旧系统，很难做到统一维护、治理、监控等，在过度时期往往需要多个团队分而管之，维护难度加大。</li>
+</ul>
+<p>上述这些问题都是在所难免，我们都知道<strong>技术演进来源于实践中不断的摸索，将功能抽象、解耦、封装、服务化。</strong> 随着传统微服务架构暴露出的这些问题，将迎来新的挑战，让大家纷纷寻找其他解决方案。</p>
+<h2 id="12-迎来新一代微服务架构">1.2 迎来新一代微服务架构</h2>
+<p>为了解决传统微服务面临的问题，以应对全新的挑战，微服务架构也进一步演化，最终催生了<code>Service Mesh</code> 的出现，迎来了新一代微服务架构，也被称为下一代微服务。为了更好地理解 <code>Service Mesh</code> 的概念和存在的意义，我们来回顾一下这一演进过程。</p>
+<h3 id="121-耦合阶段">1.2.1 耦合阶段</h3>
+<p>在微服务架构中，服务发现、熔断、治理等能力是微服务架构重要的组成部分。微服务化之后，服务更加的分散，复杂度变得更高，起初开发者将诸如熔断、超时等功能和业务代码封装在一起，使服务具备了网络控制能力，如下图所示。</p>
+<p><img src="./%E5%B0%86%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E5%92%8C%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E8%80%A6%E5%90%88%E5%9C%A8%E4%B8%80%E8%B5%B7.png" alt=""></p>
+<p>这种方案虽然易于实现，但从设计角度来讲却存在一定的缺陷。</p>
+<ul>
+<li>基础设施功能（如，服务发现，负载均衡、熔断等）和业务逻辑高度耦合。</li>
+<li>每个微服务都重复实现了相同功能的代码。</li>
+<li>管理困难。如果某个服务的负载均衡发生变化，则调用它的相关服务都需要更新变化。</li>
+<li>开发者不能集中精力只关注于业务逻辑开发。</li>
+</ul>
+<h3 id="122-公共库sdk">1.2.2 公共库SDK</h3>
+<p>基于上面存在的问题，很容易会想到将基础设施功能设计为一个公共库SDK，让服务的业务逻辑与这些功能降低耦合度，提高重复利用率，更重要的是开发者只需要关注公共库SDK的依赖及使用，而不必关注实现这些公共功能，从而更加专注于业务逻辑的开发，比如 <code>Spring Cloud</code> 框架是类似的方式。如下图所示：</p>
+<p><img src="./%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%A2%AB%E5%B0%81%E8%A3%85%E5%9C%A8%E5%85%AC%E5%85%B1%E5%BA%93%E9%87%8C.PNG" alt=""></p>
+<p>实际上即便如此，它仍然有一些不足之处。</p>
+<ul>
+<li>这些公共库SDK存在较为陡峭的学习成本，需要耗费开发人员一定的时间和人力与现有系统集成，甚至需要考虑修改现有代码进行整合。</li>
+<li>这些公共库SDK一般都是通过特定语言实现，缺乏多语言的支持，在对现有系统整合时有一定的局限性。</li>
+<li>公共库SDK的管理和维护依然需要耗费开发者的大量精力，并需专门人员来进行管理维护。</li>
+</ul>
+<h3 id="123-sidecar模式">1.2.3 Sidecar模式</h3>
+<p>有了上面公共库SDK的启发，加上跨语言问题、更新后的发布和维护等问题，人们发现更好的解决方案是把它作为一个代理，服务通过这个透明的代理完成所有流量的控制。</p>
+<p>这就是典型的 <code>Sidecar</code> 代理模式，也被翻译为边车代理，它作为与其他服务通信的桥梁，为服务提供额外的网络特性，并与服务独立部署，对服务零侵入，更不会受限于服务的开发语言和技术栈，如下图所示。</p>
+<p><img src="./Sidecar%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>以 <code>Sidecar</code> 模式进行通信代理，实现了基础实施层与业务逻辑的完全隔离，在部署、升级时带来了便利，做到了真正的基础设施层与业务逻辑层的彻底解耦。另一方面，<code>Sidecar</code> 可以更加快速地为应用服务提供更灵活的扩展，而不需要应用服务的大量改造。<code>Sidecar</code> 可以实现以下主要功能：</p>
+<ul>
+<li><strong>服务注册。</strong> 帮助服务注册到相应的服务注册中心，并对服务做相关的健康检查。</li>
+<li><strong>服务路由。</strong> 当应用服务调用其它服务时，<code>Sidecar</code> 可以帮助从服务发现中找到相应的服务地址，完成服务路由功能。</li>
+<li><strong>服务治理。</strong> <code>Sidecar</code> 可以完全拦截服务进出的流量，并对其进行相应的调用链跟踪、熔断、降级、日志监控等操作，将服务治理功能集中在 <code>Sidecar</code> 中实现。</li>
+<li><strong>集中管控。</strong> 整个微服务架构体系下的所有服务完全可以通过 <code>Sidecar</code> 来进行集中管控，完成对服务的流控、下线等。</li>
+</ul>
+<p>于是，应用服务终于可以做到跨语言开发、并更专注于业务逻辑的开发。</p>
+<h3 id="124-service-mesh">1.2.4 Service Mesh</h3>
+<p>把 <code>Sidecar</code> 模式充分应用于一个庞大的微服务架构系统，为每个应用服务配套部署一个 <code>Sidecar</code> 代理，完成服务间复杂的通信，最终就会得到一个如下所示的网络拓扑结构，这就是 <code>Service Mesh</code>，又称之为“服务网格“。</p>
+<p><img src="./%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC%E7%BD%91%E7%8A%B6%E7%BB%93%E6%9E%84.png" alt=""></p>
+<p>至此，迎来了新一代微服务架构——<code>Service Mesh</code>，它彻底解决了传统微服务架构所面临的问题。</p>
+<h2 id="13-什么是service-mesh">1.3 什么是Service Mesh</h2>
+<p>在开始进入主题之前，我认为有必要再对 <code>Service Mesh</code> 进行统一的阐述，这样将有助于理解它，更加便于阅读接下来的内容。</p>
+<h3 id="131-service-mesh介绍">1.3.1 Service Mesh介绍</h3>
+<p><code>Service Mesh</code>翻译为“服务网格”，作为<strong>服务间通信的基础设施层</strong>。轻量级高性能网络代理，提供安全的、快速的、可靠地服务间通讯，与实际应用部署一起，但对应用透明。应用作为服务的发起方，只需要用最简单的方式将请求发送给本地的服务网格代理，然后网格代理会进行后续的操作，如服务发现，负载均衡，最后将请求转发给目标服务。</p>
+<p><strong><code>Service Mesh</code>目的是解决系统架构微服务化后的服务间通信和治理问题。</strong> 服务网格由<code>Sidecar</code>节点组成，这个模式的精髓在于实现了数据面（业务逻辑）和控制面的解耦。具体到微服务架构中，即给每一个微服务实例同步部署一个<code>Sidecar</code>。</p>
+<p><img src=".%5CServiceMesh%E9%83%A8%E7%BD%B2%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt=""></p>
+<p>在<code>Service Mesh</code>部署网络结构图中，绿色方块为应用服务，蓝色方块为 <code>SideCar</code>，应用服务之间通过<code>Sidecar</code>进行通信，整个服务通信形成图中的蓝色网络连线，图中所有蓝色部分就形成了<code>Service Mesh</code>。其具备如下主要特点：</p>
+<ul>
+<li>应用程序间通讯的中间层。</li>
+<li>轻量级网络代理。</li>
+<li>应用程序无感知。</li>
+<li>解耦应用程序的重试/超时、监控、追踪和服务发现。</li>
+</ul>
+<p><code>Service Mesh</code> 的出现解决了传统微服务框架中的痛点，使得开发人员专注于业务本身，同时，将服务通信及相关管控功能从业务中分离到基础设施层。</p>
+<h3 id="132-service-mesh的功能">1.3.2 Service Mesh的功能</h3>
+<p>那么 <code>Service Mesh</code> 到底能够做什么呢？</p>
+<p><code>Service Mesh</code> 作为微服务架构中负责网络通信的基础设施层，具备网络处理的大部分功能。下面列举了一些主要的功能：</p>
+<ul>
+<li><strong>动态路由。</strong> 可通过路由规则来动态路由到所请求的服务，便于不同环境、不同版本等的动态路由调整。</li>
+<li><strong>故障注入。</strong> 通过引入故障来模拟网络传输中的问题（如延迟）来验证系统的健壮性，方便完成系统的各类故障测试。</li>
+<li><strong>熔断。</strong> 通过服务降级来终止潜在的关联性错误。</li>
+<li><strong>安全。</strong> 在<code>Service Mesh</code>上实现安全机制（如<code>TLS</code>），并且很容易在基础设施层完成安全机制更新。</li>
+<li><strong>多语言支持。</strong> 作为独立运行且对业务透明的 <code>Sidecar</code> 代理，<code>Service Mesh</code> 很轻松地支持多语言的异构系统。</li>
+<li><strong>多协议支持。</strong> 同多语言一样，也支持多协议。</li>
+<li><strong>指标和分布式链路追踪。</strong></li>
+</ul>
+<p>概括起来，<code>Service Mesh</code> 主要体现在以下4个方面：</p>
+<ul>
+<li><strong>可见性：</strong> 运行时指标遥测、分布式跟踪。</li>
+<li><strong>可管理性：</strong> 服务发现、负载均衡、运行时动态路由等。</li>
+<li><strong>健壮性：</strong> 超时、重试、熔断等弹性能力。</li>
+<li><strong>安全性：</strong> 服务间访问控制、<code>TLS</code> 加密通信。</li>
+</ul>
+<h3 id="133-service-mesh解决什么问题">1.3.3 Service Mesh解决什么问题</h3>
+<p>从上述<code>Service Mesh</code>的介绍和功能来看：</p>
+<ul>
+<li><strong>基础设施层是<code>Service Mesh</code>的定位</strong>，致力于解决微服务基础设施标准化、配置化、服务化和产品化的问题。</li>
+<li><strong>服务间通信是<code>Service Mesh</code>技术层面对的问题</strong>，对微服务屏蔽通信的复杂度，解决微服务的通信治理问题。</li>
+<li>请求的可靠传递是<code>Service Mesh</code>的目标。</li>
+<li>轻量级网络代理是<code>Service Mesh</code>的部署方式。</li>
+<li>对应用程序透明是<code>Service Mesh</code>的亮点和特色，实现对业务无侵入。</li>
+</ul>
+<p>综合上述，<code>Service Mesh</code>主要解决用户如下3个维度的痛点需求：</p>
+<ul>
+<li>
+<p><strong>完善的微服务基础设施</strong></p>
+<p>通过将微服务通信下沉到基础设施层，屏蔽了微服务处理各种通信问题的复杂度，形成微服务之间的抽象协议层。开发者无需关心通信层的具体实现，也无需关注<code>RPC</code>通信（包含服务发现、负载均衡、流量调度、流量降级、监控统计等）的一切细节，真正像本地调用一样使用微服务，通信相关的一起工作直接交给<code>Service Mesh</code>。</p>
+</li>
+<li>
+<p><strong>语言无关的通信和链路治理</strong></p>
+<p>功能上，<code>Service Mesh</code>并没有提供任何新的特性和能力，<code>Service Mesh</code>提供的所有通信和服务治理能力在<code>Service Mesh</code>之前的技术中均能找到，比如<code>Spring Cloud</code>就实现了完善的微服务<code>RPC</code>通信和服务治理支持。</p>
+<p><strong><code>Service Mesh</code>改变的是通信和服务治理能力提供的方式，通过将这些能力实现从各语言业务实现中解耦，下沉到基础设施层面，以一种更加通用和标准化的方式提供，屏蔽不同语言、不同平台的差异性</strong>，有利于通信和服务治理能力的迭代和创新，使得业务实现更加方便。</p>
+<p><code>Service Mesh</code>避免了多语言服务治理上的重复建设，通过<code>Service Mesh</code>语言无关的通信和服务治理能力，助力于多语言技术栈的效率提升。</p>
+</li>
+<li>
+<p><strong>通信和服务治理的标准化</strong></p>
+<ul>
+<li><strong>微服务治理层面</strong>，<code>Service Mesh</code>是标准化、体系化、无侵入的分布式治理平台。</li>
+<li><strong>标准化方面</strong>，<code>Sidecar</code>成为所有微服务流量通信的约束标准，同时<code>Service Mesh</code>的数据平台和控制平面也通过标准协议进行交互。</li>
+<li><strong>体系化方面</strong>，从全局考虑，提供多维度立体的微服务可观测能力（<code>Metric</code>、<code>Trace</code>、<code>Logging</code>），并提供体系化的服务治理能力，如限流、熔断、安全、灰度等。</li>
+</ul>
+<p>通过标准化，带来一致的服务治理体验，减少多业务之间由于服务治理标准不一致带来的沟通和转换成本，提升全局服务治理的效率。</p>
+</li>
+</ul>
+<h3 id="134-service-mesh框架选型">1.3.4 Service Mesh框架选型</h3>
+<p>下面对针对目前市面上常见的 <code>Service Mesh</code> 框架进行的比较汇总，见下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>Linkerd 2</th>
+<th>Envoy</th>
+<th>Istio</th>
+<th>Conduit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>代理</td>
+<td><code>Finagle</code> + <code>Jetty</code></td>
+<td><code>Envoy</code></td>
+<td><code>Envoy</code></td>
+<td><code>Conduit</code></td>
+</tr>
+<tr>
+<td>熔断</td>
+<td>支持。基于连接的熔断器<code>Fast Fail</code>和基于请求的熔断器<code>Failure Accrual</code>。</td>
+<td>支持。通过特定准则，如最大连接数、 最大请求数、最大挂起请求数或者最大重试数的设定。</td>
+<td>支持。通过特定准则，如最大连接数和最大请求数等的设定。</td>
+<td>暂不支持。</td>
+</tr>
+<tr>
+<td>动态路由</td>
+<td>支持。通过设置<code>Linkerd</code>的<code>dtab</code>规则实现不同版本服务请求的动态路由。</td>
+<td>支持。通过服务的版本或环境信息实现。</td>
+<td>支持。通过服务的版本或环境信息实现。</td>
+<td>暂不支持。</td>
+</tr>
+<tr>
+<td>流量分流</td>
+<td>支持。以增量和受控的方式实现分流。</td>
+<td>支持。以增量和受控的方式实现分流。</td>
+<td>支持。以增量和受控的方式实现分流。</td>
+<td>暂不支持。</td>
+</tr>
+<tr>
+<td>服务发现</td>
+<td>支持。支持多种服务发现机制，如基于文件的服务发现、<code>Consul</code>、<code>Zookeeper</code>、<code>Kubernetes</code>等。</td>
+<td>支持。通过提供平台无关的服务发现接口实现与不同服务发现工具集成。</td>
+<td>支持。通过提供平台无关的服务发现接口实现与不同服务发现工具集成。</td>
+<td>只支持<code>Kubernetes</code>。</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>支持。提供多种负载均衡算法。</td>
+<td>支持。提供多种负载均衡算法，如<code>Round Robin</code>、加权最小请求、哈希环、<code>Maglev</code>等。</td>
+<td>支持。提供多种负载均衡算法，如<code>Round Robin</code>、加权最小请求、哈希环、<code>Maglev</code>等。</td>
+<td>支持。当前只有HTTP请求支持基于<code>P2C</code> + <code>least-loaded</code>的负载均衡算法。</td>
+</tr>
+<tr>
+<td>安全通信</td>
+<td>支持<code>TLS</code>。</td>
+<td>支持<code>TLS</code>。</td>
+<td>支持<code>TLS</code>。</td>
+<td>支持<code>TLS</code>。</td>
+</tr>
+<tr>
+<td>访问控制</td>
+<td>不支持。</td>
+<td>不支持。</td>
+<td>支持。基于<code>RBAC</code>的访问控制。</td>
+<td>暂不支持。</td>
+</tr>
+<tr>
+<td>可见性</td>
+<td>分布式追踪(<code>Zipkin</code>)、运行时指标(<code>InfluxDB</code>、<code>Prometheus</code>、<code>statsd</code>)</td>
+<td>分布式追踪(<code>Zipkin</code>)、运行时指标(<code>statsd</code>)</td>
+<td>分布式追踪(<code>Zipkin</code>)、运行时指标(<code>Prometheus</code>、<code>statsd</code>)、监控(<code>NewRepic</code>、<code>Stackdriver</code>)</td>
+<td>运行时指标(<code>Prometheus</code>)</td>
+</tr>
+<tr>
+<td>部署模式</td>
+<td><code>sidecar</code>或者<code>per-host</code>模式</td>
+<td><code>sidecar</code>模式</td>
+<td><code>sidecar</code>模式</td>
+<td><code>sidecar</code>模式</td>
+</tr>
+<tr>
+<td>控制平面</td>
+<td><code>Namerd</code></td>
+<td>没有，但可通过API实现。</td>
+<td><code>Pilot</code>、<code>Mixer</code>、<code>Citadel</code></td>
+<td><code>Conduit</code></td>
+</tr>
+<tr>
+<td>协议支持</td>
+<td><code>HTTP/1.x</code>、<code>HTTP/2</code>、<code>gRPC</code></td>
+<td><code>HTTP/1.x</code>、<code>HTTP/2</code>、<code>gRPC</code>、<code>TCP</code></td>
+<td><code>HTTP/1.x</code>、<code>HTTP/2</code>、<code>gRPC</code>、<code>TCP</code></td>
+<td><code>HTTP/1.x</code>、<code>HTTP/2</code>、<code>gRPC</code>、<code>TCP</code></td>
+</tr>
+<tr>
+<td>运行平台</td>
+<td>平台无关</td>
+<td>平台无关</td>
+<td>目前支持<code>Kubernetes</code>，平台无关是最终实现目标。</td>
+<td>只支持<code>Kubernetes</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>上述任何一个 <code>Service Mesh</code> 框架都能够满足您的基本需求。到⽬前为⽌，<code>Istio</code> 具有这几个服务⽹格框架中最多的功能和灵活性，灵活性意味着复杂性，因此需要团队更为充⾜的准备。如果只想使⽤基本的 <code>Service Mesh</code> 治理功能，<code>Linkerd</code> 可能是最佳选择。如果您想⽀持同时包含 <code>Kubernetes</code> 和 <code>VM</code> 的异构环境，并且不需要 <code>Istio</code> 的复杂性，那么 <code>Consul</code> 可能是您的最佳选择，⽬前 <code>Istio</code> 也提供了同时包含 <code>Kubernetes</code> 和 <code>VM</code> 的异构环境的⽀持。</p>
+<p>从另一个角度来看，目前 <code>Istio</code> 社区正在快速迭代以应对各种场景，并力争作为 <code>Service Mesh</code> 的标杆，本文以选取 <code>Istio</code> 框架作为最终迁移框架。</p>
+<h2 id="14-框架迁移迫在眉睫">1.4 框架迁移迫在眉睫</h2>
+<p>为了更好的占领市场，满足更多业务场景的需求，传统微服务架构（如，基于 <code>Spring Cloud</code> 框架的微服务架构）面临了众多新的挑战，而 <code>Service Mesh</code> 的出现正好解决了这些问题。面对新的框架体系，对于传统微服务架构该如何应对？</p>
+<p>对于 <code>Spring Cloud</code> 框架的微服务向 <code>Service Mesh</code> 框架迁移必将迫在眉睫，是推翻重来，还是循序迁移？如果迁移，又该如何？</p>
+<h1 id="2service-mesh迁移方案">2、Service Mesh迁移方案</h1>
+<p>对于还未涉足 <code>Service Mesh</code> 的企业或产品，其传统微服务架构如若已采用 <code>Spring Cloud</code> 框架构建，此时向<code>Service Mesh</code> 框架迁移该如何做呢？需要综合考虑哪些因素？是否有依可据呢？</p>
+<p>接下来，我们就构建基于<code>Spring Cloud</code> 向 <code>Service Mesh</code> 框架迁移提供一些建议方案和思路，供大家参考。</p>
+<h2 id="21-迁移场景">2.1 迁移场景</h2>
+<p>传统微服务框架，我们以最为典型的 <code>Spring Cloud</code> 框架为例进行迁移说明。首先，我们先看一下这样的一个迁移场景，目前的微服务架构是这样的，如下图左边部分：</p>
+<ul>
+<li>应用是部署在虚拟机或物理机上。（服务还未容器化）</li>
+<li>框架是基于 <code>Spring Cloud</code> 框架开发。（服务中包含的业务逻辑和 <code>Spring Cloud</code> 组件相依赖，业务和框架耦合度过高）</li>
+<li>开发语言是以Java为主。（存在跨语言的问题）</li>
+<li>注册中心采用的是 <code>Consul</code> 或 <code>Eureka</code>。（服务需引入注册中心依赖包，存在一定的耦合）</li>
+</ul>
+<p>目前开源 <code>Istio</code> 已经成为 <code>Service Mesh</code> 事实上的标准，更是新一代微服务架构发展的趋势，因此公司希望尝试迁移到 <code>Istio</code> 框架，希望最终形成类似下图右边部分。</p>
+<p><img src="./SpringCloud%E5%90%91ServiceMesh%E8%BF%81%E7%A7%BB%E5%9C%BA%E6%99%AF%E5%9B%BE.png" alt=""></p>
+<h2 id="22-迁移路径">2.2 迁移路径</h2>
+<p>面对上述迁移场景，确定要引入 <code>Service Mesh</code> 时，就要彻底搞清楚 <code>Service Mesh</code> 迁移的具体路径。</p>
+<p><strong>首先</strong>，要对自己项目做以下评估：</p>
+<ul>
+<li>是否真的有必要引入迁移到 <code>Service Mesh</code> 上？</li>
+<li>当前微服务架构下，是否面临传统微服务架构面临的挑战？</li>
+<li>当前微服务架构，是否已经阻碍或影响未来业务的发展？</li>
+<li>公司或技术团队，是否有能力、人力、精力来投入到 <code>Service Mesh</code> 的迁移？</li>
+</ul>
+<p><strong>其次</strong>，完成 <code>Service Mesh</code> 微服务平台的搭建。当前所处阶段是否已经支持容器化和 <code>Kubernetes</code>。如果当前业务已经运行在 <code>Kubernetes</code> 之上，则 <code>Service Mesh</code> 的迁移将会比较顺畅；如果当前业务没有运行在<code>Kubernetes</code>上，因 <code>Service Mesh</code> 当前典型的 <code>Istio</code> 框架对 <code>Kubernetes</code> 有着过度依赖，所以可能就无法直接从 <code>Spring Cloud</code> 迁移到 <code>Istio</code> 框架，即使定制修改 <code>Istio</code> 以接触对 <code>Kubernetes</code> 的依赖，将会付出很大的代价。这时通常有两条迁移路径可以选择。</p>
+<p><strong>路径一：非 <code>Kubernetes</code> 环境下，先接入 <code>Sidecar</code></strong></p>
+<p>如果当前业务没法快速容器化，同时又有引入 <code>Service Mesh</code> 的迫切需求，可采取先接入 <code>Sidecar</code>，来满足当前业务的痛点需求。在引入 <code>Sidecar</code> 时，要注意其未来的演进方向，考虑后续可能继续向 <code>Service Mesh</code> 迁移，一旦时机成熟并引入 <code>Kubernetes</code> 容器化后，则能够顺利由 <code>Sidecar</code> 的方式直接演进到 <code>Service Mesh</code>。</p>
+<p><code>Service Mesh</code> 当前典型的 <code>Istio</code> 框架在非 <code>Kubernetes</code> 下没有很好的支持（据说未来会完全脱离对<code>Kubernetes</code> 的依赖），对 <code>Istio</code> 进行定制化修改以支持非 <code>Kubernetes</code> 环境将会付出很大的代价，非特别强烈的需求和强大的技术储备，一般不建议这么做，特别是对于一些中小公司而言。</p>
+<p>如果一定要在非 <code>Kubernetes</code> 环境下引入 <code>Service Mesh</code>，数据平面可使用 <code>Envoy</code>，控制平面可根据 <code>XDS</code> 协议进行自研。</p>
+<p><strong>路径二：先进行 <code>Kubernetes</code> 容器化改造，再接入 <code>Service Mesh</code></strong></p>
+<p>倘若公司有云平台或容器化团队，可采用公司资源共享的方式，先借助其他团队来完成 <code>Kubernetes</code> 容器化改造，再接入 <code>Service Mesh</code>。</p>
+<p>**最后， **基于构建的 <code>Service Mesh</code> 框架，将业务应用逐步迁移到 <code>Service Mesh</code> 上来。</p>
+<h2 id="23-迁移原则">2.3 迁移原则</h2>
+<p>在实施迁移时，必须要时刻遵守以下迁移原则。</p>
+<ul>
+<li>
+<p><strong>渐进式迁移：</strong> 为了避免 <code>Service Mesh</code> 迁移过程中的风险，必须采用渐进式迁移原则，每次只迁移少量服务，待迁移后观察足够长的时间，没有问题后再继续迁移。</p>
+</li>
+<li>
+<p><strong>业务透明：</strong> 为减少 <code>Service Mesh</code> 迁移对业务的影响，减少业务的迁移阻力，迁移初期必须确保业务完全透明且不需要过多的变更和修改。</p>
+<p>方案上，为保证迁移对业务的完全透明，在数据平面通信上可采用支持透明拦截的方式，对业务请求流量透明拦截。</p>
+</li>
+<li>
+<p><strong>兼容性：</strong> 在迁移阶段，必然会存在两种模式（ <code>Spring Cloud</code> 和 <code>Service Mesh</code> 框架）并存，在迁移过程中需要充分考虑两者的兼容性，使得迁移前后网络打通，至少能够满足未迁移和已迁移部分能够通信。</p>
+</li>
+</ul>
+<h2 id="24-迁移方案">2.4 迁移方案</h2>
+<p>从 <code>Spring Cloud</code> 向 <code>Service Mesh</code> 框架迁移，大体上分为四个步骤：<code>Spring Cloud</code> 架构分析、容器化改造、<code>Service Mesh</code> 微服务平台搭建和应用迁移。</p>
+<h3 id="241-spring-cloud架构分析">2.4.1 Spring Cloud架构分析</h3>
+<p><code>Spring Cloud</code> 架构分析的目的在于重新了解我们当前微服务架构下的所有功能，便于在向 <code>Service Mesh</code> 迁移时做准备，考虑哪些功能需要迁移，哪些不需要迁移，哪些需要改造等。我们先看一下基于 <code>Spring Cloud</code> 完整构建的微服务架构解决方案，如下图所示。</p>
+<p><img src="./SpringCloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84.png" alt=""></p>
+<p>从上图经过分析，我们可以汇总得知它主要由以下几部分组成：</p>
+<ul>
+<li><strong>代理&amp;网关：</strong> 提供统一对外或对内的访问入口，包括路由、鉴权、限流、熔断、降级等统一处理。</li>
+<li><strong>注册中心：</strong> 提供服务的注册与发现功能。</li>
+<li><strong>应用服务：</strong> 覆盖整个业务服务，包括业务逻辑实现、框架SDK及外部组件依赖交互等。</li>
+<li><strong>中间件&amp;数据存储：</strong> 为应用服务提供额外的支持能力。</li>
+<li><strong>CI&amp;CD：</strong> 持续集成、持续部署。</li>
+</ul>
+<p>上述这几部分中哪些内容是我们可以去掉或者说基于 <code>Service Mesh</code> （以 <code>Istio</code> 为例）能够去做的？经过分析得知，可以替换的组件包括网关（<code>Gateway</code> 或者 <code>Zuul</code>，由 <code>Ingress gateway</code> 或者 <code>egress</code> 替换），熔断器（<code>hystrix</code>，由 <code>Sidecar</code> 替换），注册中心（<code>Eureka</code> 及 <code>Eureka client</code>，由 <code>Polit</code>，<code>Sidecar</code> 替换），负责均衡（ <code>Ribbon</code>，由 <code>Sidecar</code> 替换）等。</p>
+<p>此阶段，我们能够大致知道 <code>Spring Cloud</code> 中的哪些内容可以由 <code>Istio</code> 处理，哪些内容可以继续沿用。</p>
+<h3 id="242-容器化改造">2.4.2 容器化改造</h3>
+<p>容器化改造，主要针对目前还未引入 <code>Kubernetes</code> 容器化的场景。</p>
+<p>在容器化改造之前，我们有必要知道改造的优势及要求。</p>
+<p><strong>容器化改造优势：</strong></p>
+<ul>
+<li><strong>更省：</strong> 极大的资源利用效率， 最大限度榨取和共享物理资源，多项目更能体现出容器化多优势，节约部署 IT 成本。</li>
+<li><strong>更快：</strong> 秒级启动，实现业务系统更快的开发迭代 和 交付部署。</li>
+<li><strong>弹性：</strong> 可根据业务负载进行弹性容器伸缩，弹性扩展。</li>
+<li><strong>方便：</strong> 容器化业务部署支持蓝绿/灰度/金丝雀等发布，回滚，更加灵活方便。</li>
+<li><strong>灵活：</strong> 监控底层 node 节点健康状态，灵活调度至最优节点部署。</li>
+<li><strong>强一致性：</strong> 容器将环境和代码打包在镜像内，保证了测试与生产环境的强一致性。</li>
+</ul>
+<p><strong>容器化改造要求：</strong></p>
+<ul>
+<li>
+<p><strong>掌握 <code>Docker</code> 技术：</strong> 开发人员需熟悉 <code>Docker</code> 容器化技术，熟练编写 <code>Dockerfile</code> 文件。</p>
+</li>
+<li>
+<p><strong>掌握 <code>Kubernetes</code> 编排系统：</strong> 熟悉 <code>Kubernetes</code> 容器化编排系统，  熟悉各组件资源清单编写、高可用、 <code>RBAC</code> 安全策略等。</p>
+</li>
+</ul>
+<p>容器化改造，主要分为以下两个阶段：</p>
+<ul>
+<li><strong>容器化构建：</strong> 将基于 <code>Spring Cloud</code> 搭建的所有服务实现容器化构建，实现 <code>Docker</code> 镜像打包。</li>
+<li><strong>容器化管理：</strong> 基于 <code>Kubernetes</code> 进行服务容器的管理。</li>
+</ul>
+<h4 id="2421-容器化构建">2.4.2.1 容器化构建</h4>
+<p>容器化构建需借助编写的 <code>Dockerfile</code> 文件，并通过 <code>Jenkins</code> 自动化完成对 <code>Docker</code> 镜像的制作。这里以一个简单的<a href="https://github.com/xcbeyond/springCloudLearning/tree/master/serviceProvider">serviceProvider服务</a>（基于 <code>Spring Cloud</code> 框架开发）为例说明构建过程：</p>
+<p>（1）创建 <code>Dockerfile</code> 文件。</p>
+<p>在服务<code>serviceProvider/src/main/docker</code>目录下创建一个 <code>Dockerfile</code> 文件，内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> java:8</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir /microservice<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /microservice</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ADD</span> /service-provider-1.0.jar /microservice/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8001</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;java&#34;</span>, <span style="color:#e6db74">&#34;-Djava.security.egd=file:/dev/./urandom&#34;</span>, <span style="color:#e6db74">&#34;-jar&#34;</span>, <span style="color:#e6db74">&#34;/microservice/service-provider-1.0.jar&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>（2）配置pom <code>docker-maven-plugin</code>插件。</p>
+<p>在服务<code>serviceProvider</code> 的 <code>pom.xml</code> 中配置 <code>build</code> 部分，内容如下：</p>
+<pre><code>&lt;!-- 打包配置 --&gt;
+	&lt;build&gt;
+		&lt;defaultGoal&gt;install&lt;/defaultGoal&gt;
+		&lt;!-- build后的文件名，默认值是${artifactId}-${version}。  --&gt;
+    	&lt;finalName&gt;service-provider-${project.version}&lt;/finalName&gt;
+    
+		&lt;plugins&gt;
+			&lt;plugin&gt;
+				&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+				&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+			&lt;/plugin&gt;
+			
+			&lt;!-- 配置docker maven插件，绑定install生命周期，在运行maven install时生成docker镜像 --&gt;
+	        &lt;plugin&gt;
+	            &lt;groupId&gt;com.spotify&lt;/groupId&gt;
+	            &lt;artifactId&gt;docker-maven-plugin&lt;/artifactId&gt;
+	            &lt;version&gt;0.4.13&lt;/version&gt;
+	            &lt;executions&gt;
+	                &lt;execution&gt;
+	                    &lt;phase&gt;install&lt;/phase&gt;
+	                    &lt;goals&gt;
+	                        &lt;goal&gt;build&lt;/goal&gt;
+	                        &lt;goal&gt;tag&lt;/goal&gt;
+	                    &lt;/goals&gt;
+	                &lt;/execution&gt;
+	            &lt;/executions&gt;
+	            &lt;configuration&gt;
+	                &lt;!-- 修改这里的docker节点ip，需要打开docker节点的远程管理端口2375。可在hosts中进行dockerip的配置 --&gt;
+	                &lt;dockerHost&gt;http://dockerip:2375&lt;/dockerHost&gt;
+	                &lt;imageName&gt;${project.build.finalName}&lt;/imageName&gt;
+	                &lt;baseImage&gt;java&lt;/baseImage&gt;
+	                &lt;!-- 这里的entryPoint定义了容器启动时的运行命令，容器启动时运行 java -jar 包名 , -Djava.security.egd这个配置解决tomcat8启动时，因为需要收集环境噪声来生成安全随机数导致启动过慢的问题--&gt;
+	                &lt;entryPoint&gt;
+	                    [&quot;java&quot;, &quot;-Djava.security.egd=file:/dev/./urandom&quot;, &quot;-jar&quot;, &quot;/${project.build.finalName}.jar&quot;]
+	                &lt;/entryPoint&gt;
+	                &lt;resources&gt;
+	                    &lt;resource&gt;
+	                        &lt;targetPath&gt;/&lt;/targetPath&gt;
+	                        &lt;directory&gt;${project.build.directory}&lt;/directory&gt;
+	                        &lt;include&gt;${project.build.finalName}.jar&lt;/include&gt;
+	                    &lt;/resource&gt;
+	                &lt;/resources&gt;
+	                &lt;image&gt;${docker.image.prefix}/${project.build.finalName}&lt;/image&gt;
+	                &lt;newName&gt;${docker.image.prefix}/${project.build.finalName}:${docker.tag}&lt;/newName&gt;
+	                &lt;forceTags&gt;true&lt;/forceTags&gt;
+	                &lt;!-- 如果需要在生成镜像时推送到远程库，pushImage设为true --&gt;
+	                &lt;pushImage&gt;false&lt;/pushImage&gt;
+	            &lt;/configuration&gt;
+	        &lt;/plugin&gt;
+		&lt;/plugins&gt;
+	&lt;/build&gt;
+</code></pre><p>（3）打包。</p>
+<p>在执行 <code>mvn package</code> 的时候，会根据 <code>pom.xml</code> 中 <code>build</code> 配置自动打包 <code>Docker</code> 镜像，并推送到Docker服务器上。</p>
+<p>至此，就顺利地完成了容器化构建，这一步对于原有服务基本没有影响，打包成功后只需进行验证测试即可，以确保镜像打包存在问题。</p>
+<h4 id="2422-容器化管理">2.4.2.2 容器化管理</h4>
+<p>容器化管理实际上就是将服务容器通过 <code>Kubernetes</code>编排系统，完成对服务部署、管理等，需要对 <code>Kubernetes</code> 有一定的了解，会熟练使用它，看参考之前写的<a href="https://xie.infoq.cn/tag/7282">”Kubernetes从入门到精通“</a>系列文章。</p>
+<h3 id="243-service-mesh-微服务平台搭建">2.4.3 Service Mesh 微服务平台搭建</h3>
+<p><code>Service Mesh</code> 我们选取 <code>Istio</code> 框架，关于选型方案可参考之前文章：<a href="https://xie.infoq.cn/article/fa7e10501c948f177d9f52fe0">Service Mesh 框架选型对比分析：Linkerd、Envoy、Istio、Conduit</a>。</p>
+<h4 id="2431-istio基础框架搭建">2.4.3.1 istio基础框架搭建</h4>
+<p>基于 <code>Istio</code> 框架搭建 <code>Istio</code> 基础框架，在控制平面和数据平台提供分别提供以下能力：</p>
+<ul>
+<li><strong>控制平面：</strong> 提供服务⽹格控制指令下发、服务配置、 权限控制等功能。</li>
+<li><strong>数据平台：</strong> 提供服务治理、服务监控及运维、流量管控等功能。</li>
+</ul>
+<p>上述功能在 <code>Istio</code> 框架上都能找到对应的功能，并通过适当的资源清单配置即可完成。</p>
+<p><code>Istio</code> 架构图如下：</p>
+<p><img src="./Istio%E6%9E%B6%E6%9E%84%E5%9B%BE.png" alt=""></p>
+<p>至此，一个 <code>Istio</code> 基础框架搭建完成，能够提供 <code>Service Mesh</code> 的所有能力。</p>
+<h4 id="2432-istio扩展和定制">2.4.3.2 istio扩展和定制</h4>
+<p>在迁移路径中已经提及过，对于非 <code>Kubernetes</code> 环境，建议先引入 <code>Sidecar</code>，并采取 <code>istio</code> 对虚拟机的支持方案，在虚拟机环境下运行。但如果有多平台支持的场景，比如既有 <code>Kubernetes</code> 环境，又有虚拟机环境，需对 <code>istio</code> 进行定制化改造，去掉对 <code>Kubernetes</code> 的强依赖和耦合，增加对其他平台的支持。（对于多平台的支持，目前<code>istio</code> 还未支持，但从 <code>istio</code> 官方相关文档可以看出，多平台的支持最终肯定支持，我们只需拭目以待。）</p>
+<p><code>Istio</code> 对 <code>Kubernetes</code> 的耦合主要有以下几个方面，因此需要针对性的适配修改。</p>
+<p><strong>（1）API资源管理层对 Kubernetes API Server 的依赖</strong></p>
+<p>资源管理层是 <code>Istio</code> 对 <code>Kubernetes</code> 依赖最大的地方。<code>Istio</code> 对核心资源的管理，是以 <code>Kubernetes CRD</code> 为基础，并使用 <code>kubectl</code> 作为命令行操作入口，<code>kubectl</code> 调用 <code>API Server</code>，将资源存放在 <code>etcd</code> 中，并通过 <code>Kubernetes CRD</code> 机制触发资源变更事件通知，通知关心 <code>Istio</code> 资源变更事件的模块进行相关处理。</p>
+<p>如需解除<code>Istio</code> 对 <code>Kubernetes</code> 的绑定，则需要自行实现这一套API管理方式，并且做到平台无关。</p>
+<p><strong>（2）通信访问层面对 kube DNS 的依赖</strong></p>
+<p>通信层面，在客户端发送请求前，先通过 <code>DNS</code> 获取服务的虚拟IP地址，<code>Istio</code> 的 <code>DNS</code> 实现沿用<code>Kubernetes DNS</code> 方案，基于 <code>DNS</code> 通过服务名实现直接访问。因此需要在 <code>DNS</code> 方案层面接触和<code>Kubernetes</code> 的耦合，并使用平台无关的 <code>DNS</code> 解决方案。</p>
+<h4 id="2433-两种框架并存">2.4.3.3 两种框架并存</h4>
+<p>对于体量较大的业务，不可能一次性迁移完成，需遵守“渐进式迁移”原则，逐步迁移，所以实际迁移过程中可能面临这样的诉求：</p>
+<ul>
+<li>
+<p>一些存量老业务运行在虚拟机或者物理机上，暂时没有容器化改造计划，但希望通过 <code>Service Mesh</code> 来做服务治理。</p>
+</li>
+<li>
+<p>新上的业务或者存量的非关键业务可以做为试点，先容器化、<code>Service Mesh</code> 化，其它业务依然采用原有的运行方式和微服务框架。</p>
+</li>
+<li>
+<p>对于未迁移的存量应用和迁移完成的 <code>Service Mesh</code> 应用依然能保持业务上的互通。</p>
+</li>
+</ul>
+<p>面对上述这些真实而又合理的诉求，在进行 <code>Service Mesh</code> 微服务平台搭建时，必然会存在两种框架并存的场景，如下图所示，左边是未迁移的存量服务，右边是容器化并 <code>Service Mesh</code> 化的试点服务，但这种模式服务间却是互不相同，且无法统一治理。</p>
+<p><img src="./SpringCloud%E5%92%8CServiceMesh%E4%B8%A4%E7%A7%8D%E6%A1%86%E6%9E%B6%E5%85%B1%E5%AD%98%EF%BC%88%E6%95%B4%E5%90%88%E5%89%8D%EF%BC%89.png" alt=""></p>
+<p>那么两种框架并存时，如何服务间互通，统一治理呢？</p>
+<p>在业内流行这样一句话：计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决。</p>
+<p>同样，我们可以针对 <code>Service Mesh</code> 的控制平面做些文章，通过自定义控制插件（<code>WASM</code>）将 <code>Spring Cloud</code> 框架中原有注册中心的功能纳入进来，由控制平面提供原有服务注册与发现的能力，并结合 <code>Istio</code> 中入口网关 <code>Ingress</code> 和 <code>ServiceEntry</code> 资源配置，以实现服务间互通，统一治理，整个实现逻辑架构如下图所示。</p>
+<p><img src="./SpringCloud%E5%92%8CServiceMesh%E4%B8%A4%E7%A7%8D%E6%A1%86%E6%9E%B6%E5%85%B1%E5%AD%98%EF%BC%88%E6%95%B4%E5%90%88%E5%90%8E%EF%BC%89.png" alt=""></p>
+<p>至此，实现了基于<code>Spring Cloud</code> 和 <code>Istio</code> 两种框架的并存。</p>
+<h3 id="244-应用迁移">2.4.4 应用迁移</h3>
+<p>到这里，我们已经完成了 <code>Service Mesh</code> 微服务平台的搭建，那在这样的平台上我们如何将应用 <code>Spring Cloud</code> 应用逐步向 <code>Service Mesh</code> 迁移呢？</p>
+<h4 id="2441-去除重叠功能">2.4.4.1 去除重叠功能</h4>
+<p>我们先来看一下 <code>Spring Cloud</code> 框架与 <code>Istio</code> 框架的功能重叠情况：</p>
+<table>
+<thead>
+<tr>
+<th>功能列表</th>
+<th>Spring Cloud</th>
+<th>Isito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务注册与发现</td>
+<td>支持，基于Eureka，consul等组件。</td>
+<td>支持，基于<code>XDS</code>接口获取服务信息，并依赖“虚拟服务路由表”实现服务发现，可灵活扩展任何注册中心。</td>
+</tr>
+<tr>
+<td>链路监控</td>
+<td>支持，基于<code>Zikpin</code> 、 <code>Pinpoint</code>或者<code>Skywalking</code> 实现。</td>
+<td>支持，基于<code>Sidecar</code> 代理模型，记录网络请求信息。</td>
+</tr>
+<tr>
+<td>服务网关</td>
+<td>支持，基于 <code>zuul</code> 或者 <code>Spring-Cloud-gateway</code> 实现。</td>
+<td>支持，基于<code>Ingress gateway</code> 以及 <code>egress</code>实现。</td>
+</tr>
+<tr>
+<td>熔断器</td>
+<td>支持，基于<code>Hystrix</code> 实现。</td>
+<td>支持，基于声明配置文件，最终转化成路由规则实现。</td>
+</tr>
+<tr>
+<td>服务路由</td>
+<td>支持，基于网关层实现路由转发。</td>
+<td>支持，基于iptables规则实现，通过 <code>VirtualService</code> 和<code>DestinationRule</code>灵活配置。</td>
+</tr>
+<tr>
+<td>安全策略</td>
+<td>支持，基于 <code>spring-security</code>组件实现，包括认证，鉴权等，支持通信加密。</td>
+<td>支持，基于 <code>RBAC</code> 的权限模型，依赖 <code>Kubernetes</code>实现，同时支持通信加密。</td>
+</tr>
+<tr>
+<td>配置中心</td>
+<td>支持，<code>Spring Cloud Config</code>组件实现。</td>
+<td>不支持。</td>
+</tr>
+<tr>
+<td>性能监控</td>
+<td>支持，基于 <code>Spring cloud</code> 提供的监控组件收集数据，对接第三方的监控数据存储。</td>
+<td>支持，基于<code>Sidecar</code>代理，记录服务调用性能数据，并通过metrics adapter，导入第三方数据监控工具。</td>
+</tr>
+<tr>
+<td>日志收集</td>
+<td>支持，对接第三方日志系统，例如 <code>ELK</code>。</td>
+<td>支持，基于 <code>Sidecar</code> 代理，记录日志信息，并通过<code>log adapter</code>，导入第三方日志系统。</td>
+</tr>
+</tbody>
+</table>
+<p>从上表功能情况，存在大量重叠功能，需将<code>Spring Cloud</code> 与 <code>Istio</code> 中重叠功能去除，缺失功能保留，理论上可轻松去重。对于 <code>Spring Cloud</code> 而言，这些重叠功能大部分只需去除 <code>pom.xml</code> 中依赖包、相关配置及代码中注解即可轻松完成，剩余一个相对干净的应用。</p>
+<h4 id="2442-应用注入">2.4.4.2 应用注入</h4>
+<p>应用注入是指在将应用服务部署到网格时，将 <code>Sidecar</code> 注入到应用服务中去，以实现网格的代理。</p>
+<p><code>Sidecar</code> 注入，分为手动注入和自动注入：</p>
+<ul>
+<li>
+<p><strong>手动注入：</strong> 通过手动执行 <code>istioctl kube-inject</code> 来重新构造应用的 <code>CRD yaml</code>。</p>
+</li>
+<li>
+<p><strong>自动注入：</strong> 通过 <code>Kubernetes</code> 的 <code>mutable webhook</code> 回调 <code>istio-sidecar-injector</code> 服务来重新构造应用的 <code>CRD yaml</code>。</p>
+</li>
+</ul>
+<p>如下图所示：</p>
+<p><img src="./Sidecar%E6%B3%A8%E5%85%A5.jpg" alt=""></p>
+<p>无论是手动注入还是自动注入，<code>Sidecar</code> 注入的本质是将运行 <code>Sidecar</code> 所需要的镜像地址、启动参数、所连接的 <code>Istio</code> 集群（<code>Pilot</code>、<code>Citadel</code>、<code>Galley</code>）及配置信息填充到注入模版，并添加到应用的 <code>CRD yaml</code> 中，最终通过 <code>Kubernetes</code> 持久化资源并拉起应用和 <code>Sidecar</code> 的 <code>POD</code>。</p>
+<p>此时，应用已成功迁移部署到 <code>Service Mesh</code> 中了。</p>
+<h1 id="3总结">3、总结</h1>
+<p>这篇文章从传统微服务架构开始一步步介绍到 <code>Service Mesh</code>，并提出了传统微服务架构面临的挑战，针对现状，如何能够更好的满足市场需求，而不被市场淘汰，介绍了传统微服务如何平滑迁移至 <code>Service Mesh</code> 的过程，并给出了一些解决方案、步骤及思路，供大家参考。</p>
+<p>希望能够帮您解决实际迁移过程中遇到的问题，能够帮助大家在做架构演进或迁移时带来一些思考和启发。</p>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://istio.io/latest/docs/concepts/what-is-istio/">https://istio.io/latest/docs/concepts/what-is-istio/</a></li>
+<li>刘俊海 著《Service Mesh微服务架构设计》</li>
+<li><a href="https://mp.weixin.qq.com/s/y9PZLgHhVcdsMuTzAyIMsQ">https://mp.weixin.qq.com/s/y9PZLgHhVcdsMuTzAyIMsQ</a></li>
+<li><a href="https://www.servicemesher.com/blog/service-mesh-rebuild-microservice-market/">https://www.servicemesher.com/blog/service-mesh-rebuild-microservice-market/</a></li>
+<li><a href="https://mp.weixin.qq.com/s/-MszFJORuDJKf3V5ndyimw">https://mp.weixin.qq.com/s/-MszFJORuDJKf3V5ndyimw</a></li>
+<li><a href="https://www.servicemesher.com/blog/netease-yeation-service-mesh/">https://www.servicemesher.com/blog/netease-yeation-service-mesh/</a></li>
+</ol>
+
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">搜索</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="搜索">
+                <input type="hidden" name="sitesearch" value="https://xcbeyond.github.io/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>关于我们</h4>
+
+            <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>最新博客</h4>
+
+            <div class="blog-entries">
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+        <div class="col-md-4 col-sm-6">
+
+          <h4>联系</h4>
+
+            
+
+            <a href="/contact" class="btn btn-small btn-template-main">跳到联系页面</a>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2015 - 2021, xcbeyond; all rights reserved.</p>
+            
+            <p class="pull-right">
+              模板来自 <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              移植到 Hugo 来自 <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+
+<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCFhtWLJcE30xOAjcbSFi-0fnoVmQZPb1Y&v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+  </body>
+</html>
