@@ -1,40 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
-    <link>https://xcbeyond.github.io/</link>
-    <description>Recent content on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
+    <title>Kubernetes on xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
+    <link>https://xcbeyond.github.io/kubernetes/</link>
+    <description>Recent content in Kubernetes on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 24 Apr 2021 20:09:14 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>关于我</title>
-      <link>https://xcbeyond.github.io/about/</link>
-      <pubDate>Tue, 20 Apr 2021 10:45:56 +0800</pubDate>
-      
-      <guid>https://xcbeyond.github.io/about/</guid>
-      <description>xcbeyond，现任某公司架构师，CSDN博客专家，腾讯云社区年度优秀作者，InfoQ写作平台作者，微信公众号《程序猿技术大咖》号主， 拥有多年研发、架构经验，乐于技术输出、分享，现阶段从事微服务架构产品研发、中台建设工作，涉及架构设计、技术选型、业务研发等工作。对于Java、微服务、数据库、Docker有深入了解，并有大量的调优经验。
-我是xcbeyond，您也可以叫我&amp;quot;超哥&amp;quot;，一个热爱编程、热爱技术的人，乐于技术输出、分享。
-疯狂源自梦想，技术成就辉煌！
-个人微信公众号：程序猿技术大咖，“专注分享技术干货，不为别的，只为技术沉淀&amp;hellip;”，欢迎关注！</description>
-    </item>
-    
-    <item>
-      <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
-      <link>https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/</link>
-      <pubDate>Fri, 09 Apr 2021 14:50:21 +0800</pubDate>
-      
-      <guid>https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
-      <description>作为新一代微服务架构体系，Service Mesh 技术有效地解决了 Spring Cloud 微服务架构和服务治理过程中的痛点问题，一经推出便引起了很大的反响。近一年来，伴随着云原生的热火朝天，Service Mesh 被推向了巅峰，从陌生走向大家的视界，甚至一些初创企业都想从中获得第一桶金。对于初创企业或全新产品，选择 Service Mesh 变得相对轻松很多，毕竟不存在迁移的问题。但对于大部分企业或成熟的产品体系，这样大的架构转型就变得很难以实施，需要多加权衡利弊，面对 Service Mesh 带来的好处，不得不迫使向它靠拢。
-目前很多企业还是采用基于 SDK 的传统微服务框架（例如，Dubbo、Spring Cloud）进行服务治理，而随着 Service Mesh 的普及，越来越多的企业开始布局自己的 Service Mesh 框架体系，但多数企业刚开始不会激进地将所有业务迁移至 Serivice Mesh，毕竟这样风险太大、收益太慢。像 Java 技术栈应用依然保留原框架，而非 Java 技术栈应用采用 Service Mesh 框架，不同开发语言可以用不同的技术框架，但业务不能被框架割裂，那么在这两种架构体系下应用服务如何互联互通？微服务如何统一治理？传统微服务又如何平滑迁移至 Service Mesh 呢？
-如何解决上述问题呢？今天我们就针对构建基于 Spring Cloud 向 Service Mesh 框架迁移过程中的诸多问题展开讨论，尽可能提供一套完善的解决方案和迁移思路，供大家参考。
-1、背景 微服务是近些年来软件架构中的热名词，也是一个很大的概念，不同人对它的理解都各不相同，甚至在早期微服务架构中出现了一批四不像的微服务架构产品，有人把单纯引入Spring Boot、Spring Cloud框架也叫做微服务架构，却只是将它作为服务的Web容器而已。
-随着微服务的火热，越来越多的团队开始实践，将微服务纷纷落地，并投入生产。但随着微服务规模的不断壮大，每增加一个微服务，就可能会增加一些依赖的基础设施和第三方的配置，比如 Kafka 实例等，相应 CI/CD 的配置也会增加或调整。 同时随着微服务数量增多、业务复杂性的提升及需求的多样性等（如，对接第三方异构系统等），服务间通信的错综复杂，一步步地将微服务变得更加臃肿，服务治理也是难上加难，而这些问题在单体架构中很容易解决。为此，有人开始怀疑当初微服务化是否是明智之选，甚至考虑回归到传统单体应用。
-正如下图所示，PPT 中的微服务总是美好的，但现实中的微服务却是一团糟糕，想甩甩不掉，越看越糟心。难道就没有办法了么？
-1.1 传统微服务架构面临的挑战 面对上述暴露出的问题，并在传统微服务架构下，经过实践的不断冲击，面临了更多新的挑战，综上所述，产生这些问题的原因有以下这几点：
- 过于绑定特定技术栈。 当面对异构系统时，需要花费大量精力来进行代码的改造，不同异构系统可能面临不同的改造。 代码侵入度过高。 开发者往往需要花费大量的精力来考虑如何与框架或 SDK 结合，并在业务中更好的深度融合，对于大部分开发者而言都是一个高曲线的学习过程。 多语言支持受限。 微服务提倡不同组件可以使用最适合它的语言开发，但是在 Spring Cloud 框架下就是Java的天下，多语言的支持难度很大。这也就导致在面对异构系统对接时的无奈，或退而求其次的方案了。 老旧系统维护难。 面对老旧系统，很难做到统一维护、治理、监控等，在过度时期往往需要多个团队分而管之，维护难度加大。  上述这些问题都是在所难免，我们都知道技术演进来源于实践中不断的摸索，将功能抽象、解耦、封装、服务化。 随着传统微服务架构暴露出的这些问题，将迎来新的挑战，让大家纷纷寻找其他解决方案。</description>
-    </item>
-    
+    <lastBuildDate>Sat, 24 Apr 2021 20:09:14 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kubernetes介绍篇：是什么？为什么要用？</title>
       <link>https://xcbeyond.github.io/kubernetes/introduction-chapter-what-is-kubernetes/</link>

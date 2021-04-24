@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Kubernetes介绍篇：是什么？为什么要用？</title>
+  <meta name="author" content="xcbeyond" />
+  
+  
+  
+  
+  <meta name="keywords" content="devows, hugo, go">
+  
+  
+  <meta name="description" content="是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。">
+
+  <meta name="generator" content="Hugo 0.81.0" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="https://xcbeyond.github.io/index.xml" type="application/rss+xml" title="xcbeyond | 疯狂源自梦想，技术成就辉煌!">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:site_name" content="xcbeyond | 疯狂源自梦想，技术成就辉煌!">
+  <meta property="og:title" content="Kubernetes介绍篇：是什么？为什么要用？">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xcbeyond.github.io/kubernetes/introduction-chapter-what-is-kubernetes/" />
+  <meta property="og:description" content="是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。">
+  <meta property="og:image" content="https://xcbeyond.github.io/images/kubernetes/Kubernets%E6%89%80%E5%B1%9E%E5%9C%B0%E4%BD%8D.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="1352">
+    <meta property="og:image:height" content="1014">
+  
+  
+  <meta property="og:updated_time" content="2020-10-26T10:18:25&#43;0800">
+  
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@GoHugoIO">
+  <meta name="twitter:title" content="Kubernetes介绍篇：是什么？为什么要用？">
+  
+  <meta name="twitter:image" content="https://xcbeyond.github.io/images/kubernetes/Kubernets%E6%89%80%E5%B1%9E%E5%9C%B0%E4%BD%8D.jpg">
+  
+  <meta name="twitter:description" content="是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header class="navbar-affixed-top" data-spy="affix" data-offset-top="62">
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">    
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/images/logo.png" alt="Kubernetes介绍篇：是什么？为什么要用？ logo" class="hidden-xs hidden-sm">
+                    <img src="/images/logo-small.png" alt="Kubernetes介绍篇：是什么？为什么要用？ logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Kubernetes介绍篇：是什么？为什么要用？ - 跳到主页</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">切换导航</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">主页</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">微服务 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      
+                        <li><a href="/servicemesh/">Service Mesh</a></li>
+                      
+                    </ul>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">容器 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      
+                        <li><a href="/kubernetes/">Kubernetes</a></li>
+                      
+                    </ul>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/about/">关于</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">    
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</header>
+
+
+
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Kubernetes介绍篇：是什么？为什么要用？</h1>
+                <span>是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        
+                          <p class="text-muted text-uppercase mb-small text-right">
+                            作者 xcbeyond
+                             | 
+                            2020-10-26
+                          </p>
+                        
+
+                        <div id="post-content">
+                          <blockquote>
+<p>是时候该学习<code>Kubernetes</code>了，不然都不敢说自己了解容器、了解Docker。</p>
+</blockquote>
+<h1 id="1kubernetes的前世">1、Kubernetes的前世</h1>
+<p><code>Kubernetes</code>，它是一个全新的基于容器技术的分布式架构方案，近些年在容器领域使用非常广泛，作为容器化部署实施的典型方案。</p>
+<p>看似很新（相对于刚出现时来说），但它却是谷歌十几年以来大规模应用容器技术的经验积累和升华的重要成果。确切地说，<code>Kubernetes</code>是谷歌严格保密十几年的秘密武器——<code>Borg</code>的一个开源版本。<code>Borg</code>是谷歌的一个久负盛名的内部使用的大规模集群管理系统，它基于容器技术，目的是实现资源管理的自动化，以及跨过个数据中心资源利用率的最大化。十几年以来，谷歌一直通过<code>Borg</code>系统管理者数据庞大的应用程序集群，由于谷歌员工都签署了保密协议，即使离职也不能泄露<code>Borg</code>的内部设计，所以外界一直无法了解关于它的更多信息。直到2015年4月，传闻许久的<code>Borg</code>论文发布，伴随着<code>Kubernetes</code>的高调宣传被谷歌首次公开，大家才得以了解它的更多内幕。正式由于站在<code>Borg</code>这个前辈的肩膀上，汲取了<code>Borg</code>过去十年间的经验与教训，所以<code>Kubernetes</code>一经开源就一鸣惊人，并迅速称霸容器领域。</p>
+<p><img src="./Borg-Kubernetes.png" alt=""></p>
+<p><code>Borg</code>就是一个喷气式飞机的驾驶系统，非常的专业和高大上，他适用于谷歌这样的大公司，它有几百万的机器。<code>Kubernetes</code>是一个它的简化版，它是一辆设计优良的轿车，它适合中小型公司，更方便的用它来调度自己的集群。</p>
+<h1 id="2kubernetes是什么">2、Kubernetes是什么？</h1>
+<p><code>Kubernetes</code>是<strong>用于自动部署，扩展和管理容器化应用程序的开源系统</strong>，它将组成应用程序的容器组合成逻辑单元，以便于管理和服务发现。<code>Kubernetes</code>源自谷歌15年生产环境的运维经验，同时凝聚了社区的最佳创意和实践。</p>
+<p>![](./Kubernetes logo.jpg)</p>
+<p><code>Kubernetes</code>，构建在Docker技术之上，为跨主机的容器化应用提供资源调度、服务发现、高可用管理和弹性伸缩等一整套功能，它提供了完善的管理工具，涵盖开发、部署测试、运维监控等各个环节。它的目标不仅仅是一个编排系统，更是提供一个规范，可以让你来描述集群的架构，定义服务的最终状态，<code>Kubernetes</code>可以帮你将系统自动达到和维持在这个状态。</p>
+<p><img src="./Kubernetes%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8%E7%9A%84%E6%BC%94%E5%8F%98%E8%BF%87%E7%A8%8B.jpg" alt=""></p>
+<h2 id="21-亮点">2.1 亮点</h2>
+<p><strong>亮点1：</strong> <code>Kubernetes</code>以“<strong>一切以服务（Service）为中心，一切围绕服务运转</strong>”作为指导思想的创新型产品。它在功能和架构设计上始终遵循着这一指导思想，构建在<code>Kubernetes</code>上的系统不仅可以独立运行在物理机、虚拟机集群或企业私有云上，也可以被托管在公有云上。</p>
+<p><strong>亮点2：</strong> <code>Kubernetes</code>是一个<strong>开放的开发平台</strong>。与J2EE不同，它不局限于任何一种语言，没有限定任何编程接口，所以不论是用Java、Go、C++还是Python编写的程序，都可以被映射为<code>Kubernetes</code>的Service，并通过标准的TCP通讯协议进行交互。此外，<code>Kubernetes</code>平台对现有的编程语言、编程框架、中间件没有任何侵入性，做到了零侵入，因此现有的系统也很容易改造升级并迁移到<code>Kubernetes</code>平台之上。</p>
+<p><strong>亮点3：</strong> <code>Kubernetes</code>的另一个亮点是<strong>自动化</strong>。在<code>Kubernetes</code>的解决方案中，一个可以自我扩展、自我诊断，并且容易升级，在收到服务扩容的请求后，<code>Kubernetes</code>会触发调度流程，最终在选定的目标节点上启动相应数据的服务实例副本，这些服务实例副本在启动成功后会自动加入负载均衡器中并生效，整个过程无须额外的人工操作。另外，<code>Kubernetes</code>会定时巡查每个服务的所有实例的可用性，确保服务实例的数量始终保持为预期的数量，当它发现某个实例不可用时，会自动重启该实例或者其他节点上重新调度、运行一个新实例，这样一个复杂的过程无须人工干预即可全部自动完成。</p>
+<p><strong>亮点4：</strong> <code>Kubernetes</code>是一个完备的<strong>分布式系统支撑平台</strong>。具备完备的集群管理能力，包括多层次的安全防护和准入机制、多租户应用支撑能力、透明的服务注册和服务发现机制、内建的智能负载均衡器、强大的故障发现和自我修复能力、服务滚动升级和在线扩容能力、可扩展的资源自动调度机制，以及多粒度的资源配额管理能力。同时，<code>Kubernetes</code>提供了完善的管理工具，这些涵盖了包括开发、部署测试、运维监控在内的各个环节。因此，<code>Kubernetes</code>是一个全新的基于容器技术的分布式架构解决方案，并且是一个一站式的完备的分布式系统开发和支持平台。</p>
+<p>随着容器化部署环境限制、语言差异、容器数量的庞大、负载均衡、故障检测、故障修复等问题，倘若将过多的精力、时间放在这些地方，其工作量将会多大，将会让很多企业、产品对容器望而止步。在容器化的时代，<code>Kubernetes</code>足以免去上述面临的问题，让容器化使用变得的更加容易、轻松，只需花费更多的时间去完成业务功能的开发。</p>
+<h2 id="22-特性">2.2 特性</h2>
+<p><code>Kubernetes</code>特性如下：</p>
+<p><strong>Service拓扑：</strong> 基于集群拓扑的服务流量路由。可以让一个服务基于集群的<code>Node</code>拓扑进行流量路由。例如，一个服务可以指定流量是被优先路由到一个和客户端在同一个<code>Node</code>或者在同一可用区域的端点。
+<strong>端点切片：</strong> Kubernetes 集群中网络端点的可扩展跟踪。
+<strong>存储编排：</strong> 自动挂载所选存储系统，包括本地存储、诸如 <a href="https://cloud.google.com/storage/">GCP</a> 或 <a href="https://aws.amazon.com/products/storage/">AWS</a> 之类公有云提供商所提供的存储或者诸如 NFS、iSCSI、Gluster、Ceph、Cinder 或 Flocker 这类网络存储系统。
+<strong>Secret和配置管理：</strong> 部署和更新 Secrets 和应用程序的配置而不必重新构建容器镜像，且不必将软件堆栈配置中的秘密信息暴露出来。
+<strong>批量执行：</strong> 除了服务之外，Kubernetes 还可以管理你的批处理和 CI 工作负载，在期望时替换掉失效的容器。
+<strong>服务发现与负载均衡：</strong> 无需修改您的应用程序即可使用陌生的服务发现机制。Kubernetes 为容器提供了自己的 IP 地址和一个 DNS 名称，并且可以在它们之间实现负载均衡。
+<strong>自我修复：</strong> 重新启动失败的容器，在节点死亡时替换并重新调度容器，杀死不响应用户定义的健康检查的容器，并且在它们准备好服务之前不会将它们公布给客户端。
+<strong>自动化上线和回滚：</strong> Kubernetes 会分步骤地将针对应用或其配置的更改上线，同时监视应用程序运行状况以确保你不会同时终止所有实例。如果出现问题，Kubernetes 会为你回滚所作更改。你应该充分利用不断成长的部署方案生态系统。
+<strong>自动装箱：</strong> 根据资源需求和其他约束自动放置容器，同时避免影响可用性。将关键性工作负载和尽力而为性质的服务工作负载进行混合放置，以提高资源利用率并节省更多资源。
+<strong>IPv4/IPv6双协议栈：</strong> 为 Pod 和 Service 分配 IPv4 和 IPv6 地址。
+<strong>水平扩缩：</strong> 使用一个简单的命令、一个UI或基于CPU使用情况自动对应用程序进行扩缩。</p>
+<h1 id="3为什么使用kubernetes">3、为什么使用Kubernetes？</h1>
+<p>使用<code>Kubernetes</code>的理由很多，最重要的理由是，IT行业从来都是由新技术驱动的。</p>
+<p>当前，Docker容器化技术已经被很多公司采用，从单机走向集群已成为必然。云计算的蓬勃发展正在加速这一进程。<code>Kubernetes</code>作为当前被业界广泛认可和看好的基于Docker的大规模容器化分布式系统解决方案，得到了以谷歌为首的IT巨头们的大力宣传和维持推进。</p>
+<p>2015年，谷歌联合20多家公司一起建立了<code>CNCF</code>（Cloud Native Computing Foundation，云原生计算基金会）开源组织来推广<code>Kubernetes</code>，并由此开创了云原生应用（Cloud Native Application）的新时代。作为CNCF“钦定”的官方云原生平台，<code>Kubernetes</code>正在颠覆应用程序的开发方式。</p>
+<p>不妨从以下几个方面来看看，你一定会喜欢上它的哦！</p>
+<h2 id="31-一个平台搞定所有">3.1 一个平台搞定所有</h2>
+<p>使用 <code>Kubernetes</code>部署任何应用都是小菜一碟。只要应用可以打包成镜像，能够容器部署，<code>Kubernetes</code>就一定能启动它。</p>
+<p><img src="./%E4%B8%80%E4%B8%AA%E5%B9%B3%E5%8F%B0%E6%90%9E%E5%AE%9A%E6%89%80%E6%9C%89.jpg" alt="一个平台搞定所有"></p>
+<p>不管什么语言、什么框架写的应用（如：Java, Python, Node.js），<code>Kubernetes</code>都可以在任何环境中安全的启动它，如：物理服务器、虚拟机、云环境。</p>
+<h2 id="32-云环境无缝迁移">3.2 云环境无缝迁移</h2>
+<p>如果你有换云环境的需求，例如从GCP到AWS，使用<code>Kubernetes</code>的话，你就不用有任何担心。</p>
+<p><img src="./%E4%BA%91%E7%8E%AF%E5%A2%83%E6%97%A0%E7%BC%9D%E8%BF%81%E7%A7%BB.jpg" alt="云环境无缝迁移"></p>
+<p><code>Kubernetes</code>完全兼容各种云服务提供商，例如 <code>Google Cloud</code>、<code>Amazon</code>、<code>Microsoft Azure</code>，还可以工作在 <code>CloudStack</code>, <code>OpenStack</code>, <code>OVirt</code>, <code>Photon</code>, <code>VSphere</code>等。</p>
+<h2 id="33-高效的利用资源">3.3 高效的利用资源</h2>
+<p>看下图，左边是4个虚拟机，黄色和蓝色部分是运行的应用，白色部分是未使用的内存和处理器资源。</p>
+<p>右边，同样的应用打包运行在容器中。</p>
+<p><img src="./%E9%AB%98%E6%95%88%E7%9A%84%E5%88%A9%E7%94%A8%E8%B5%84%E6%BA%90.jpg" alt=""></p>
+<p><code>Kubernetes</code>如果发现有节点工作不饱和，便会重新分配<code>pod</code>，帮助我们节省开销，高效的利用内存、处理器等资源。</p>
+<p>如果一个节点宕机了，<code>Kubernetes</code>会自动重新创建之前运行在此节点上的<code>pod</code>，在其他节点上运行。</p>
+<h2 id="34-开箱即用的自动缩放能力">3.4 开箱即用的自动缩放能力</h2>
+<p>网络、负载均衡、复制等特性，对于<code>Kubernetes</code>都是开箱即用的。</p>
+<p>pod是无状态运行的，任何时候有pod宕了，立马会有其他pod接替它的工作，用户完全感觉不到。</p>
+<p>如果用户量突然暴增，现有的pod规模不足了，那么会自动创建出一批新的pod，以适应当前的需求。</p>
+<p>反之亦然，当负载降下来的时候，<code>Kubernetes</code>也会自动缩减 pod 的数量。</p>
+<p><img src="./%E5%BC%80%E7%AE%B1%E5%8D%B3%E7%94%A8%E7%9A%84%E8%87%AA%E5%8A%A8%E7%BC%A9%E6%94%BE%E8%83%BD%E5%8A%9B.jpg" alt="开箱即用的自动缩放能力"></p>
+<h2 id="35-使cicd更简单">3.5 使CI/CD更简单</h2>
+<p>你不必精通于<code>Chef</code> 和 <code>Ansible</code>这类工具，只需要对 CI 服务写个简单的脚本然后运行它，就会使用你的代码创建一个新的 pod，并部署到 <code>Kubernetes</code>集群里面。</p>
+<p>应用打包在容器中使其可以安全的运行在任何地方，例如你的 PC、一个云服务器，使得测试极其简单。</p>
+<p><img src="./%E4%BD%BFCI%E3%80%81CD%E6%9B%B4%E7%AE%80%E5%8D%95.jpg" alt=""></p>
+<h2 id="36-可靠性">3.6 可靠性</h2>
+<p><code>Kubernetes</code>如此流行的一个重要原因是：应用会一直顺利运行，不会被pod或节点的故障所中断。</p>
+<p>如果出现故障，<code>Kubernetes</code>会创建必要数量的应用镜像，并分配到健康的pod或节点中，直到系统恢复。</p>
+<p>而且用户不会感到任何不适。</p>
+<p><img src="./%E5%8F%AF%E9%9D%A0%E6%80%A7.jpg" alt=""></p>
+<p>一个容器化的基础设施是有自愈能力的，可以提供应用程序的不间断操作，即使一部分基础设施出现故障。</p>
+<h1 id="4总结">4、总结</h1>
+<p><code>Kubernetes</code>使得应用的启动、迁移、部署变得简单又安全。</p>
+<p>不必担心应用迁移后工作出现问题，也不用担心一台服务器无法应付突发的用户量。</p>
+<p>需要注意的是，你的应用最好使用微服务架构进行开发，因为微服务应用比单体应用更适合做容器化。</p>
+<p>不要为了单纯的使用<code>Kubernetes</code>而引入，要看你的系统规模是否值得去用，否则可能适得其反，毕竟<code>Kubernetes</code>的学习是需要一定成本。</p>
+<blockquote>
+<p>参考文章：</p>
+<ol>
+<li>
+<p><a href="http://www.mamicode.com/info-detail-1436432.html">http://www.mamicode.com/info-detail-1436432.html</a></p>
+</li>
+<li>
+<p><a href="https://yellow.systems/blog/why-you-should-use-kubernetes-in-your-next-project">https://yellow.systems/blog/why-you-should-use-kubernetes-in-your-next-project</a></p>
+</li>
+</ol>
+</blockquote>
+
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>关于我们</h4>
+
+            <p>专注分享技术干货，不为别的，只为技术沉淀…</p>
+        <p>请关注我的微信公众号</p>
+        <img src="images/qrcode/cxyjsdk.jpg" class="img-responsive" width="30%" height="30%" alt="" >
+        
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>最新博客</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/">
+                          
+                            <img src="/images/banner/913cb0407aa9b161980095570b13824c023867cd.jpg" class="img-responsive" alt="构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://xcbeyond.github.io/kubernetes/introduction-chapter-what-is-kubernetes/">
+                          
+                            <img src="/images/kubernetes/Kubernets%e6%89%80%e5%b1%9e%e5%9c%b0%e4%bd%8d.jpg" class="img-responsive" alt="Kubernetes介绍篇：是什么？为什么要用？">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://xcbeyond.github.io/kubernetes/introduction-chapter-what-is-kubernetes/">Kubernetes介绍篇：是什么？为什么要用？</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2015 - 2021, xcbeyond; all rights reserved.</p>
+            
+            <p class="pull-right">
+              模板来自 <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              移植到 Hugo 来自 <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+
+<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCFhtWLJcE30xOAjcbSFi-0fnoVmQZPb1Y&v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+  </body>
+</html>
