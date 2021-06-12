@@ -6,80 +6,358 @@
     <description>Recent content on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 24 Apr 2021 20:09:14 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
+    <lastBuildDate>Sat, 09 Mar 2030 15:27:17 +0600</lastBuildDate><atom:link href="https://xcbeyond.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>关于我</title>
-      <link>https://xcbeyond.github.io/about/</link>
-      <pubDate>Tue, 20 Apr 2021 10:45:56 +0800</pubDate>
+      <title>Social media and behavior economics conference</title>
+      <link>https://xcbeyond.github.io/event/event-1/</link>
+      <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/about/</guid>
-      <description>xcbeyond，现任某公司架构师，CSDN博客专家，腾讯云社区年度优秀作者，InfoQ写作平台作者，微信公众号《程序猿技术大咖》号主， 拥有多年研发、架构经验，乐于技术输出、分享，现阶段从事微服务架构产品研发、中台建设工作，涉及架构设计、技术选型、业务研发等工作。对于Java、微服务、数据库、Docker有深入了解，并有大量的调优经验。
-我是xcbeyond，您也可以叫我&amp;quot;超哥&amp;quot;，一个热爱编程、热爱技术的人，乐于技术输出、分享。
-疯狂源自梦想，技术成就辉煌！
-个人微信公众号：程序猿技术大咖，“专注分享技术干货，不为别的，只为技术沉淀&amp;hellip;”，欢迎关注！</description>
+      <guid>https://xcbeyond.github.io/event/event-1/</guid>
+      <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Social media and behavior economics conference</title>
+      <link>https://xcbeyond.github.io/event/event-2/</link>
+      <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/event/event-2/</guid>
+      <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Social media and behavior economics conference</title>
+      <link>https://xcbeyond.github.io/event/event-3/</link>
+      <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/event/event-3/</guid>
+      <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Social media and behavior economics conference</title>
+      <link>https://xcbeyond.github.io/event/event-4/</link>
+      <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/event/event-4/</guid>
+      <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Social media and behavior economics conference</title>
+      <link>https://xcbeyond.github.io/event/event-5/</link>
+      <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/event/event-5/</guid>
+      <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Social media and behavior economics conference</title>
+      <link>https://xcbeyond.github.io/event/event-6/</link>
+      <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/event/event-6/</guid>
+      <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
-      <link>https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/</link>
+      <link>https://xcbeyond.github.io/blog/servicemesh/migration-from-springcloud-to-servicemesh/</link>
       <pubDate>Fri, 09 Apr 2021 14:50:21 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
-      <description>作为新一代微服务架构体系，Service Mesh 技术有效地解决了 Spring Cloud 微服务架构和服务治理过程中的痛点问题，一经推出便引起了很大的反响。近一年来，伴随着云原生的热火朝天，Service Mesh 被推向了巅峰，从陌生走向大家的视界，甚至一些初创企业都想从中获得第一桶金。对于初创企业或全新产品，选择 Service Mesh 变得相对轻松很多，毕竟不存在迁移的问题。但对于大部分企业或成熟的产品体系，这样大的架构转型就变得很难以实施，需要多加权衡利弊，面对 Service Mesh 带来的好处，不得不迫使向它靠拢。
-目前很多企业还是采用基于 SDK 的传统微服务框架（例如，Dubbo、Spring Cloud）进行服务治理，而随着 Service Mesh 的普及，越来越多的企业开始布局自己的 Service Mesh 框架体系，但多数企业刚开始不会激进地将所有业务迁移至 Serivice Mesh，毕竟这样风险太大、收益太慢。像 Java 技术栈应用依然保留原框架，而非 Java 技术栈应用采用 Service Mesh 框架，不同开发语言可以用不同的技术框架，但业务不能被框架割裂，那么在这两种架构体系下应用服务如何互联互通？微服务如何统一治理？传统微服务又如何平滑迁移至 Service Mesh 呢？
-如何解决上述问题呢？今天我们就针对构建基于 Spring Cloud 向 Service Mesh 框架迁移过程中的诸多问题展开讨论，尽可能提供一套完善的解决方案和迁移思路，供大家参考。
-1、背景 微服务是近些年来软件架构中的热名词，也是一个很大的概念，不同人对它的理解都各不相同，甚至在早期微服务架构中出现了一批四不像的微服务架构产品，有人把单纯引入Spring Boot、Spring Cloud框架也叫做微服务架构，却只是将它作为服务的Web容器而已。
-随着微服务的火热，越来越多的团队开始实践，将微服务纷纷落地，并投入生产。但随着微服务规模的不断壮大，每增加一个微服务，就可能会增加一些依赖的基础设施和第三方的配置，比如 Kafka 实例等，相应 CI/CD 的配置也会增加或调整。 同时随着微服务数量增多、业务复杂性的提升及需求的多样性等（如，对接第三方异构系统等），服务间通信的错综复杂，一步步地将微服务变得更加臃肿，服务治理也是难上加难，而这些问题在单体架构中很容易解决。为此，有人开始怀疑当初微服务化是否是明智之选，甚至考虑回归到传统单体应用。
-正如下图所示，PPT 中的微服务总是美好的，但现实中的微服务却是一团糟糕，想甩甩不掉，越看越糟心。难道就没有办法了么？
-1.1 传统微服务架构面临的挑战 面对上述暴露出的问题，并在传统微服务架构下，经过实践的不断冲击，面临了更多新的挑战，综上所述，产生这些问题的原因有以下这几点：
- 过于绑定特定技术栈。 当面对异构系统时，需要花费大量精力来进行代码的改造，不同异构系统可能面临不同的改造。 代码侵入度过高。 开发者往往需要花费大量的精力来考虑如何与框架或 SDK 结合，并在业务中更好的深度融合，对于大部分开发者而言都是一个高曲线的学习过程。 多语言支持受限。 微服务提倡不同组件可以使用最适合它的语言开发，但是在 Spring Cloud 框架下就是Java的天下，多语言的支持难度很大。这也就导致在面对异构系统对接时的无奈，或退而求其次的方案了。 老旧系统维护难。 面对老旧系统，很难做到统一维护、治理、监控等，在过度时期往往需要多个团队分而管之，维护难度加大。  上述这些问题都是在所难免，我们都知道技术演进来源于实践中不断的摸索，将功能抽象、解耦、封装、服务化。 随着传统微服务架构暴露出的这些问题，将迎来新的挑战，让大家纷纷寻找其他解决方案。</description>
+      <guid>https://xcbeyond.github.io/blog/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
+      <description>作为新一代微服务架构体系，Service Mesh 技术有效地解决了 Spring Cloud 微服务架构和服务治理过程中的痛点问题，一经推出便引起了很大的反响。近一年来，伴随着云原生的热火朝天，Service Mesh 被推向了巅峰，从陌生走向大家的视界，甚至一些初创企业都想从中获得第一桶金。对于初创企业或全新产品，选择 Service Mesh 变得相对轻松很多，毕竟不存在迁移的问题。但对于大部分企业或成熟的产品体系，这样大的架构转型就变得很难以实施，需要多加权衡利弊，面对 Service Mesh 带来的好处，不得不迫使向它靠拢。</description>
     </item>
     
     <item>
       <title>Kubernetes概念篇：基本概念和术语</title>
-      <link>https://xcbeyond.github.io/kubernetes/concept-chapter-kubernetes-baisc-concept/</link>
+      <link>https://xcbeyond.github.io/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</link>
       <pubDate>Mon, 26 Oct 2020 23:28:43 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/kubernetes/concept-chapter-kubernetes-baisc-concept/</guid>
+      <guid>https://xcbeyond.github.io/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</guid>
       <description>在开始使用之前，应当先了解一下关于Kubernetes的相关概念术语，对后续的学习、使用将有很大的帮助。（Kubernetes的概念比较多，建议加强理解，并清楚各种所处位置及关联！）
 Kubernetes中的大部分概念，如：Node、Pod、Replication Controller、Service等都可以看作是一种资源对象，几乎所有资源对象都可以通过Kubernetes提供的kubectl工具（或者API接口）执行增、删、改、查等操作并将其保存在etcd中持久化存储。
 从这个角度来看，Kubernetes其实是一个高度自动化的资源控制系统，它通过跟踪对比etcd库里保存的“资源期望状态”与当前环境中的“实际资源状态”的差异来实现自动控制和自动纠错的高级功能。
 本文将介绍Kubernetes中重要的资源对象，即：Kubernetes的基本概念和术语。
 1、Master Master是指Kubernetes集群中的控制节点（Master Node），在每个Kubernetes集群里都需要有一个Master来负责整个集群的管理和控制，基本所有的控制命令都发给它，它负责具体的执行过程，后续执行的所有命令基本都是在Master上运行。
-Master提供集群的独特视角，并且拥有一系列组件，比如Kubernetes API Server。API Server提供可以用来和集群交互的REST端点。可以通过命令行或图形化界面来维护pod、副本和服务。
-在Master上包括以下组件：
-  etcd： 分布式key-value存储，保存集群的状态数据、资源对象数据。
-  API Server(kube-api-server)： Kubernetes提供的HTTP Rest接口，是所有资源的增、删、改、查等操作的唯一入口，也是集群控制的入口进程。
-  Controllers(kube-controller-manager)： Kubernetes里所有资源对象的自动化控制中心。
-  Scheduler(kube-scheduler)： 负责资源调度（Pod调度）的进程，相当于公交公司的&amp;quot;调度室&amp;quot;。
-  2、Node 除了Master，Kubernetes集群中的其他集群被称为Node，即：Worker Node（工作节点）。与Master一样，Node可以是一台物理主机，也可以是一台虚拟机。
-Node是Kubernetes集群中的工作负载节点，每个Node都会被Master分配一些工作负载，当某个Node宕机时，其上的工作负载会被Master自动转移到其他节点上。
-每个Node上都运行着以下关键组件：
- kubelet： 负责Pod对应的容器创建、启停等任务，同时与Master密切协作，实现集群管理的基本功能。 kube-proxy： 实现Kubernetes Service的通信与负载均衡机制的重要组件。 Container Runtime： 下载镜像、运行容器。如Docker引擎，负责本机的容器创建和管理工作。  Node可以再运行期间动态增加调整到Kubernetes集群中，默认情况下kubelet会向Master注册自己。一旦Node被纳入集群管理范围，kubelet进程就会定时向Master上报自己的信息，如操作系统、Docker版本、机器CPU和内存、以及当前有哪些Pod在运行等，这样Master就可以获知每个Node的资源使用情况，并实现高效均衡的资源调度策略。而某个Node在超过指定时间不上报信息时，会被Master判定为“失联”状态，标记为不可用（Not Ready）,随后Master会触发“工作负载大转移”的自动流程。
-执行命令kubectl get nodes可以查看在集群中有多少个Node：
-[xcbeyond@localhost ~]$ kubectl get nodes NAME STATUS ROLES AGE VERSION minikube Ready master 17d v1.19.0 然后通过kubectl describe node &amp;lt;node_name&amp;gt;查看某个Node的详细信息：</description>
+Master提供集群的独特视角，并且拥有一系列组件，比如Kubernetes API Server。API Server提供可以用来和集群交互的REST端点。可以通过命令行或图形化界面来维护pod、副本和服务。</description>
     </item>
     
     <item>
       <title>Kubernetes介绍篇：是什么？为什么要用？</title>
-      <link>https://xcbeyond.github.io/kubernetes/introduction-chapter-what-is-kubernetes/</link>
+      <link>https://xcbeyond.github.io/blog/kubernetes/introduction-chapter-what-is-kubernetes/</link>
       <pubDate>Mon, 26 Oct 2020 10:18:25 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/kubernetes/introduction-chapter-what-is-kubernetes/</guid>
+      <guid>https://xcbeyond.github.io/blog/kubernetes/introduction-chapter-what-is-kubernetes/</guid>
       <description>是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。
  1、Kubernetes的前世 Kubernetes，它是一个全新的基于容器技术的分布式架构方案，近些年在容器领域使用非常广泛，作为容器化部署实施的典型方案。
 看似很新（相对于刚出现时来说），但它却是谷歌十几年以来大规模应用容器技术的经验积累和升华的重要成果。确切地说，Kubernetes是谷歌严格保密十几年的秘密武器——Borg的一个开源版本。Borg是谷歌的一个久负盛名的内部使用的大规模集群管理系统，它基于容器技术，目的是实现资源管理的自动化，以及跨过个数据中心资源利用率的最大化。十几年以来，谷歌一直通过Borg系统管理者数据庞大的应用程序集群，由于谷歌员工都签署了保密协议，即使离职也不能泄露Borg的内部设计，所以外界一直无法了解关于它的更多信息。直到2015年4月，传闻许久的Borg论文发布，伴随着Kubernetes的高调宣传被谷歌首次公开，大家才得以了解它的更多内幕。正式由于站在Borg这个前辈的肩膀上，汲取了Borg过去十年间的经验与教训，所以Kubernetes一经开源就一鸣惊人，并迅速称霸容器领域。
 Borg就是一个喷气式飞机的驾驶系统，非常的专业和高大上，他适用于谷歌这样的大公司，它有几百万的机器。Kubernetes是一个它的简化版，它是一辆设计优良的轿车，它适合中小型公司，更方便的用它来调度自己的集群。
 2、Kubernetes是什么？ Kubernetes是用于自动部署，扩展和管理容器化应用程序的开源系统，它将组成应用程序的容器组合成逻辑单元，以便于管理和服务发现。Kubernetes源自谷歌15年生产环境的运维经验，同时凝聚了社区的最佳创意和实践。
-![](./Kubernetes logo.jpg)
-Kubernetes，构建在Docker技术之上，为跨主机的容器化应用提供资源调度、服务发现、高可用管理和弹性伸缩等一整套功能，它提供了完善的管理工具，涵盖开发、部署测试、运维监控等各个环节。它的目标不仅仅是一个编排系统，更是提供一个规范，可以让你来描述集群的架构，定义服务的最终状态，Kubernetes可以帮你将系统自动达到和维持在这个状态。
-2.1 亮点 亮点1： Kubernetes以“一切以服务（Service）为中心，一切围绕服务运转”作为指导思想的创新型产品。它在功能和架构设计上始终遵循着这一指导思想，构建在Kubernetes上的系统不仅可以独立运行在物理机、虚拟机集群或企业私有云上，也可以被托管在公有云上。
-亮点2： Kubernetes是一个开放的开发平台。与J2EE不同，它不局限于任何一种语言，没有限定任何编程接口，所以不论是用Java、Go、C++还是Python编写的程序，都可以被映射为Kubernetes的Service，并通过标准的TCP通讯协议进行交互。此外，Kubernetes平台对现有的编程语言、编程框架、中间件没有任何侵入性，做到了零侵入，因此现有的系统也很容易改造升级并迁移到Kubernetes平台之上。
-亮点3： Kubernetes的另一个亮点是自动化。在Kubernetes的解决方案中，一个可以自我扩展、自我诊断，并且容易升级，在收到服务扩容的请求后，Kubernetes会触发调度流程，最终在选定的目标节点上启动相应数据的服务实例副本，这些服务实例副本在启动成功后会自动加入负载均衡器中并生效，整个过程无须额外的人工操作。另外，Kubernetes会定时巡查每个服务的所有实例的可用性，确保服务实例的数量始终保持为预期的数量，当它发现某个实例不可用时，会自动重启该实例或者其他节点上重新调度、运行一个新实例，这样一个复杂的过程无须人工干预即可全部自动完成。
-亮点4： Kubernetes是一个完备的分布式系统支撑平台。具备完备的集群管理能力，包括多层次的安全防护和准入机制、多租户应用支撑能力、透明的服务注册和服务发现机制、内建的智能负载均衡器、强大的故障发现和自我修复能力、服务滚动升级和在线扩容能力、可扩展的资源自动调度机制，以及多粒度的资源配额管理能力。同时，Kubernetes提供了完善的管理工具，这些涵盖了包括开发、部署测试、运维监控在内的各个环节。因此，Kubernetes是一个全新的基于容器技术的分布式架构解决方案，并且是一个一站式的完备的分布式系统开发和支持平台。
-随着容器化部署环境限制、语言差异、容器数量的庞大、负载均衡、故障检测、故障修复等问题，倘若将过多的精力、时间放在这些地方，其工作量将会多大，将会让很多企业、产品对容器望而止步。在容器化的时代，Kubernetes足以免去上述面临的问题，让容器化使用变得的更加容易、轻松，只需花费更多的时间去完成业务功能的开发。
-2.2 特性 Kubernetes特性如下：
-Service拓扑： 基于集群拓扑的服务流量路由。可以让一个服务基于集群的Node拓扑进行流量路由。例如，一个服务可以指定流量是被优先路由到一个和客户端在同一个Node或者在同一可用区域的端点。 端点切片： Kubernetes 集群中网络端点的可扩展跟踪。 存储编排： 自动挂载所选存储系统，包括本地存储、诸如 GCP 或 AWS 之类公有云提供商所提供的存储或者诸如 NFS、iSCSI、Gluster、Ceph、Cinder 或 Flocker 这类网络存储系统。 Secret和配置管理： 部署和更新 Secrets 和应用程序的配置而不必重新构建容器镜像，且不必将软件堆栈配置中的秘密信息暴露出来。 批量执行： 除了服务之外，Kubernetes 还可以管理你的批处理和 CI 工作负载，在期望时替换掉失效的容器。 服务发现与负载均衡： 无需修改您的应用程序即可使用陌生的服务发现机制。Kubernetes 为容器提供了自己的 IP 地址和一个 DNS 名称，并且可以在它们之间实现负载均衡。 自我修复： 重新启动失败的容器，在节点死亡时替换并重新调度容器，杀死不响应用户定义的健康检查的容器，并且在它们准备好服务之前不会将它们公布给客户端。 自动化上线和回滚： Kubernetes 会分步骤地将针对应用或其配置的更改上线，同时监视应用程序运行状况以确保你不会同时终止所有实例。如果出现问题，Kubernetes 会为你回滚所作更改。你应该充分利用不断成长的部署方案生态系统。 自动装箱： 根据资源需求和其他约束自动放置容器，同时避免影响可用性。将关键性工作负载和尽力而为性质的服务工作负载进行混合放置，以提高资源利用率并节省更多资源。 IPv4/IPv6双协议栈： 为 Pod 和 Service 分配 IPv4 和 IPv6 地址。 水平扩缩： 使用一个简单的命令、一个UI或基于CPU使用情况自动对应用程序进行扩缩。</description>
+![](./Kubernetes logo.</description>
+    </item>
+    
+    <item>
+      <title>Algorithm</title>
+      <link>https://xcbeyond.github.io/course/course-5/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/course/course-5/</guid>
+      <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Artificial Intelligence</title>
+      <link>https://xcbeyond.github.io/course/course-3/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/course/course-3/</guid>
+      <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Geography</title>
+      <link>https://xcbeyond.github.io/research/research-1/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/research/research-1/</guid>
+      <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Geography</title>
+      <link>https://xcbeyond.github.io/research/research-2/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/research/research-2/</guid>
+      <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Geography</title>
+      <link>https://xcbeyond.github.io/research/research-3/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/research/research-3/</guid>
+      <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Geography</title>
+      <link>https://xcbeyond.github.io/research/research-4/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/research/research-4/</guid>
+      <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Geography</title>
+      <link>https://xcbeyond.github.io/research/research-5/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/research/research-5/</guid>
+      <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Geography</title>
+      <link>https://xcbeyond.github.io/research/research-6/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/research/research-6/</guid>
+      <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>JavaScript</title>
+      <link>https://xcbeyond.github.io/course/course-4/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/course/course-4/</guid>
+      <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Mathematics</title>
+      <link>https://xcbeyond.github.io/course/course-2/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/course/course-2/</guid>
+      <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Photography</title>
+      <link>https://xcbeyond.github.io/course/course-1/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/course/course-1/</guid>
+      <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Materials and Testing Methods</title>
+      <link>https://xcbeyond.github.io/notice/notice-1/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/notice/notice-1/</guid>
+      <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Materials and Testing Methods</title>
+      <link>https://xcbeyond.github.io/notice/notice-2/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/notice/notice-2/</guid>
+      <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Materials and Testing Methods</title>
+      <link>https://xcbeyond.github.io/notice/notice-3/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/notice/notice-3/</guid>
+      <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Materials and Testing Methods</title>
+      <link>https://xcbeyond.github.io/notice/notice-4/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/notice/notice-4/</guid>
+      <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Materials and Testing Methods</title>
+      <link>https://xcbeyond.github.io/notice/notice-5/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/notice/notice-5/</guid>
+      <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Teaching Materials and Testing Methods</title>
+      <link>https://xcbeyond.github.io/notice/notice-6/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/notice/notice-6/</guid>
+      <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Vlogging</title>
+      <link>https://xcbeyond.github.io/course/course-6/</link>
+      <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
+      
+      <guid>https://xcbeyond.github.io/course/course-6/</guid>
+      <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Alex Rook</title>
+      <link>https://xcbeyond.github.io/teacher/alex-rook/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/teacher/alex-rook/</guid>
+      <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>CHEMICAL ENGINEERING</title>
+      <link>https://xcbeyond.github.io/scholarship/scholarship-1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/scholarship/scholarship-1/</guid>
+      <description> institutes Smart-affiliated research Digital Access to Scholarship Smart Catalyst Smart Library Portal Smart research programs  </description>
+    </item>
+    
+    <item>
+      <title>CHEMICAL ENGINEERING</title>
+      <link>https://xcbeyond.github.io/scholarship/scholarship-2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/scholarship/scholarship-2/</guid>
+      <description> institutes Smart-affiliated research Digital Access to Scholarship Smart Catalyst Smart Library Portal Smart research programs  </description>
+    </item>
+    
+    <item>
+      <title>CHEMICAL ENGINEERING</title>
+      <link>https://xcbeyond.github.io/scholarship/scholarship-3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/scholarship/scholarship-3/</guid>
+      <description> institutes Smart-affiliated research Digital Access to Scholarship Smart Catalyst Smart Library Portal Smart research programs  </description>
+    </item>
+    
+    <item>
+      <title>Clark Malik</title>
+      <link>https://xcbeyond.github.io/teacher/clark-malik/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/teacher/clark-malik/</guid>
+      <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Devid Luis</title>
+      <link>https://xcbeyond.github.io/teacher/devid-luis/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/teacher/devid-luis/</guid>
+      <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Duis Rio</title>
+      <link>https://xcbeyond.github.io/teacher/duis-rio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/teacher/duis-rio/</guid>
+      <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Jacke Mastio</title>
+      <link>https://xcbeyond.github.io/teacher/jacke-mastio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/teacher/jacke-mastio/</guid>
+      <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>John doe</title>
+      <link>https://xcbeyond.github.io/author/john-doe/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/author/john-doe/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet vulputate augue.</description>
+    </item>
+    
+    <item>
+      <title>Mark Dinn</title>
+      <link>https://xcbeyond.github.io/author/mark-dinn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/author/mark-dinn/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet vulputate augue.</description>
+    </item>
+    
+    <item>
+      <title>Zim Cook</title>
+      <link>https://xcbeyond.github.io/teacher/zim-cook/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://xcbeyond.github.io/teacher/zim-cook/</guid>
+      <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
   </channel>
