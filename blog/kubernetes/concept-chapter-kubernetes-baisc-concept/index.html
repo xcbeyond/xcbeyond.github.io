@@ -135,7 +135,7 @@
 <p><code>Kubernetes</code>中的大部分概念，如：<code>Node</code>、<code>Pod</code>、<code>Replication Controller</code>、<code>Service</code>等都可以看作是一种<strong>资源对象</strong>，几乎所有资源对象都可以通过<code>Kubernetes</code>提供的<code>kubectl</code>工具（或者API接口）执行增、删、改、查等操作并将其保存在<code>etcd</code>中持久化存储。</p>
 <p>从这个角度来看，<code>Kubernetes</code>其实是一个高度自动化的资源控制系统，它通过跟踪对比<code>etcd</code>库里保存的“资源期望状态”与当前环境中的“实际资源状态”的差异来实现自动控制和自动纠错的高级功能。</p>
 <p>本文将介绍<code>Kubernetes</code>中重要的资源对象，即：<code>Kubernetes</code>的基本概念和术语。</p>
-<h1 id="1master">1、Master</h1>
+<h2 id="1master">1、Master</h2>
 <p><code>Master</code>是指<code>Kubernetes</code>集群中的控制节点（Master Node），在每个<code>Kubernetes</code>集群里都需要有一个<code>Master</code>来负责整个集群的管理和控制，基本所有的控制命令都发给它，它负责具体的执行过程，后续执行的所有命令基本都是在<code>Master</code>上运行。</p>
 <p><code>Master</code>提供集群的独特视角，并且拥有一系列组件，比如<code>Kubernetes API Server</code>。<code>API Server</code>提供可以用来和集群交互的REST端点。可以通过命令行或图形化界面来维护pod、副本和服务。</p>
 <p><img src="./kubernetes-master-node.png" alt=""></p>
@@ -154,7 +154,7 @@
 <p><strong>Scheduler(<code>kube-scheduler</code>)：</strong> 负责资源调度（Pod调度）的进程，相当于公交公司的&quot;调度室&quot;。</p>
 </li>
 </ul>
-<h1 id="2node">2、Node</h1>
+<h2 id="2node">2、Node</h2>
 <p>除了Master，Kubernetes集群中的其他集群被称为<code>Node</code>，即：Worker Node（工作节点）。与Master一样，Node可以是一台物理主机，也可以是一台虚拟机。</p>
 <p><code>Node</code>是Kubernetes集群中的工作负载节点，每个Node都会被Master分配一些工作负载，当某个Node宕机时，其上的工作负载会被Master自动转移到其他节点上。</p>
 <p><img src="./kubernetes-worker-node.png" alt=""></p>
@@ -179,7 +179,7 @@ Labels:             beta.kubernetes.io/arch=amd64
                     kubernetes.io/hostname=minikube
                     kubernetes.io/os=linux
                     ……
-</code></pre><h1 id="3pod">3、Pod</h1>
+</code></pre><h2 id="3pod">3、Pod</h2>
 <p><code>Pod</code>是Kubernetes中的原子对象，是基本构建单元。</p>
 <p><code>Pod</code>表示集群上一组正在运行的容器。通常创建Pod是为了运行单个主容器。Pod 还可以运行可选的sidecar容器，以实现诸如日志记录之类的补充特性。（如：在Service Mesh中，和应用一起存在的<code>istio-proxy</code>、<code>istio-init</code>容器）</p>
 <p><strong>通常用Deployment来管理Pod。</strong></p>
@@ -227,7 +227,7 @@ Labels:             beta.kubernetes.io/arch=amd64
 <p><strong><code>Unknown</code>：</strong> 无法获得Pod的状态，通常是由于无法和Pod所在的Node进行通信。</p>
 </li>
 </ul>
-<h1 id="4label">4、Label</h1>
+<h2 id="4label">4、Label</h2>
 <p><code>Label</code>（标签）是Kubernetes中另外一个核心概念。一个Label是一个key=value的键值对，其中key与value由用户自己指定。Label可以被附加到各种资源对象上，例如Node、Pod、Service、RC等，一个资源对象可以定义任意数量的Label，同一个Label也可以被添加到任意数量的资源对象上。Label通常在资源对象定义时确定，也可以在对象创建后动态添加或删除。</p>
 <p>一般来说，我们会给指定的资源对象定义多个label，来实现多维度的资源分组管理，以便灵活、方便地进行资源分配、调度、配置、部署等管理工作。例如：部署不同版本的应用到不同的环境中，或者监控和分析应用（日志记录，监控，报警等）。一些常用的Label示例如下：</p>
 <ul>
@@ -246,7 +246,7 @@ Labels:             beta.kubernetes.io/arch=amd64
 <p>使用<code>Label</code>可以给对象创建一组或多组标签，<code>Label</code>和<code>Label Selector</code>共同构成了Kubernetes系统中最核心的应用模型，使得对象能够精细分组、管理，同时实现了集群的高可用性。</p>
 <p><img src="./Label-Selector%E7%A4%BA%E6%84%8F%E5%9B%BE1.jpg" alt=""></p>
 <p><img src="./Label-Selector%E7%A4%BA%E6%84%8F%E5%9B%BE2.jpg" alt=""></p>
-<h1 id="5replication-controller">5、Replication Controller</h1>
+<h2 id="5replication-controller">5、Replication Controller</h2>
 <p><code>Replication Controller</code>，简称RC，是Kubernetes中核心概念之一，定义了一个期望的场景，即：声明某种Pod的副本数量在任意时刻都符合某个预期值。</p>
 <p>RC的定义包括以下几个部分：</p>
 <ul>
@@ -270,7 +270,7 @@ Labels:             beta.kubernetes.io/arch=amd64
 <li>通过改变RC里的Pod副本数量，实现对Pod的<strong>扩容和缩容功能</strong>。</li>
 <li>通过改变RC里Pod模板中的镜像版本，可以实现Pod的<strong>滚动升级功能</strong>。</li>
 </ul>
-<h1 id="6deployment">6、Deployment</h1>
+<h2 id="6deployment">6、Deployment</h2>
 <p><code>Deployment</code>是Kubernetes在1.2版本中引入的新概念，用于更好地解决Pod的编排问题。为此，<code>Deployment</code>在内部使用了Replica Set来实现，无论从Deployment的作用、YAML定义，还是从它的具体命令行操作来看，我们都可以把它看作是RC的一次升级。</p>
 <p><code>Deployment</code>相对于RC的一个最大升级是我们可以随时知道当前Pod部署的进度。</p>
 <p>典型使用场景：</p>
@@ -283,7 +283,7 @@ Labels:             beta.kubernetes.io/arch=amd64
 <li>扩展Deployment以应对高负载。</li>
 <li>查看Deployment状态，以此作为发布是否成功的指标。</li>
 </ul>
-<h1 id="7statefulset">7、StatefulSet</h1>
+<h2 id="7statefulset">7、StatefulSet</h2>
 <p>在Kubernetes中，Pod的管理对象RC、Deployment、DaemonSet和Job都是面向无状态的服务。但现实中有很多服务是有状态的，特别是一些复杂的中间件集群，例如MySQL集群、MongoDB集群、Kafka集群、Zookeeper集群等，这些应用集群有以下一些共同点。</p>
 <ul>
 <li>每个节点都有固定的身份ID，通过这个ID，集群中的成员可以相互发现并且通信。</li>
@@ -300,16 +300,16 @@ Labels:             beta.kubernetes.io/arch=amd64
 <p><code>StatefulSet</code>除了要与PV卷捆绑使用以存储Pod的状态数据，还要与Headless Service配合使用，即在每个<code>StatefulSet</code>的定义中要声明它属于哪个Headless Service。Headless Service与普通Service的关键区别在于，它没有Cluster IP，如果解析Headless Service的DNS域名，则返回的是该Service对应的全部Pod的Endpoint列表。StatefulSet在Headless Service的基础上又为StatefulSet控制的每个Pod实例创建了一个DNS域名，这个域名的格式为：</p>
 <p><code>$(podname).$(headless service name)</code></p>
 <p>比如一个3节点的Kafka的StatefulSet集群，对应的Headless Service的名字为kafka，StatefulSet的名字为kafka，则StatefulSet里面的3个Pod的DNS名称分别为kafka-0.kafka、kafka-1.kafka、kafka-3.kafka，这些DNS名称可以直接在集群的配置文件中固定下来。</p>
-<h1 id="8service">8、Service</h1>
+<h2 id="8service">8、Service</h2>
 <p><code>Service</code>也是Kubernetes里的最核心的资源对象之一，Kubernetes里的每个Service其实就是我们经常提起的微服务架构中的一个“微服务”，上面我们所说的Pod、RC等资源对象其实都是为讲解Kubernetes Service做铺垫的。下图显示了Pod、RC与Service的逻辑关系。</p>
 <p><img src="./Pod%E3%80%81RC%E4%B8%8EService%E7%9A%84%E9%80%BB%E8%BE%91%E5%85%B3%E7%B3%BB.jpg" alt="Pod、RC与Service的逻辑关系"></p>
 <p>从图中我们看到，Kubernetes的Service定义了一个服务的访问入口地址，前端的应用（Pod）通过这个入口地址访问其背后的一组由Pod副本组成的集群实例，Service与其后端Pod副本集群之间则是通过Label Selector来实现“无缝对接”的。而RC的作用实际上是保证Service的服务能力和服务质量始终处于预期的标准。</p>
-<h1 id="9job">9、Job</h1>
+<h2 id="9job">9、Job</h2>
 <p><code>Job</code>（批处理任务）通过并行或串行启动多个进程去处理一批工作，在处理完成后，整个批处理任务结束。从Kubernetes 1.2版本开始，支持批处理类型的应用，可以通过Kubernetes Job这种新的资源对象定义并启动一个批处理任务Job。与RC、Deployment、ReplicaSet类似，Job也是用来控制一组Pod容器。</p>
 <p><code>Job</code>负责批量处理短暂的一次性任务 ，即仅执行一次的任务，它保证批处理任务的一个或多个Pod成功结束。</p>
-<h1 id="10volume">10、Volume</h1>
+<h2 id="10volume">10、Volume</h2>
 <p><code>Volume</code>（存储卷）是Pod中能够被多个容器访问的共享目录。Kubernetes的Volume概念、用途和目的与Docker的Volume比较类似，但两者不能等价。首先，Kubernetes中的Volume定义在Pod上，然后被一个Pod里的多个容器挂载到具体的文件目录下；其次，Kubernetes中的Volume中的数据也不会丢失。最后，Kubernetes支持多种类型的Volume，例如Gluster、Ceph等先进的分布式文件系统。</p>
-<h1 id="11namespace">11、Namespace</h1>
+<h2 id="11namespace">11、Namespace</h2>
 <p><code>Namespace</code>（命名空间）是Kubernetes系统中的另一个非常重要的概念，Namespace在很多情况下用于实现多租户的资源隔离。Nameaspace通过将集群内部的资源对象“分配”到不同的Namespce中，形成逻辑上分组的不同项目、小组或用户组，便于不同的分组在共享使用整个集群的资源的同时还能被分别管理。</p>
 <p>Kubernetes集群默认会创建一个名为default的Namespace，通过<code>kubectl</code>可以查看：</p>
 <pre><code>[xcbeyond@bogon ~]$ kubectl get namespaces
@@ -321,7 +321,7 @@ kube-public            Active   23d
 kube-system            Active   23d
 kubernetes-dashboard   Active   23d
 </code></pre><p>如果不特别指定Namespace，则用户创建的Pod、RC、Service等都将创建到默认的default的Namespace中。</p>
-<h1 id="12annotation">12、Annotation</h1>
+<h2 id="12annotation">12、Annotation</h2>
 <p><code>Annotation</code>（注解）与Label类似，也使用key/value键值对的形式进行定义。不同的是Label具有严格的命名规则，它定义的是Kubernetes对象的元数据（Metadata），并且用于Label Selector。而<code>Annotation</code>则是用户任意定义的“附加”信息，以便于外部工具进行查找，很多时候，Kubernetes的模块自身会通过Annotation的方式标记资源对象的特殊信息。</p>
 <p>通常来说，用<code>Annotation</code>来记录的信息如下：</p>
 <ul>
@@ -330,7 +330,7 @@ kubernetes-dashboard   Active   23d
 <li>程序调试工具信息，例如工具、版本号等。</li>
 <li>团队等联系信息，例如电话号码、负责人名称、网址等。</li>
 </ul>
-<h1 id="13configmap">13、ConfigMap</h1>
+<h2 id="13configmap">13、ConfigMap</h2>
 <p>为了能够准确、深刻理解<code>Kubernetes ConfigMap</code>的功能和价值，可以先从Docker说起。我们都知道，Docker通过将程序、依赖库、数据及配置文件等“打包固化”到一个不变的镜像文件，以解决因应用部署差异的难题，但这同时带来了另一个棘手的问题，即：配置文件中的参数在运行期间如何修改的问题。为了解决这个问题，Docker提供了以下两种方式：</p>
 <ul>
 <li>通过环境变量来传递参数。</li>
@@ -340,7 +340,7 @@ kubernetes-dashboard   Active   23d
 <p>如果在分布式系统中，就会变得更加糟糕，多台宿主机上创建相同的配置文件，并且要确保这些配置文件的一致性，是很难实现的。为此，Kubernetes引入了<code>ConfigMap</code>，巧妙的解决了这种问题。</p>
 <p>把所有的配置项都当作key-value字符串，如：配置项host=192.168.1.1、user=root、password=123456用于表示连接FTP服务器的配置参数。这些配置项作为Map表中的一项，整个Map的数据被持久化存储在Kubernetes的etcd中，并提供API方便Kubernetes相关组件或应用CRUD操作，这里用来保存配置参数的Map就是Kubernetes ConfigMap资源对象。</p>
 <p><strong>ConfigMap机制：</strong> 将存储在etcd中的ConfigMap通过Volume映射方式变为目标Pod内的配置文件，不管目标Pod被调度到哪台服务器上，都会自欧东完成映射。如果ConfigMap中的key-value数据被修改，则映射到Pod中的“配置文件”也会随之自动更新。于是，ConfigMap就形成了分布式系统中最为简单且对应用无侵入的配置中心。</p>
-<h1 id="14总结">14、总结</h1>
+<h2 id="14总结">14、总结</h2>
 <p>上述的这些概念术语也是Kubernetes的核心组件，它们共同构成了Kubernetes的框架和计算模型。通过对它们进行灵活组合，用户就可以快速、方便地对容器集群进行配置、创建和管理。除了本文介绍的概念外，Kubernetes中还有许多其他的概念，用于辅助配置资源对象，如：LimitRange、ResourceQuota等，更多概念术语可参照官方术语表：<a href="https://kubernetes.io/zh/docs/reference/glossary/?fundamental=true">https://kubernetes.io/zh/docs/reference/glossary/?fundamental=true</a></p>
 <blockquote>
 <p>参考文章：</p>
@@ -352,11 +352,6 @@ kubernetes-dashboard   Active   23d
 
           </div>
           
-          
-          <div class="col-12">
-            
-            {0xc0001743c0 0xc0006dad20}
-          </div>
           
         </div>
       </div>
