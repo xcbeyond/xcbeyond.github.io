@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Spring Cloud on xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
-    <link>https://xcbeyond.github.io/tags/spring-cloud/</link>
+    <link>http://xcbeyond.cn/tags/spring-cloud/</link>
     <description>Recent content in Spring Cloud on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Fri, 09 Apr 2021 14:50:21 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 09 Apr 2021 14:50:21 +0800</lastBuildDate><atom:link href="http://xcbeyond.cn/tags/spring-cloud/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
-      <link>https://xcbeyond.github.io/blog/servicemesh/migration-from-springcloud-to-servicemesh/</link>
+      <link>http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/</link>
       <pubDate>Fri, 09 Apr 2021 14:50:21 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
+      <guid>http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
       <description>作为新一代微服务架构体系，Service Mesh 技术有效地解决了 Spring Cloud 微服务架构和服务治理过程中的痛点问题，一经推出便引起了很大的反响。近一年来，伴随着云原生的热火朝天，Service Mesh 被推向了巅峰，从陌生走向大家的视界，甚至一些初创企业都想从中获得第一桶金。对于初创企业或全新产品，选择 Service Mesh 变得相对轻松很多，毕竟不存在迁移的问题。但对于大部分企业或成熟的产品体系，这样大的架构转型就变得很难以实施，需要多加权衡利弊，面对 Service Mesh 带来的好处，不得不迫使向它靠拢。</description>
     </item>
     

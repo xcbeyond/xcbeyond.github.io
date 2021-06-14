@@ -2,90 +2,90 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
-    <link>https://xcbeyond.github.io/</link>
+    <link>http://xcbeyond.cn/</link>
     <description>Recent content on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Sat, 09 Mar 2030 15:27:17 +0600</lastBuildDate><atom:link href="https://xcbeyond.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 09 Mar 2030 15:27:17 +0600</lastBuildDate><atom:link href="http://xcbeyond.cn/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Social media and behavior economics conference</title>
-      <link>https://xcbeyond.github.io/event/event-1/</link>
+      <link>http://xcbeyond.cn/event/event-1/</link>
       <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/event/event-1/</guid>
+      <guid>http://xcbeyond.cn/event/event-1/</guid>
       <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Social media and behavior economics conference</title>
-      <link>https://xcbeyond.github.io/event/event-2/</link>
+      <link>http://xcbeyond.cn/event/event-2/</link>
       <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/event/event-2/</guid>
+      <guid>http://xcbeyond.cn/event/event-2/</guid>
       <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Social media and behavior economics conference</title>
-      <link>https://xcbeyond.github.io/event/event-3/</link>
+      <link>http://xcbeyond.cn/event/event-3/</link>
       <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/event/event-3/</guid>
+      <guid>http://xcbeyond.cn/event/event-3/</guid>
       <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Social media and behavior economics conference</title>
-      <link>https://xcbeyond.github.io/event/event-4/</link>
+      <link>http://xcbeyond.cn/event/event-4/</link>
       <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/event/event-4/</guid>
+      <guid>http://xcbeyond.cn/event/event-4/</guid>
       <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Social media and behavior economics conference</title>
-      <link>https://xcbeyond.github.io/event/event-5/</link>
+      <link>http://xcbeyond.cn/event/event-5/</link>
       <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/event/event-5/</guid>
+      <guid>http://xcbeyond.cn/event/event-5/</guid>
       <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Social media and behavior economics conference</title>
-      <link>https://xcbeyond.github.io/event/event-6/</link>
+      <link>http://xcbeyond.cn/event/event-6/</link>
       <pubDate>Sat, 09 Mar 2030 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/event/event-6/</guid>
+      <guid>http://xcbeyond.cn/event/event-6/</guid>
       <description>About Event Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
-      <link>https://xcbeyond.github.io/blog/servicemesh/migration-from-springcloud-to-servicemesh/</link>
+      <link>http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/</link>
       <pubDate>Fri, 09 Apr 2021 14:50:21 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
+      <guid>http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/</guid>
       <description>作为新一代微服务架构体系，Service Mesh 技术有效地解决了 Spring Cloud 微服务架构和服务治理过程中的痛点问题，一经推出便引起了很大的反响。近一年来，伴随着云原生的热火朝天，Service Mesh 被推向了巅峰，从陌生走向大家的视界，甚至一些初创企业都想从中获得第一桶金。对于初创企业或全新产品，选择 Service Mesh 变得相对轻松很多，毕竟不存在迁移的问题。但对于大部分企业或成熟的产品体系，这样大的架构转型就变得很难以实施，需要多加权衡利弊，面对 Service Mesh 带来的好处，不得不迫使向它靠拢。</description>
     </item>
     
     <item>
       <title>1.1 Go语言从入门到精通：Go语言介绍</title>
-      <link>https://xcbeyond.github.io/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</link>
+      <link>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</link>
       <pubDate>Sun, 21 Feb 2021 15:03:15 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</guid>
+      <guid>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</guid>
       <description>1、Go 介绍  Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.</description>
     </item>
     
     <item>
       <title>我们设计的是微服务还是小单体呢？</title>
-      <link>https://xcbeyond.github.io/blog/microservice/%E6%88%91%E4%BB%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%98%AF%E5%B0%8F%E5%8D%95%E4%BD%93%E5%91%A2/</link>
+      <link>http://xcbeyond.cn/blog/microservice/%E6%88%91%E4%BB%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%98%AF%E5%B0%8F%E5%8D%95%E4%BD%93%E5%91%A2/</link>
       <pubDate>Fri, 15 Jan 2021 10:02:25 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/microservice/%E6%88%91%E4%BB%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%98%AF%E5%B0%8F%E5%8D%95%E4%BD%93%E5%91%A2/</guid>
+      <guid>http://xcbeyond.cn/blog/microservice/%E6%88%91%E4%BB%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%98%AF%E5%B0%8F%E5%8D%95%E4%BD%93%E5%91%A2/</guid>
       <description>在微服务设计和实践中，可能很多人会一致认为：“将单体应用拆分成多少个微服务，是微服务的设计重点。”
 很多人把大量的精力花费在如何拆分微服务上，并把微服务设计好坏全部归因于微服务拆分的好坏。
 可事实真是这样吗？其实并非如此！
@@ -99,19 +99,19 @@ Martin Fowler在提出微服务时，提到过微服务的一个重要特征：�
     
     <item>
       <title>0 Go语言从入门到精通：开篇介绍，Go语言我来啦</title>
-      <link>https://xcbeyond.github.io/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</link>
+      <link>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</link>
       <pubDate>Thu, 14 Jan 2021 21:30:24 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</guid>
+      <guid>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</guid>
       <description>“Go will be the server language of the future.” — Tobias Lütke, Shopify</description>
     </item>
     
     <item>
       <title>中台到底是什么？</title>
-      <link>https://xcbeyond.github.io/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/</link>
+      <link>http://xcbeyond.cn/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/</link>
       <pubDate>Mon, 11 Jan 2021 09:25:43 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/</guid>
+      <guid>http://xcbeyond.cn/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/</guid>
       <description>到处都在喊中台，到处都是中台，中台这个词在好多地方已经被滥用了。
 在有些人眼里：中台就是技术平台，像微服务开发框架、Devops平台、PaaS平台，容器云之类的，人们都叫它“技术中台”。
 在有些人眼里：中台就是微服务业务平台，像最常见的什么用户中心，订单中心，各种微服务集散地，人们都叫它“业务中台”。
@@ -125,10 +125,10 @@ Martin Fowler在提出微服务时，提到过微服务的一个重要特征：�
     
     <item>
       <title>Kubernetes概念篇：基本概念和术语</title>
-      <link>https://xcbeyond.github.io/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</link>
+      <link>http://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</link>
       <pubDate>Mon, 26 Oct 2020 23:28:43 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</guid>
+      <guid>http://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</guid>
       <description>在开始使用之前，应当先了解一下关于Kubernetes的相关概念术语，对后续的学习、使用将有很大的帮助。（Kubernetes的概念比较多，建议加强理解，并清楚各种所处位置及关联！）
 Kubernetes中的大部分概念，如：Node、Pod、Replication Controller、Service等都可以看作是一种资源对象，几乎所有资源对象都可以通过Kubernetes提供的kubectl工具（或者API接口）执行增、删、改、查等操作并将其保存在etcd中持久化存储。
 从这个角度来看，Kubernetes其实是一个高度自动化的资源控制系统，它通过跟踪对比etcd库里保存的“资源期望状态”与当前环境中的“实际资源状态”的差异来实现自动控制和自动纠错的高级功能。
@@ -139,10 +139,10 @@ Master提供集群的独特视角，并且拥有一系列组件，比如Kubernet
     
     <item>
       <title>Kubernetes介绍篇：是什么？为什么要用？</title>
-      <link>https://xcbeyond.github.io/blog/kubernetes/introduction-chapter-what-is-kubernetes/</link>
+      <link>http://xcbeyond.cn/blog/kubernetes/introduction-chapter-what-is-kubernetes/</link>
       <pubDate>Mon, 26 Oct 2020 10:18:25 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/kubernetes/introduction-chapter-what-is-kubernetes/</guid>
+      <guid>http://xcbeyond.cn/blog/kubernetes/introduction-chapter-what-is-kubernetes/</guid>
       <description>是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。
  1、Kubernetes的前世 Kubernetes，它是一个全新的基于容器技术的分布式架构方案，近些年在容器领域使用非常广泛，作为容器化部署实施的典型方案。
 看似很新（相对于刚出现时来说），但它却是谷歌十几年以来大规模应用容器技术的经验积累和升华的重要成果。确切地说，Kubernetes是谷歌严格保密十几年的秘密武器——Borg的一个开源版本。Borg是谷歌的一个久负盛名的内部使用的大规模集群管理系统，它基于容器技术，目的是实现资源管理的自动化，以及跨过个数据中心资源利用率的最大化。十几年以来，谷歌一直通过Borg系统管理者数据庞大的应用程序集群，由于谷歌员工都签署了保密协议，即使离职也不能泄露Borg的内部设计，所以外界一直无法了解关于它的更多信息。直到2015年4月，传闻许久的Borg论文发布，伴随着Kubernetes的高调宣传被谷歌首次公开，大家才得以了解它的更多内幕。正式由于站在Borg这个前辈的肩膀上，汲取了Borg过去十年间的经验与教训，所以Kubernetes一经开源就一鸣惊人，并迅速称霸容器领域。
@@ -153,10 +153,10 @@ Kubernetes，构建在Docker技术之上，为跨主机的容器化应用提供�
     
     <item>
       <title>文档写作利器：Markdown</title>
-      <link>https://xcbeyond.github.io/blog/others/markdown-usage/</link>
+      <link>http://xcbeyond.cn/blog/others/markdown-usage/</link>
       <pubDate>Wed, 12 Feb 2020 22:32:25 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/others/markdown-usage/</guid>
+      <guid>http://xcbeyond.cn/blog/others/markdown-usage/</guid>
       <description>一、前言 无论你是软件开发者，还是互联网写作者，为了使自己写的文档或作品更好的流通，便于在不同场合、不同环境、不同人群的查看，亟需寻求一种通用、便于扭转、留存的文档格式。
 在这之前、现在或者今后，你可能会存在以下这些困扰：
  作为软件开发者、架构师，写的设计文档到底应该以什么样的格式来保存呢？是word、txt、pdf，还是html呢？这些文档格式，在不同情况下，可能都会存在。有时为了便于评审、修改，会采用word格式；有时为了防止文档篡改，会采用pdf格式；有时为了便于网页浏览(如：GitLib)，会采用html格式。难道要针对不同格式进行不同的编写吗？ 作为互联网写作者，写的文章希望能够在不同的平台能够发表，分享给更多的人。而在不同互联网平台，如：微信公众号、CSND、知乎、有道云笔记等，文章的排版会花费你大量的时间，不同平台排版上也会存在一些差异性，甚至让你抓狂。难道不同平台要进行不同排版的调整吗？  办法总比困难多! 上述的这些困扰，Markdown就能很好的解决，接下来我们一起来了解下它吧。
@@ -165,262 +165,262 @@ Kubernetes，构建在Docker技术之上，为跨主机的容器化应用提供�
     
     <item>
       <title>Algorithm</title>
-      <link>https://xcbeyond.github.io/course/course-5/</link>
+      <link>http://xcbeyond.cn/course/course-5/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/course/course-5/</guid>
+      <guid>http://xcbeyond.cn/course/course-5/</guid>
       <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Artificial Intelligence</title>
-      <link>https://xcbeyond.github.io/course/course-3/</link>
+      <link>http://xcbeyond.cn/course/course-3/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/course/course-3/</guid>
+      <guid>http://xcbeyond.cn/course/course-3/</guid>
       <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Geography</title>
-      <link>https://xcbeyond.github.io/research/research-1/</link>
+      <link>http://xcbeyond.cn/research/research-1/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/research/research-1/</guid>
+      <guid>http://xcbeyond.cn/research/research-1/</guid>
       <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Geography</title>
-      <link>https://xcbeyond.github.io/research/research-2/</link>
+      <link>http://xcbeyond.cn/research/research-2/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/research/research-2/</guid>
+      <guid>http://xcbeyond.cn/research/research-2/</guid>
       <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Geography</title>
-      <link>https://xcbeyond.github.io/research/research-3/</link>
+      <link>http://xcbeyond.cn/research/research-3/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/research/research-3/</guid>
+      <guid>http://xcbeyond.cn/research/research-3/</guid>
       <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Geography</title>
-      <link>https://xcbeyond.github.io/research/research-4/</link>
+      <link>http://xcbeyond.cn/research/research-4/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/research/research-4/</guid>
+      <guid>http://xcbeyond.cn/research/research-4/</guid>
       <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Geography</title>
-      <link>https://xcbeyond.github.io/research/research-5/</link>
+      <link>http://xcbeyond.cn/research/research-5/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/research/research-5/</guid>
+      <guid>http://xcbeyond.cn/research/research-5/</guid>
       <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Geography</title>
-      <link>https://xcbeyond.github.io/research/research-6/</link>
+      <link>http://xcbeyond.cn/research/research-6/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/research/research-6/</guid>
+      <guid>http://xcbeyond.cn/research/research-6/</guid>
       <description>About Research Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>JavaScript</title>
-      <link>https://xcbeyond.github.io/course/course-4/</link>
+      <link>http://xcbeyond.cn/course/course-4/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/course/course-4/</guid>
+      <guid>http://xcbeyond.cn/course/course-4/</guid>
       <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Mathematics</title>
-      <link>https://xcbeyond.github.io/course/course-2/</link>
+      <link>http://xcbeyond.cn/course/course-2/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/course/course-2/</guid>
+      <guid>http://xcbeyond.cn/course/course-2/</guid>
       <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Photography</title>
-      <link>https://xcbeyond.github.io/course/course-1/</link>
+      <link>http://xcbeyond.cn/course/course-1/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/course/course-1/</guid>
+      <guid>http://xcbeyond.cn/course/course-1/</guid>
       <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Teaching Materials and Testing Methods</title>
-      <link>https://xcbeyond.github.io/notice/notice-1/</link>
+      <link>http://xcbeyond.cn/notice/notice-1/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/notice/notice-1/</guid>
+      <guid>http://xcbeyond.cn/notice/notice-1/</guid>
       <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Teaching Materials and Testing Methods</title>
-      <link>https://xcbeyond.github.io/notice/notice-2/</link>
+      <link>http://xcbeyond.cn/notice/notice-2/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/notice/notice-2/</guid>
+      <guid>http://xcbeyond.cn/notice/notice-2/</guid>
       <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Teaching Materials and Testing Methods</title>
-      <link>https://xcbeyond.github.io/notice/notice-3/</link>
+      <link>http://xcbeyond.cn/notice/notice-3/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/notice/notice-3/</guid>
+      <guid>http://xcbeyond.cn/notice/notice-3/</guid>
       <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Teaching Materials and Testing Methods</title>
-      <link>https://xcbeyond.github.io/notice/notice-4/</link>
+      <link>http://xcbeyond.cn/notice/notice-4/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/notice/notice-4/</guid>
+      <guid>http://xcbeyond.cn/notice/notice-4/</guid>
       <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Teaching Materials and Testing Methods</title>
-      <link>https://xcbeyond.github.io/notice/notice-5/</link>
+      <link>http://xcbeyond.cn/notice/notice-5/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/notice/notice-5/</guid>
+      <guid>http://xcbeyond.cn/notice/notice-5/</guid>
       <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Teaching Materials and Testing Methods</title>
-      <link>https://xcbeyond.github.io/notice/notice-6/</link>
+      <link>http://xcbeyond.cn/notice/notice-6/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/notice/notice-6/</guid>
+      <guid>http://xcbeyond.cn/notice/notice-6/</guid>
       <description>About Notice Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Vlogging</title>
-      <link>https://xcbeyond.github.io/course/course-6/</link>
+      <link>http://xcbeyond.cn/course/course-6/</link>
       <pubDate>Sat, 06 Jul 2019 15:27:17 +0600</pubDate>
       
-      <guid>https://xcbeyond.github.io/course/course-6/</guid>
+      <guid>http://xcbeyond.cn/course/course-6/</guid>
       <description>About Course Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Alex Rook</title>
-      <link>https://xcbeyond.github.io/teacher/alex-rook/</link>
+      <link>http://xcbeyond.cn/teacher/alex-rook/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/teacher/alex-rook/</guid>
+      <guid>http://xcbeyond.cn/teacher/alex-rook/</guid>
       <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>CHEMICAL ENGINEERING</title>
-      <link>https://xcbeyond.github.io/scholarship/scholarship-1/</link>
+      <link>http://xcbeyond.cn/scholarship/scholarship-1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/scholarship/scholarship-1/</guid>
+      <guid>http://xcbeyond.cn/scholarship/scholarship-1/</guid>
       <description> institutes Smart-affiliated research Digital Access to Scholarship Smart Catalyst Smart Library Portal Smart research programs  </description>
     </item>
     
     <item>
       <title>CHEMICAL ENGINEERING</title>
-      <link>https://xcbeyond.github.io/scholarship/scholarship-2/</link>
+      <link>http://xcbeyond.cn/scholarship/scholarship-2/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/scholarship/scholarship-2/</guid>
+      <guid>http://xcbeyond.cn/scholarship/scholarship-2/</guid>
       <description> institutes Smart-affiliated research Digital Access to Scholarship Smart Catalyst Smart Library Portal Smart research programs  </description>
     </item>
     
     <item>
       <title>CHEMICAL ENGINEERING</title>
-      <link>https://xcbeyond.github.io/scholarship/scholarship-3/</link>
+      <link>http://xcbeyond.cn/scholarship/scholarship-3/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/scholarship/scholarship-3/</guid>
+      <guid>http://xcbeyond.cn/scholarship/scholarship-3/</guid>
       <description> institutes Smart-affiliated research Digital Access to Scholarship Smart Catalyst Smart Library Portal Smart research programs  </description>
     </item>
     
     <item>
       <title>Clark Malik</title>
-      <link>https://xcbeyond.github.io/teacher/clark-malik/</link>
+      <link>http://xcbeyond.cn/teacher/clark-malik/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/teacher/clark-malik/</guid>
+      <guid>http://xcbeyond.cn/teacher/clark-malik/</guid>
       <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Devid Luis</title>
-      <link>https://xcbeyond.github.io/teacher/devid-luis/</link>
+      <link>http://xcbeyond.cn/teacher/devid-luis/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/teacher/devid-luis/</guid>
+      <guid>http://xcbeyond.cn/teacher/devid-luis/</guid>
       <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Duis Rio</title>
-      <link>https://xcbeyond.github.io/teacher/duis-rio/</link>
+      <link>http://xcbeyond.cn/teacher/duis-rio/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/teacher/duis-rio/</guid>
+      <guid>http://xcbeyond.cn/teacher/duis-rio/</guid>
       <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>Jacke Mastio</title>
-      <link>https://xcbeyond.github.io/teacher/jacke-mastio/</link>
+      <link>http://xcbeyond.cn/teacher/jacke-mastio/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/teacher/jacke-mastio/</guid>
+      <guid>http://xcbeyond.cn/teacher/jacke-mastio/</guid>
       <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     
     <item>
       <title>John doe</title>
-      <link>https://xcbeyond.github.io/author/john-doe/</link>
+      <link>http://xcbeyond.cn/author/john-doe/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/author/john-doe/</guid>
+      <guid>http://xcbeyond.cn/author/john-doe/</guid>
       <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet vulputate augue.</description>
     </item>
     
     <item>
       <title>Mark Dinn</title>
-      <link>https://xcbeyond.github.io/author/mark-dinn/</link>
+      <link>http://xcbeyond.cn/author/mark-dinn/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/author/mark-dinn/</guid>
+      <guid>http://xcbeyond.cn/author/mark-dinn/</guid>
       <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet vulputate augue.</description>
     </item>
     
     <item>
       <title>Zim Cook</title>
-      <link>https://xcbeyond.github.io/teacher/zim-cook/</link>
+      <link>http://xcbeyond.cn/teacher/zim-cook/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://xcbeyond.github.io/teacher/zim-cook/</guid>
+      <guid>http://xcbeyond.cn/teacher/zim-cook/</guid>
       <description>About Me Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
     </item>
     

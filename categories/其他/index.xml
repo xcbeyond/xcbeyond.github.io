@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>其他 on xcbeyond | 疯狂源自梦想，技术成就辉煌!</title>
-    <link>https://xcbeyond.github.io/categories/%E5%85%B6%E4%BB%96/</link>
+    <link>http://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/</link>
     <description>Recent content in 其他 on xcbeyond | 疯狂源自梦想，技术成就辉煌!</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Wed, 12 Feb 2020 22:32:25 +0800</lastBuildDate><atom:link href="https://xcbeyond.github.io/categories/%E5%85%B6%E4%BB%96/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Feb 2020 22:32:25 +0800</lastBuildDate><atom:link href="http://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>文档写作利器：Markdown</title>
-      <link>https://xcbeyond.github.io/blog/others/markdown-usage/</link>
+      <link>http://xcbeyond.cn/blog/others/markdown-usage/</link>
       <pubDate>Wed, 12 Feb 2020 22:32:25 +0800</pubDate>
       
-      <guid>https://xcbeyond.github.io/blog/others/markdown-usage/</guid>
+      <guid>http://xcbeyond.cn/blog/others/markdown-usage/</guid>
       <description>一、前言 无论你是软件开发者，还是互联网写作者，为了使自己写的文档或作品更好的流通，便于在不同场合、不同环境、不同人群的查看，亟需寻求一种通用、便于扭转、留存的文档格式。
 在这之前、现在或者今后，你可能会存在以下这些困扰：
  作为软件开发者、架构师，写的设计文档到底应该以什么样的格式来保存呢？是word、txt、pdf，还是html呢？这些文档格式，在不同情况下，可能都会存在。有时为了便于评审、修改，会采用word格式；有时为了防止文档篡改，会采用pdf格式；有时为了便于网页浏览(如：GitLib)，会采用html格式。难道要针对不同格式进行不同的编写吗？ 作为互联网写作者，写的文章希望能够在不同的平台能够发表，分享给更多的人。而在不同互联网平台，如：微信公众号、CSND、知乎、有道云笔记等，文章的排版会花费你大量的时间，不同平台排版上也会存在一些差异性，甚至让你抓狂。难道不同平台要进行不同排版的调整吗？  办法总比困难多! 上述的这些困扰，Markdown就能很好的解决，接下来我们一起来了解下它吧。
