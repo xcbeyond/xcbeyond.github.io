@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  <title>1.2 Go语言从入门到精通：开发环境搭建</title>
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="本文将从 Go 语言环境安装开始，带你一起开启 Go 语言的开发之路，其中包括环境安装、IDE 使用等内容。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="http://xcbeyond.cn/images/logo.png" alt="xcbeyond | 疯狂源自梦想，技术成就辉煌!"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">专题</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">1.2 Go语言从入门到精通：开发环境搭建</li>
+        </ul>
+        <p class="text-lighten">本文将从 Go 语言环境安装开始，带你一起开启 Go 语言的开发之路，其中包括环境安装、IDE 使用等内容。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/golang-02.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2021-02-21 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a"> 
+                  Go语言从入门到精通</a> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5">
+            <p>上一篇对 Go 语言进行了介绍，不知道你有没有想继续学下去的冲动呢?</p>
+<p>在软件领域，当你学习一门新语言、新技术时，一般先从安装环境开始，实实在在的安装完，使用它，逐步深入了解。本文将从 Go 语言环境安装开始，带你一起开启 Go 语言的开发之路，其中包括环境安装、IDE使用等内容。</p>
+<h2 id="1go语言环境安装">1、Go语言环境安装</h2>
+<h3 id="11-开发包获取">1.1 开发包获取</h3>
+<p>Go 语言支持以下系统：</p>
+<ul>
+<li>Windows</li>
+<li>Linux</li>
+<li>Mac：也称为 Darwin</li>
+<li><a href="https://baike.baidu.com/item/FreeBSD">FreeBSD</a></li>
+</ul>
+<p>开发包下载地址为：<a href="https://golang.org/dl">https://golang.org/dl</a></p>
+<p>如果打不开可以使用这个地址：<a href="https://golang.google.cn/dl">https://golang.google.cn/dl</a></p>
+<p>根据你的系统，选择下载对应的开发包。</p>
+<p><img src="golang-installer-package.png" alt="Go 语言安装包"></p>
+<p>以 Windows 系统为例，下载 Windows 的安装包 <code>go1.16.windows-amd64.msi</code>，下载地址：<a href="https://golang.google.cn/doc/install?download=go1.16.windows-amd64.msi">https://golang.google.cn/doc/install?download=go1.16.windows-amd64.msi</a></p>
+<h3 id="12-开发包安装">1.2 开发包安装</h3>
+<p>（1）安装开发包。</p>
+<p>双击下载的安装包 <code>go1.16.windows-amd64.msi</code>，一步步安装即可。</p>
+<p>默认情况下，会安装在 <code>C:\Program Files\Go</code> 目录下。（不同版本会存在差异，以实际为准！）</p>
+<p>（2）配置 Go 环境变量。</p>
+<blockquote>
+<p>默认情况下，安装完开发包会自动配置 Go 环境变量，如若未配置或配置不符合自己需求（GOPATH 可按照自己的实际情况配置），则安装下面的配置方法配置或进行调整。</p>
+</blockquote>
+<p>根据 Windows 系统在查找可执行程序的原理，可以将 Go 所在路径定义到环境变量中，让系统帮我们去找到运行执行的程序，这样任何目录都可以执行go指令。配置的环境变量如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Path</td>
+<td>添加Go开发包的 /bin 目录，如：<code>C:\Program Files\Go\bin</code></td>
+</tr>
+<tr>
+<td>GOPATH</td>
+<td>工作目录，设置 Go 项目的工作路径，可根据自我喜好设置。</td>
+</tr>
+</tbody>
+</table>
+<p>右键“我的电脑”-&gt; 属性 -&gt; 高级系统设置 -&gt; 高级 -&gt; 系统变量：</p>
+<p><img src="%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E8%AE%BE%E7%BD%AE.png" alt="环境变量设置"></p>
+<p>添加的环境变量如下：</p>
+<ul>
+<li>
+<p>Path：<code>C:\Program Files\Go\bin</code></p>
+<p><img src="%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8FPath.png" alt="配置环境变量Path"></p>
+</li>
+<li>
+<p>GOPATH：<code>E:\github\golangLearning</code>，自定义目录，作为后续 Go 工程目录。</p>
+</li>
+</ul>
+<p>（3）环境检验。</p>
+<p>打开 cmd 命令行，执行 <code>go version</code>，检查是否安装成功并生效。</p>
+<p><img src="go-version%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.png" alt="go-version执行结果"></p>
+<h2 id="2ide-安装">2、IDE 安装</h2>
+<h3 id="21-ide-工具">2.1 IDE 工具</h3>
+<p>常用的 Go 开发 IDE 如下所示：</p>
+<ul>
+<li><strong>Visual Studio Code（简称 VSCode）</strong><br>
+微软的产品，一个运行于 Mac OS、Windows 和 Linux 之上的工具，默认提供 Go 语言的语法高亮。安装 Go 语言插件，还可以支持智能提示，编译运行等功能。</li>
+<li><strong>Sublime Text</strong><br>
+可以免费试用，默认也支持 Go 代码语法高亮，只是保存次数达到一定数量后需要购买。</li>
+<li><strong>Vim</strong><br>
+它是从 vi（Linux）发展出来的一个文本编辑器，代码补全、编译及错误跳转等方便编程的功能非常丰富。</li>
+<li><strong>Emacs</strong><br>
+它不仅仅是一个编辑器，因为功能强大，可称为集成开发环境。</li>
+<li><strong>Eclipse IDE 工具</strong><br>
+开源免费，并提供 Go Eclipse 插件。</li>
+<li><strong>LiteIDE</strong><br>
+LiteIDE是一款专门为Go语言开发的跨平台轻量级集成开发环境（IDE），是国人开发的。</li>
+<li><strong>JetBrains 公司的产品</strong><br>
+GoLand、PhpStrom、WebStrom 和 PyCharm 等 IDE 工具，都需要安装 Go 插件。</li>
+</ul>
+<p>Go 语言的 IDE 工具很多，可根据自我喜好自行选择，不做强制要求。</p>
+<p>（建议大家先选择使用 VSCode，这样能让你更好地理解 Go 语言、基本语法和关键字等。等熟悉 Go 的语法后，再切换到自己顺手的IDE即可，如：IDEA、GoLand 等。）</p>
+<h3 id="22-安装-vscode">2.2 安装 VSCode</h3>
+<p>这里以 VSCode 为例。</p>
+<p>下载地址：<a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></p>
+<p><img src="VSCode%E4%B8%8B%E8%BD%BD%E9%A1%B5%E9%9D%A2.png" alt="VSCode下载页面"></p>
+<p>下载页面可以选择不同版本供大家下载。</p>
+<p>我选择了 <code>Windows x64</code> 版本下载，并直接安装即可。</p>
+<h3 id="23-vscode-配置-go-语言插件">2.3 VSCode 配置 Go 语言插件</h3>
+<p>（1）首先安装 Go 语言插件：</p>
+<p><img src="VSCode%E5%AE%89%E8%A3%85Go%E8%AF%AD%E8%A8%80%E6%8F%92%E4%BB%B6.png" alt="VSCode安装Go语言插件"></p>
+<p>（2）配置 Go 开发环境包</p>
+<p>VSCode中，快捷键<code>ctrl+shift+p</code>打开，输入<code>go:install</code>：</p>
+<p><img src="VSCode%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85go-install.png" alt="VSCode插件安装go-install"></p>
+<p>并选中<code>Go:Install/Update Tools</code>回车，并全部勾选，确认：</p>
+<p><img src="VSCode%E6%8F%92%E4%BB%B6%E5%AE%89%E8%A3%85go-install-2.png" alt="VSCode插件安装go-install-2"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Tools environment: GOPATH<span style="color:#f92672">=</span>E:<span style="color:#ae81ff">\g</span>ithub<span style="color:#ae81ff">\g</span>olangLearning
+Installing <span style="color:#ae81ff">9</span> tools at E:<span style="color:#ae81ff">\g</span>ithub<span style="color:#ae81ff">\g</span>olangLearning<span style="color:#ae81ff">\b</span>in in module mode.
+  gopkgs
+  go-outline
+  gotests
+  gomodifytags
+  impl
+  goplay
+  dlv
+  golint
+  gopls
+  省略……
+
+Installing github.com/uudashr/gopkgs/v2/cmd/gopkgs <span style="color:#f92672">(</span>E:<span style="color:#ae81ff">\g</span>ithub<span style="color:#ae81ff">\g</span>olangLearning<span style="color:#ae81ff">\b</span>in<span style="color:#ae81ff">\g</span>opkgs.exe<span style="color:#f92672">)</span> SUCCEEDED
+Installing github.com/ramya-rao-a/go-outline <span style="color:#f92672">(</span>E:<span style="color:#ae81ff">\g</span>ithub<span style="color:#ae81ff">\g</span>olangLearning<span style="color:#ae81ff">\b</span>in<span style="color:#ae81ff">\g</span>o-outline.exe<span style="color:#f92672">)</span> SUCCEEDED
+省略……
+
+All tools successfully installed. You are ready to Go :<span style="color:#f92672">)</span>.
+</code></pre></div><h3 id="24-go语言程序快速运行">2.4 Go语言程序快速运行</h3>
+<p>（1）VSCode 打开刚刚创建的 GOPATH 工程目录。</p>
+<p>（2）创建一个新的文件 <code>test.go</code>，编写 <code>Hello, World!</code> Go 程序，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+   <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Hello, World!&#34;</span>)
+}
+</code></pre></div><p>保存文件后，VSCode 会自动检测到可能需要安装的扩展包或插件，此时我们会看到右下角有弹框提示，如下所示。此时我们暂时忽略，无需安装。</p>
+<p><img src="VSCode%E5%AE%89%E8%A3%85Go%E6%89%A9%E5%B1%95%E5%8C%85.png" alt="VSCode安装Go扩展包"></p>
+<p>（3）快速运行。</p>
+<p>VSCode 中“Terminal” -&gt; New Terminal，执行 <code>go run test.go</code> 命令直接运行 <code>test.go</code> 程序，结果如下：</p>
+<p>（实际环境是需要先编译(<code>go build</code>)后运行。<code>go run</code> 命令的执行时间较长，是因为其中包含编译过程。）</p>
+<p><img src="go-run%E7%A4%BA%E4%BE%8B.png" alt="go-run示例"></p>
+<p>到此，Go语言开发环境搭建完毕！</p>
+
+          </div>
+          
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a" class="d-block pb-3 mt-3">Go语言从入门到精通</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/go">Go</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/migration.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/">
+          <h5 class="mt-0">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h5>
+        </a>
+        2021-04-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-02.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+          <h5 class="mt-0">1.2 Go语言从入门到精通：开发环境搭建</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-01.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/">
+          <h5 class="mt-0">1.1 Go语言从入门到精通：Go语言介绍</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/microservice/%E6%88%91%E4%BB%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%98%AF%E5%B0%8F%E5%8D%95%E4%BD%93%E5%91%A2/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/technology-02.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/microservice/%E6%88%91%E4%BB%AC%E8%AE%BE%E8%AE%A1%E7%9A%84%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%98%AF%E5%B0%8F%E5%8D%95%E4%BD%93%E5%91%A2/">
+          <h5 class="mt-0">我们设计的是微服务还是小单体呢？</h5>
+        </a>
+        2021-01-15
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/Go%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/">
+          <h5 class="mt-0">0 Go语言从入门到精通：开篇介绍，Go语言我来啦</h5>
+        </a>
+        2021-01-14
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/technology-01.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/">
+          <h5 class="mt-0">中台到底是什么？</h5>
+        </a>
+        2021-01-11
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1go语言环境安装">1、Go语言环境安装</a>
+      <ul>
+        <li><a href="#11-开发包获取">1.1 开发包获取</a></li>
+        <li><a href="#12-开发包安装">1.2 开发包安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#2ide-安装">2、IDE 安装</a>
+      <ul>
+        <li><a href="#21-ide-工具">2.1 IDE 工具</a></li>
+        <li><a href="#22-安装-vscode">2.2 安装 VSCode</a></li>
+        <li><a href="#23-vscode-配置-go-语言插件">2.3 VSCode 配置 Go 语言插件</a></li>
+        <li><a href="#24-go语言程序快速运行">2.4 Go语言程序快速运行</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.</p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu5nZKbeK-WHQ70oqOWo-_4VmwOwKP9YQ"></script>
+
+
+<!-- JS Plugins -->
+
+<script src="http://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/google-map/gmap.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="http://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+</body>
+
+</html>
