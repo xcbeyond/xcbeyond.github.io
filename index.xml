@@ -73,10 +73,10 @@
     
     <item>
       <title>1.2 Go语言从入门到精通：开发环境搭建</title>
-      <link>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
+      <link>http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</link>
       <pubDate>Sun, 21 Feb 2021 20:21:06 +0800</pubDate>
       
-      <guid>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
+      <guid>http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</guid>
       <description>上一篇对 Go 语言进行了介绍，不知道你有没有想继续学下去的冲动呢?
 在软件领域，当你学习一门新语言、新技术时，一般先从安装环境开始，实实在在的安装完，使用它，逐步深入了解。本文将从 Go 语言环境安装开始，带你一起开启 Go 语言的开发之路，其中包括环境安装、IDE使用等内容。
 1、Go语言环境安装 1.1 开发包获取 Go 语言支持以下系统：</description>
@@ -84,10 +84,10 @@
     
     <item>
       <title>1.1 Go语言从入门到精通：Go语言介绍</title>
-      <link>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</link>
+      <link>http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</link>
       <pubDate>Sun, 21 Feb 2021 15:03:15 +0800</pubDate>
       
-      <guid>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</guid>
+      <guid>http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/</guid>
       <description>1、Go 介绍  Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.</description>
     </item>
     
@@ -110,10 +110,10 @@ Martin Fowler在提出微服务时，提到过微服务的一个重要特征：�
     
     <item>
       <title>0 Go语言从入门到精通：开篇介绍，Go语言我来啦</title>
-      <link>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</link>
+      <link>http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</link>
       <pubDate>Thu, 14 Jan 2021 21:30:24 +0800</pubDate>
       
-      <guid>http://xcbeyond.cn/blog/go/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</guid>
+      <guid>http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/0-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E7%AF%87%E4%BB%8B%E7%BB%8Dgo%E8%AF%AD%E8%A8%80%E6%88%91%E6%9D%A5%E5%95%A6/</guid>
       <description>“Go will be the server language of the future.” — Tobias Lütke, Shopify</description>
     </item>
     
