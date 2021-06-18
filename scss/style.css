@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*!------------------------------------------------------------------
 [MAIN STYLESHEET]
 
@@ -788,3 +789,7 @@ link:focus,
   .tag-list a:hover {
     background-color: #ffbc3b;
     color: #fff; }
+
+/** 博客样式 **/
+.content img {
+  max-width: 100%; }
