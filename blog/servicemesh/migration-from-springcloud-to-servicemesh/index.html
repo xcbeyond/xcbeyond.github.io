@@ -125,6 +125,9 @@
                   href="/categories/service-mesh"> 
                   Service Mesh</a> </li>
 
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
             </ul>
           </div>
           
@@ -140,7 +143,7 @@
 <p>微服务是近些年来软件架构中的热名词，也是一个很大的概念，不同人对它的理解都各不相同，甚至在早期微服务架构中出现了一批四不像的微服务架构产品，有人把单纯引入<code>Spring Boot</code>、<code>Spring Cloud</code>框架也叫做微服务架构，却只是将它作为服务的Web容器而已。</p>
 <p>随着微服务的火热，越来越多的团队开始实践，将微服务纷纷落地，并投入生产。但随着微服务规模的不断壮大，每增加一个微服务，就可能会增加一些依赖的基础设施和第三方的配置，比如 <code>Kafka</code> 实例等，相应 <code>CI/CD</code> 的配置也会增加或调整。 同时随着微服务数量增多、业务复杂性的提升及需求的多样性等（如，对接第三方异构系统等），服务间通信的错综复杂，一步步地将微服务变得更加臃肿，服务治理也是难上加难，而这些问题在单体架构中很容易解决。为此，有人开始怀疑当初微服务化是否是明智之选，甚至考虑回归到传统单体应用。</p>
 <p>正如下图所示，PPT 中的微服务总是美好的，但现实中的微服务却是一团糟糕，想甩甩不掉，越看越糟心。难道就没有办法了么？</p>
-<p><img src="./%E7%8E%B0%E5%AE%9E%E4%B8%ADvsPPT%E4%B8%AD%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1.png" alt=""></p>
+<p><img src="%E7%8E%B0%E5%AE%9E%E4%B8%ADvsPPT%E4%B8%AD%E7%9A%84%E5%BE%AE%E6%9C%8D%E5%8A%A1.png" alt="现实中vsPPT中的微服务"></p>
 <h3 id="11-传统微服务架构面临的挑战">1.1 传统微服务架构面临的挑战</h3>
 <p>面对上述暴露出的问题，并在传统微服务架构下，经过实践的不断冲击，面临了更多新的挑战，综上所述，产生这些问题的原因有以下这几点：</p>
 <ul>
@@ -154,7 +157,7 @@
 <p>为了解决传统微服务面临的问题，以应对全新的挑战，微服务架构也进一步演化，最终催生了<code>Service Mesh</code> 的出现，迎来了新一代微服务架构，也被称为下一代微服务。为了更好地理解 <code>Service Mesh</code> 的概念和存在的意义，我们来回顾一下这一演进过程。</p>
 <h4 id="121-耦合阶段">1.2.1 耦合阶段</h4>
 <p>在微服务架构中，服务发现、熔断、治理等能力是微服务架构重要的组成部分。微服务化之后，服务更加的分散，复杂度变得更高，起初开发者将诸如熔断、超时等功能和业务代码封装在一起，使服务具备了网络控制能力，如下图所示。</p>
-<p><img src="./%E5%B0%86%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E5%92%8C%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E8%80%A6%E5%90%88%E5%9C%A8%E4%B8%80%E8%B5%B7.png" alt=""></p>
+<p><img src="%E5%B0%86%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E5%92%8C%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91%E8%80%A6%E5%90%88%E5%9C%A8%E4%B8%80%E8%B5%B7.png" alt="耦合阶段"></p>
 <p>这种方案虽然易于实现，但从设计角度来讲却存在一定的缺陷。</p>
 <ul>
 <li>基础设施功能（如，服务发现，负载均衡、熔断等）和业务逻辑高度耦合。</li>
@@ -164,7 +167,7 @@
 </ul>
 <h4 id="122-公共库sdk">1.2.2 公共库SDK</h4>
 <p>基于上面存在的问题，很容易会想到将基础设施功能设计为一个公共库SDK，让服务的业务逻辑与这些功能降低耦合度，提高重复利用率，更重要的是开发者只需要关注公共库SDK的依赖及使用，而不必关注实现这些公共功能，从而更加专注于业务逻辑的开发，比如 <code>Spring Cloud</code> 框架是类似的方式。如下图所示：</p>
-<p><img src="./%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%A2%AB%E5%B0%81%E8%A3%85%E5%9C%A8%E5%85%AC%E5%85%B1%E5%BA%93%E9%87%8C.PNG" alt=""></p>
+<p><img src="%E7%BD%91%E7%BB%9C%E5%8A%9F%E8%83%BD%E8%A2%AB%E5%B0%81%E8%A3%85%E5%9C%A8%E5%85%AC%E5%85%B1%E5%BA%93%E9%87%8C.png" alt="公共库SDK阶段"></p>
 <p>实际上即便如此，它仍然有一些不足之处。</p>
 <ul>
 <li>这些公共库SDK存在较为陡峭的学习成本，需要耗费开发人员一定的时间和人力与现有系统集成，甚至需要考虑修改现有代码进行整合。</li>
@@ -174,7 +177,7 @@
 <h4 id="123-sidecar模式">1.2.3 Sidecar模式</h4>
 <p>有了上面公共库SDK的启发，加上跨语言问题、更新后的发布和维护等问题，人们发现更好的解决方案是把它作为一个代理，服务通过这个透明的代理完成所有流量的控制。</p>
 <p>这就是典型的 <code>Sidecar</code> 代理模式，也被翻译为边车代理，它作为与其他服务通信的桥梁，为服务提供额外的网络特性，并与服务独立部署，对服务零侵入，更不会受限于服务的开发语言和技术栈，如下图所示。</p>
-<p><img src="./Sidecar%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p><img src="Sidecar%E6%A8%A1%E5%BC%8F.png" alt="Sidecar模式阶段"></p>
 <p>以 <code>Sidecar</code> 模式进行通信代理，实现了基础实施层与业务逻辑的完全隔离，在部署、升级时带来了便利，做到了真正的基础设施层与业务逻辑层的彻底解耦。另一方面，<code>Sidecar</code> 可以更加快速地为应用服务提供更灵活的扩展，而不需要应用服务的大量改造。<code>Sidecar</code> 可以实现以下主要功能：</p>
 <ul>
 <li><strong>服务注册。</strong> 帮助服务注册到相应的服务注册中心，并对服务做相关的健康检查。</li>
@@ -185,14 +188,14 @@
 <p>于是，应用服务终于可以做到跨语言开发、并更专注于业务逻辑的开发。</p>
 <h4 id="124-service-mesh">1.2.4 Service Mesh</h4>
 <p>把 <code>Sidecar</code> 模式充分应用于一个庞大的微服务架构系统，为每个应用服务配套部署一个 <code>Sidecar</code> 代理，完成服务间复杂的通信，最终就会得到一个如下所示的网络拓扑结构，这就是 <code>Service Mesh</code>，又称之为“服务网格“。</p>
-<p><img src="./%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC%E7%BD%91%E7%8A%B6%E7%BB%93%E6%9E%84.png" alt=""></p>
+<p><img src="%E6%9C%8D%E5%8A%A1%E7%BD%91%E6%A0%BC%E7%BD%91%E7%8A%B6%E7%BB%93%E6%9E%84.png" alt="Service Mesh阶段"></p>
 <p>至此，迎来了新一代微服务架构——<code>Service Mesh</code>，它彻底解决了传统微服务架构所面临的问题。</p>
 <h3 id="13-什么是service-mesh">1.3 什么是Service Mesh</h3>
 <p>在开始进入主题之前，我认为有必要再对 <code>Service Mesh</code> 进行统一的阐述，这样将有助于理解它，更加便于阅读接下来的内容。</p>
 <h4 id="131-service-mesh介绍">1.3.1 Service Mesh介绍</h4>
 <p><code>Service Mesh</code>翻译为“服务网格”，作为<strong>服务间通信的基础设施层</strong>。轻量级高性能网络代理，提供安全的、快速的、可靠地服务间通讯，与实际应用部署一起，但对应用透明。应用作为服务的发起方，只需要用最简单的方式将请求发送给本地的服务网格代理，然后网格代理会进行后续的操作，如服务发现，负载均衡，最后将请求转发给目标服务。</p>
 <p><strong><code>Service Mesh</code>目的是解决系统架构微服务化后的服务间通信和治理问题。</strong> 服务网格由<code>Sidecar</code>节点组成，这个模式的精髓在于实现了数据面（业务逻辑）和控制面的解耦。具体到微服务架构中，即给每一个微服务实例同步部署一个<code>Sidecar</code>。</p>
-<p><img src=".%5CServiceMesh%E9%83%A8%E7%BD%B2%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt=""></p>
+<p><img src="ServiceMesh%E9%83%A8%E7%BD%B2%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt="ServiceMesh部署网络结构图"></p>
 <p>在<code>Service Mesh</code>部署网络结构图中，绿色方块为应用服务，蓝色方块为 <code>SideCar</code>，应用服务之间通过<code>Sidecar</code>进行通信，整个服务通信形成图中的蓝色网络连线，图中所有蓝色部分就形成了<code>Service Mesh</code>。其具备如下主要特点：</p>
 <ul>
 <li>应用程序间通讯的中间层。</li>
@@ -391,7 +394,7 @@
 <p>如果一定要在非 <code>Kubernetes</code> 环境下引入 <code>Service Mesh</code>，数据平面可使用 <code>Envoy</code>，控制平面可根据 <code>XDS</code> 协议进行自研。</p>
 <p><strong>路径二：先进行 <code>Kubernetes</code> 容器化改造，再接入 <code>Service Mesh</code></strong></p>
 <p>倘若公司有云平台或容器化团队，可采用公司资源共享的方式，先借助其他团队来完成 <code>Kubernetes</code> 容器化改造，再接入 <code>Service Mesh</code>。</p>
-<p>**最后，**基于构建的 <code>Service Mesh</code> 框架，将业务应用逐步迁移到 <code>Service Mesh</code> 上来。</p>
+<p><strong>最后</strong>，基于构建的 <code>Service Mesh</code> 框架，将业务应用逐步迁移到 <code>Service Mesh</code> 上来。</p>
 <h3 id="23-迁移原则">2.3 迁移原则</h3>
 <p>在实施迁移时，必须要时刻遵守以下迁移原则。</p>
 <ul>
@@ -459,58 +462,58 @@
 </span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENTRYPOINT</span> [<span style="color:#e6db74">&#34;java&#34;</span>, <span style="color:#e6db74">&#34;-Djava.security.egd=file:/dev/./urandom&#34;</span>, <span style="color:#e6db74">&#34;-jar&#34;</span>, <span style="color:#e6db74">&#34;/microservice/service-provider-1.0.jar&#34;</span>]<span style="color:#960050;background-color:#1e0010">
 </span></code></pre></div><p>（2）配置pom <code>docker-maven-plugin</code>插件。</p>
 <p>在服务<code>serviceProvider</code> 的 <code>pom.xml</code> 中配置 <code>build</code> 部分，内容如下：</p>
-<pre><code>&lt;!-- 打包配置 --&gt;
- &lt;build&gt;
-  &lt;defaultGoal&gt;install&lt;/defaultGoal&gt;
-  &lt;!-- build后的文件名，默认值是${artifactId}-${version}。  --&gt;
-     &lt;finalName&gt;service-provider-${project.version}&lt;/finalName&gt;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!-- 打包配置 --&gt;</span>
+ <span style="color:#f92672">&lt;build&gt;</span>
+  <span style="color:#f92672">&lt;defaultGoal&gt;</span>install<span style="color:#f92672">&lt;/defaultGoal&gt;</span>
+  <span style="color:#75715e">&lt;!-- build后的文件名，默认值是${artifactId}-${version}。  --&gt;</span>
+     <span style="color:#f92672">&lt;finalName&gt;</span>service-provider-${project.version}<span style="color:#f92672">&lt;/finalName&gt;</span>
     
-  &lt;plugins&gt;
-   &lt;plugin&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-   &lt;/plugin&gt;
+  <span style="color:#f92672">&lt;plugins&gt;</span>
+   <span style="color:#f92672">&lt;plugin&gt;</span>
+    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+   <span style="color:#f92672">&lt;/plugin&gt;</span>
    
-   &lt;!-- 配置docker maven插件，绑定install生命周期，在运行maven install时生成docker镜像 --&gt;
-         &lt;plugin&gt;
-             &lt;groupId&gt;com.spotify&lt;/groupId&gt;
-             &lt;artifactId&gt;docker-maven-plugin&lt;/artifactId&gt;
-             &lt;version&gt;0.4.13&lt;/version&gt;
-             &lt;executions&gt;
-                 &lt;execution&gt;
-                     &lt;phase&gt;install&lt;/phase&gt;
-                     &lt;goals&gt;
-                         &lt;goal&gt;build&lt;/goal&gt;
-                         &lt;goal&gt;tag&lt;/goal&gt;
-                     &lt;/goals&gt;
-                 &lt;/execution&gt;
-             &lt;/executions&gt;
-             &lt;configuration&gt;
-                 &lt;!-- 修改这里的docker节点ip，需要打开docker节点的远程管理端口2375。可在hosts中进行dockerip的配置 --&gt;
-                 &lt;dockerHost&gt;http://dockerip:2375&lt;/dockerHost&gt;
-                 &lt;imageName&gt;${project.build.finalName}&lt;/imageName&gt;
-                 &lt;baseImage&gt;java&lt;/baseImage&gt;
-                 &lt;!-- 这里的entryPoint定义了容器启动时的运行命令，容器启动时运行 java -jar 包名 , -Djava.security.egd这个配置解决tomcat8启动时，因为需要收集环境噪声来生成安全随机数导致启动过慢的问题--&gt;
-                 &lt;entryPoint&gt;
-                     [&quot;java&quot;, &quot;-Djava.security.egd=file:/dev/./urandom&quot;, &quot;-jar&quot;, &quot;/${project.build.finalName}.jar&quot;]
-                 &lt;/entryPoint&gt;
-                 &lt;resources&gt;
-                     &lt;resource&gt;
-                         &lt;targetPath&gt;/&lt;/targetPath&gt;
-                         &lt;directory&gt;${project.build.directory}&lt;/directory&gt;
-                         &lt;include&gt;${project.build.finalName}.jar&lt;/include&gt;
-                     &lt;/resource&gt;
-                 &lt;/resources&gt;
-                 &lt;image&gt;${docker.image.prefix}/${project.build.finalName}&lt;/image&gt;
-                 &lt;newName&gt;${docker.image.prefix}/${project.build.finalName}:${docker.tag}&lt;/newName&gt;
-                 &lt;forceTags&gt;true&lt;/forceTags&gt;
-                 &lt;!-- 如果需要在生成镜像时推送到远程库，pushImage设为true --&gt;
-                 &lt;pushImage&gt;false&lt;/pushImage&gt;
-             &lt;/configuration&gt;
-         &lt;/plugin&gt;
-  &lt;/plugins&gt;
- &lt;/build&gt;
-</code></pre><p>（3）打包。</p>
+   <span style="color:#75715e">&lt;!-- 配置docker maven插件，绑定install生命周期，在运行maven install时生成docker镜像 --&gt;</span>
+         <span style="color:#f92672">&lt;plugin&gt;</span>
+             <span style="color:#f92672">&lt;groupId&gt;</span>com.spotify<span style="color:#f92672">&lt;/groupId&gt;</span>
+             <span style="color:#f92672">&lt;artifactId&gt;</span>docker-maven-plugin<span style="color:#f92672">&lt;/artifactId&gt;</span>
+             <span style="color:#f92672">&lt;version&gt;</span>0.4.13<span style="color:#f92672">&lt;/version&gt;</span>
+             <span style="color:#f92672">&lt;executions&gt;</span>
+                 <span style="color:#f92672">&lt;execution&gt;</span>
+                     <span style="color:#f92672">&lt;phase&gt;</span>install<span style="color:#f92672">&lt;/phase&gt;</span>
+                     <span style="color:#f92672">&lt;goals&gt;</span>
+                         <span style="color:#f92672">&lt;goal&gt;</span>build<span style="color:#f92672">&lt;/goal&gt;</span>
+                         <span style="color:#f92672">&lt;goal&gt;</span>tag<span style="color:#f92672">&lt;/goal&gt;</span>
+                     <span style="color:#f92672">&lt;/goals&gt;</span>
+                 <span style="color:#f92672">&lt;/execution&gt;</span>
+             <span style="color:#f92672">&lt;/executions&gt;</span>
+             <span style="color:#f92672">&lt;configuration&gt;</span>
+                 <span style="color:#75715e">&lt;!-- 修改这里的docker节点ip，需要打开docker节点的远程管理端口2375。可在hosts中进行dockerip的配置 --&gt;</span>
+                 <span style="color:#f92672">&lt;dockerHost&gt;</span>http://dockerip:2375<span style="color:#f92672">&lt;/dockerHost&gt;</span>
+                 <span style="color:#f92672">&lt;imageName&gt;</span>${project.build.finalName}<span style="color:#f92672">&lt;/imageName&gt;</span>
+                 <span style="color:#f92672">&lt;baseImage&gt;</span>java<span style="color:#f92672">&lt;/baseImage&gt;</span>
+                 <span style="color:#75715e">&lt;!-- 这里的entryPoint定义了容器启动时的运行命令，容器启动时运行 java -jar 包名 , -Djava.security.egd这个配置解决tomcat8启动时，因为需要收集环境噪声来生成安全随机数导致启动过慢的问题--&gt;</span>
+                 <span style="color:#f92672">&lt;entryPoint&gt;</span>
+                     [&#34;java&#34;, &#34;-Djava.security.egd=file:/dev/./urandom&#34;, &#34;-jar&#34;, &#34;/${project.build.finalName}.jar&#34;]
+                 <span style="color:#f92672">&lt;/entryPoint&gt;</span>
+                 <span style="color:#f92672">&lt;resources&gt;</span>
+                     <span style="color:#f92672">&lt;resource&gt;</span>
+                         <span style="color:#f92672">&lt;targetPath&gt;</span>/<span style="color:#f92672">&lt;/targetPath&gt;</span>
+                         <span style="color:#f92672">&lt;directory&gt;</span>${project.build.directory}<span style="color:#f92672">&lt;/directory&gt;</span>
+                         <span style="color:#f92672">&lt;include&gt;</span>${project.build.finalName}.jar<span style="color:#f92672">&lt;/include&gt;</span>
+                     <span style="color:#f92672">&lt;/resource&gt;</span>
+                 <span style="color:#f92672">&lt;/resources&gt;</span>
+                 <span style="color:#f92672">&lt;image&gt;</span>${docker.image.prefix}/${project.build.finalName}<span style="color:#f92672">&lt;/image&gt;</span>
+                 <span style="color:#f92672">&lt;newName&gt;</span>${docker.image.prefix}/${project.build.finalName}:${docker.tag}<span style="color:#f92672">&lt;/newName&gt;</span>
+                 <span style="color:#f92672">&lt;forceTags&gt;</span>true<span style="color:#f92672">&lt;/forceTags&gt;</span>
+                 <span style="color:#75715e">&lt;!-- 如果需要在生成镜像时推送到远程库，pushImage设为true --&gt;</span>
+                 <span style="color:#f92672">&lt;pushImage&gt;</span>false<span style="color:#f92672">&lt;/pushImage&gt;</span>
+             <span style="color:#f92672">&lt;/configuration&gt;</span>
+         <span style="color:#f92672">&lt;/plugin&gt;</span>
+  <span style="color:#f92672">&lt;/plugins&gt;</span>
+ <span style="color:#f92672">&lt;/build&gt;</span>
+</code></pre></div><p>（3）打包。</p>
 <p>在执行 <code>mvn package</code> 的时候，会根据 <code>pom.xml</code> 中 <code>build</code> 配置自动打包 <code>Docker</code> 镜像，并推送到Docker服务器上。</p>
 <p>至此，就顺利地完成了容器化构建，这一步对于原有服务基本没有影响，打包成功后只需进行验证测试即可，以确保镜像打包存在问题。</p>
 <h5 id="2422-容器化管理">2.4.2.2 容器化管理</h5>
@@ -832,6 +835,10 @@
 
 
 
-</body>
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
 
 </html>
