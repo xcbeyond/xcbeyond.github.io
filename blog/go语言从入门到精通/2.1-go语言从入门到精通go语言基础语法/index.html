@@ -2,13 +2,13 @@
 <html lang="zh-cn"><head>
   <meta charset="utf-8">
   
-  <title>0 Go语言从入门到精通：开篇介绍，Go语言我来啦 | xcbeyond</title>
+  <title>2.1 Go语言从入门到精通：Go语言基础语法 | xcbeyond</title>
   
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description"
-    content="在过去几年，崛起了一门新的语言：Go 或者 GoLang。没有什么比一门新的编程语言更令开发者兴奋了，不是么?">
+    content="Go语言基础语法">
   
   <meta name="author" content="xcbeyond">
   <meta name="generator" content="Hugo 0.81.0" />
@@ -95,9 +95,9 @@
       <div class="col-md-12">
         <ul class="list-inline custom-breadcrumb">
           
-          <li class="list-inline-item text-white h3 font-secondary">0 Go语言从入门到精通：开篇介绍，Go语言我来啦</li>
+          <li class="list-inline-item text-white h3 font-secondary">2.1 Go语言从入门到精通：Go语言基础语法</li>
         </ul>
-        <p class="text-lighten">在过去几年，崛起了一门新的语言：Go 或者 GoLang。没有什么比一门新的编程语言更令开发者兴奋了，不是么?</p>
+        <p class="text-lighten">Go语言基础语法</p>
       </div>
     </div>
   </div>
@@ -111,7 +111,7 @@
       <div class="col-lg-8 order-2 order-lg-1">
         <div class="row">
           <div class="col-12 mb-4">
-            <img src="/images/blog/Go%e8%af%ad%e8%a8%80%e6%88%91%e6%9d%a5%e5%95%a6.png" alt="blog-thumb" class="img-fluid w-100">
+            <img src="/images/blog/golang-04.png" alt="blog-thumb" class="img-fluid w-100">
           </div>
           <div class="col-12">
             <ul class="list-inline">
@@ -120,7 +120,7 @@
                   href="/author/xcbeyond">Xcbeyond</a></li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
-                  :</span>2021-01-14 </li>
+                  :</span>2021-03-28 </li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
                   :</span><a
@@ -138,29 +138,91 @@
           </div>
           
           <div class="col-12 mb-5 content">
-            <blockquote>
-<p>“Go will be the server language of the future.” — Tobias Lütke, Shopify</p>
-</blockquote>
-<p>在过去几年，崛起了一门新的语言：<code>Go</code> 或者 <code>GoLang</code>。没有什么比一门新的编程语言更令开发者兴奋了，不是么?</p>
-<p><img src="golang.jpg" alt="golang"></p>
-<p>目前一些开源社区，纷纷采用Go语言开发了许多平台、框架等，如：<a href="https://github.com/docker/docker-ce">Docker</a>、<a href="https://github.com/kubernetes/kubernetes">Kubernetes</a>等，甚至逐步从其它语言（如：<code>C</code>、<code>Java</code> 等）转换到了 <code>Go</code>，相信这一点你已经体会到了。当您在看一些开源代码时，全是Go语言编写的，你该咋办呢？</p>
-<p>此外，伴随着近两年来云原生技术的发展迅猛，<code>Go</code> 语言作为新生代的编译型编程语言，凭借语法简单、高并发性能良好和编译速度快等特点，成为了云原生技术落地实践的绝妙利器。云原生的到来，这也将迫使您不得不多学习一门新语言了。</p>
-<p>因此，从今天开始从零开始学 <code>Go</code> 语言，一方面是督促自己不断前行且学习新的知识，另一方面是分享给读者，希望与大家一起进步。该专栏文章将从零基础开始，以通俗易懂的方式一起学习、分享Go语言的学习历程，且看且珍惜吧，加油！</p>
-<p><strong>适合人群：</strong></p>
+            <p>与其他编程语言一样，Go 语言项目（大程序）都是从基本组件和基本语法编写而成。上一章节我们已经了解了 Go 语言的样子，本章节我们将学习 Go 语言的基础语法，也将是接下来所有 Go 程序中不可或缺的部分。</p>
+<h2 id="1命名规则">1、命名规则</h2>
+<p>Go 中类型、变量、常量、语句标签、包和函数的命名都遵循一个简单的规则：<strong>命名的开头是一个字母或下划线而不能是数字，后面可以跟任意数量的字符、数字和下划线，并区分大小写。</strong> 如 xcbeyond 和 xcBeyond 是不同的标识符。</p>
+<p>以下是有效的标识符：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">mahesh</span>   <span style="color:#a6e22e">kumar</span>   <span style="color:#a6e22e">abc</span>   <span style="color:#a6e22e">move_name</span>   <span style="color:#a6e22e">a_123</span>
+<span style="color:#a6e22e">myname50</span>   <span style="color:#a6e22e">_temp</span>   <span style="color:#a6e22e">j</span>   <span style="color:#a6e22e">a23b9</span>   <span style="color:#a6e22e">retVal</span>
+</code></pre></div><p>以下是无效的标识符：</p>
 <ul>
-<li>
-<p>编程爱好者</p>
-</li>
-<li>
-<p><code>Go</code> 语言初学者</p>
-</li>
+<li><code>1ab</code>：以数字开头。</li>
+<li><code>case</code>：Go 语言的关键字。</li>
+<li><code>a+b</code>：运算符是不允许的。</li>
 </ul>
-<p><strong>学习目标：</strong></p>
-<p>帮助 <code>Go</code> 语言小白快速学习 <code>Go</code> 语言基础知识，从不了解到了解，到会写Go语言程序，到入门，直到精通，作为 <code>Go</code> 语言系列全教程。</p>
-<p><strong>专栏简介：</strong></p>
-<p><code>Go</code> 语言是 <code>Google</code> 公司开源的一门编程语言，它天生支持并发的特性吸引了越来越多的公司使用 <code>Go</code> 语言作为主开发语言。目前国内外 <code>Go</code> 语言的岗位需求持续增长，<code>Go</code> 语言的未来发展前景十分可观。</p>
-<p>本专栏是 <code>Go</code> 语言从入门到精通的教程，其中包含详细的语法介绍和丰富的练习示例，带你从0基础开始学习 <code>Go</code> 语言，提升 <code>Go</code> 语言能力。</p>
-<p><strong>废话不多说，奥力给！</strong></p>
+<h2 id="2关键字">2、关键字</h2>
+<p>Go 语言和其他语言一样，也有一些关键词供程序使用。Go 中有 <code>25</code> 个关键字或保留字：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"> <span style="color:#66d9ef">break</span>     <span style="color:#66d9ef">default</span>      <span style="color:#66d9ef">func</span>    <span style="color:#66d9ef">interface</span>  <span style="color:#66d9ef">select</span>
+ <span style="color:#66d9ef">case</span>      <span style="color:#66d9ef">defer</span>        <span style="color:#66d9ef">go</span>      <span style="color:#66d9ef">map</span>        <span style="color:#66d9ef">struct</span>
+ <span style="color:#66d9ef">chan</span>      <span style="color:#66d9ef">else</span>         <span style="color:#66d9ef">goto</span>    <span style="color:#f92672">package</span>    <span style="color:#66d9ef">switch</span>
+ <span style="color:#66d9ef">const</span>     <span style="color:#66d9ef">fallthrough</span>  <span style="color:#66d9ef">if</span>      <span style="color:#66d9ef">range</span>      <span style="color:#66d9ef">type</span>
+ <span style="color:#66d9ef">continue</span>  <span style="color:#66d9ef">for</span>          <span style="color:#f92672">import</span>  <span style="color:#66d9ef">return</span>     <span style="color:#66d9ef">var</span>
+</code></pre></div><p>除了以上介绍的这些关键字，Go 语言还有 <code>36</code> 个预定义标识符：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">append</span> <span style="color:#66d9ef">bool</span> <span style="color:#66d9ef">byte</span> <span style="color:#a6e22e">cap</span>     <span style="color:#a6e22e">close</span> <span style="color:#a6e22e">complex</span> <span style="color:#66d9ef">complex64</span> <span style="color:#66d9ef">complex128</span> <span style="color:#66d9ef">uint16</span>
+<span style="color:#a6e22e">copy</span> <span style="color:#66d9ef">false</span> <span style="color:#66d9ef">float32</span> <span style="color:#66d9ef">float64</span> <span style="color:#a6e22e">imag</span> <span style="color:#66d9ef">int</span>     <span style="color:#66d9ef">int8</span>     <span style="color:#66d9ef">int16</span>     <span style="color:#66d9ef">uint32</span>
+<span style="color:#66d9ef">int32</span> <span style="color:#66d9ef">int64</span> <span style="color:#66d9ef">iota</span> <span style="color:#a6e22e">len</span>     <span style="color:#a6e22e">make</span> <span style="color:#a6e22e">new</span>     <span style="color:#66d9ef">nil</span>         <span style="color:#a6e22e">panic</span>     <span style="color:#66d9ef">uint64</span>
+<span style="color:#a6e22e">print</span> <span style="color:#a6e22e">println</span> <span style="color:#a6e22e">real</span> <span style="color:#a6e22e">recover</span> <span style="color:#66d9ef">string</span> <span style="color:#66d9ef">true</span> <span style="color:#66d9ef">uint</span>     <span style="color:#66d9ef">uint8</span>     <span style="color:#66d9ef">uintptr</span>
+</code></pre></div><h2 id="3注释">3、注释</h2>
+<p>注释，是为了增强代码的可读性，但不参与程序的一切功能，不会被编译。每个程序都应该在适当的位置添加注释，用于功能、实现、标注等说明，如果你不想不其他人唾弃，请一定养成编写注释的习惯，注释和代码同样重要。</p>
+<p>Go 语言的注释主要分为两类：</p>
+<ul>
+<li>单行注释：你可以在任何地方使用以 <code>//</code> 开头的单行注释，是最常见的注释形式。</li>
+<li>多行注释：也叫块注释，以 <code>/*</code> 开头，并以 <code>*/</code> 结尾。</li>
+</ul>
+<p>如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#75715e">// &#34;Hello World!&#34; Go语言程序
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Hello World!&#34;</span>)
+
+    <span style="color:#75715e">// 这是一个单行注释
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">/*
+</span><span style="color:#75715e">       这是一个多行注释
+</span><span style="color:#75715e">       by xcbeyond
+</span><span style="color:#75715e">    */</span>
+}
+</code></pre></div><h2 id="4行分隔符">4、行分隔符</h2>
+<p>在 Go 程序中，一行代表一个语句结束。每个语句不需要像Java等其它语言一样以分号 <code>;</code> 结尾，因为这些工作都将由Go编译器自动完成。</p>
+<p>如果你打算将多个语句写在同一行，则必须使用 <code>;</code> 人为区分，但在实际开发中我们并不鼓励这种做法。</p>
+<p>以下为两个语句：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Hello, World!&#34;</span>)
+<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Hello, xcbeyond!&#34;</span>)
+</code></pre></div><h2 id="5字符串输出">5、字符串输出</h2>
+<p>Go 语言的字符串输出可以通过函数 <code>fmt.Println</code> 或 <code>fmt.Print</code> 实现，<code>fmt.Println</code> 会输出后换行，类似于Java语言中的 <code>System.out.println</code> 和 <code>System.out.print</code>。</p>
+<p>如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+ <span style="color:#75715e">// 输出后换行
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;xcbeyond，帅么？&#34;</span>)
+ <span style="color:#75715e">// 输出后不换行
+</span><span style="color:#75715e"></span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#e6db74">&#34;帅!&#34;</span>)
+ <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Print</span>(<span style="color:#e6db74">&#34;太帅了!&#34;</span>)
+}
+</code></pre></div><p>输出结果：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond，帅么？
+帅!太帅了!
+</code></pre></div><p>此外，字符串输出还可以进行格式化输出，后续章节会进行介绍。</p>
+<h2 id="6字符串拼接">6、字符串拼接</h2>
+<p>Go语言的字符串拼接最常用的方法是通过 <code>+</code> 实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;xc&#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;beyond&#34;</span>)
+}
+</code></pre></div><p>输出结果：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond
+</code></pre></div><blockquote>
+<p><code>+</code> 实现拼接，会产生一个新的字符串对效率有所影响。除此之外，还可以借助函数 <code>fmt.Sprintf</code>、<code>strings.Join</code>、<code>buffer.WriteString</code> 等实现，后续字符串章节会详细介绍。</p>
+</blockquote>
 
           </div>
           
@@ -262,7 +324,16 @@
   
   <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
     <h4 class="mb-4">目录</h4>
-    <nav id="TableOfContents"></nav>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1命名规则">1、命名规则</a></li>
+    <li><a href="#2关键字">2、关键字</a></li>
+    <li><a href="#3注释">3、注释</a></li>
+    <li><a href="#4行分隔符">4、行分隔符</a></li>
+    <li><a href="#5字符串输出">5、字符串输出</a></li>
+    <li><a href="#6字符串拼接">6、字符串拼接</a></li>
+  </ul>
+</nav>
   </div>
 </aside>
 <!-- /sidebar -->
