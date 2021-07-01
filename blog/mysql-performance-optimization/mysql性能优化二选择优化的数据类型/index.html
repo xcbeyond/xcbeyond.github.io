@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>MySQL性能优化(二)：选择优化的数据类型 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="良好的设计是高性能的基石，应该根据系统的实际业务需求、使用场景进行设计、优化、再调整，在这其中往往需要权衡各种因素，例如，数据库表究竟如何划分、字段如何选择合适的数据类型等等问题。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="http://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">专题</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">MySQL性能优化(二)：选择优化的数据类型</li>
+        </ul>
+        <p class="text-lighten">良好的设计是高性能的基石，应该根据系统的实际业务需求、使用场景进行设计、优化、再调整，在这其中往往需要权衡各种因素，例如，数据库表究竟如何划分、字段如何选择合适的数据类型等等问题。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/mysql-performance-optimization-02.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2020-03-07 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96"> 
+                  MySQL性能优化</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>良好的设计是高性能的基石，应该根据系统的实际业务需求、使用场景进行设计、优化、再调整，在这其中往往需要权衡各种因素，例如，数据库表究竟如何划分、字段如何选择合适的数据类型等等问题。</p>
+<p>MySQL 支持的数据类型非常之多，对于选择恐惧症的小伙伴而言，苦不可言。大部分人在创建数据库表时，基本一股脑的使用 <code>INT</code>、<code>VARCHAR</code> 这两种类型最多，至于长度，则会选择足够大即可，避免日后不够用咋办。<strong>只顾当时一时爽，之后坑谁谁难受。</strong></p>
+<p>如果你是一个追求极致、高效的开发者，对于上面的情况肯定是不愿让其发生的。在众多的数据类型面前，如何选择正确的数据类型，对于高性能是至关重要的。本文将介绍如何选择优化的数据类型，来提高 MySQL 的性能，将会选取最为常用的类型进行说明，便于在实际开发中创建表、优化表字段类型时提供帮助。</p>
+<h2 id="一选择原则">一、选择原则</h2>
+<p>不管存储哪种类型的数据，下面几个简单的原则将有助于你做出更好的选择。</p>
+<h3 id="1更小的通常更好">1.更小的通常更好</h3>
+<p>一般情况下，应该<strong>尽可能选择正确存储数据的最小数据类型</strong>。更小的数据类型通常更快，因为它们占用更少的磁盘空间、内存，并且处理时需要的CPU周期更少。</p>
+<p>但是，在选择更小数据类型时，一定不要低估存储值的范围，因为后期修改数据类型及长度是一件非常痛苦、耗时的操作。如果无法确定哪个数据类型是最好的，就选择你认为不会超过范围的最小类型。</p>
+<h3 id="2简单就好">2.简单就好</h3>
+<p>简单的数据类型操作通常需要更少的 CPU 周期。例如，整型比字符操作代价更低，因为字符集和校队规则(如：排序规则)使得字符比较比整型比较更复杂。</p>
+<h3 id="3尽量避免用-null">3.尽量避免用 NULL</h3>
+<p><code>NULL</code> 是在常见不过的值了，通常都习惯对某些字段设置默认值为 <code>NULL</code>，这其实是一种非常不好的习惯。如果查询中的字段值恰巧是设置的 <code>NULL</code> 值，对 MySQl 来说更难优化，因为可为 <code>NULL</code> 的字段使得索引、值比较都更复杂。</p>
+<p><code>NULL</code> 值不能进行索引，影响索引的统计信息，影响优化器的判断。复合索引中只要有一列含有 <code>NULL</code> 值，那么这一列对于此复合索引就是无效的。</p>
+<h2 id="二字符串类型">二、字符串类型</h2>
+<p>字符串类型是数据库中使用频率最高的数据类型，<code>VARCHAR</code> 和 <code>CHAR</code> 是两种最主要的字符串类型，都可以用来存储字符串，但它们保存和检索的方式不同。<code>VARCHAR</code> 属于可变长度的字符类型，而 <code>CHAR</code> 属于固定长度的字符类型。下面是关于这两种类型的说明、比较。</p>
+<h3 id="1varchar">1.VARCHAR</h3>
+<p><code>VARCHAR</code> 类型用于存储可变长字符串，它比定长类型更节省空间，因为它仅使用必要的空间(例如，越短的字符串使用最少的空间)。</p>
+<p><code>VARCHAR</code> 需要使用 1 或 2 个额外的字节来记录字符串的长度（如果字段的最大长度小于或等于 255 字节，则只使用 1 个字节表示长度，否则使用 2 个字节来表示长度）。例如，一个 <code>VARCHAR(10)</code> 的字段需要 11 个字节的存储空间，<code>VARCHAR(1000)</code> 则需要 1002 个字节的存储空间，其中需要 2 个字节来存储长度。</p>
+<h3 id="2char">2.CHAR</h3>
+<p><code>CHAR</code> 类型是定长的。当数据类型为 <code>CHAR</code> 时，MySQL 会删除所有的末尾空格。</p>
+<p><code>CHAR</code> 类型适合存储很短的字符串，或者所有值都接近同一个长度。例如，<code>CHAR</code> 类型非常适合存储密码的 <code>MD5</code> 值，因为这是一个定长的值。对于经常变更的数据，<code>CHAR</code> 类型也比 <code>VARCHAR</code> 类型更好，因为定长的 <code>CHAR</code> 类型不容易产生碎片。对于存储非常短的列，<code>CHAR</code> 类型比 <code>VARCHAR</code> 在存储空间上更有效率。例如，用 <code>CHAR(1)</code> 来存储只有Y和N的值，如果采用 <code>VARCHAR(1)</code> 却需要 2 个字节，因为还会有一个记录长度的额外字节。</p>
+<p>通过下面具体例子来对 <code>CHAR</code> 进行说明，有助于更好的理解。这里创建一张只有一个 <code>CHAR(10)</code> 字段的表 <code>char_test</code>，并往里面插入三个字符串 <code>xcbeyond</code>，注意前后有空格的区别：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#a6e22e">char_test</span>(ch <span style="color:#66d9ef">char</span>(<span style="color:#ae81ff">10</span>));
+Query OK, <span style="color:#ae81ff">0</span> rows affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">char_test</span>(ch) <span style="color:#66d9ef">values</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>),(<span style="color:#e6db74">&#39;  xcbeyond&#39;</span>),(<span style="color:#e6db74">&#39;xcbeyond  &#39;</span>);
+Query OK, <span style="color:#ae81ff">3</span> rows affected
+Records: <span style="color:#ae81ff">3</span>  Duplicates: <span style="color:#ae81ff">0</span>  Warnings: <span style="color:#ae81ff">0</span>
+</code></pre></div><p>奇怪的事情发生了，当我们查询时，会发现第三个字符串末尾的空格被自动截断了。为了更好的显示出是否有空格，对 ch 字段前后拼接 <code>'</code> 字符便于查看对比。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#a6e22e">concat</span>(<span style="color:#e6db74">&#34;&#39;&#34;</span>,ch,<span style="color:#e6db74">&#34;&#39;&#34;</span>) <span style="color:#66d9ef">from</span> char_test;
+<span style="color:#f92672">+--------------------+</span>
+<span style="color:#f92672">|</span> <span style="color:#a6e22e">concat</span>(<span style="color:#e6db74">&#34;&#39;&#34;</span>,ch,<span style="color:#e6db74">&#34;&#39;&#34;</span>) <span style="color:#f92672">|</span>
+<span style="color:#f92672">+--------------------+</span>
+<span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;xcbeyond&#39;</span>         <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;  xcbeyond&#39;</span>       <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> <span style="color:#e6db74">&#39;xcbeyond&#39;</span>         <span style="color:#f92672">|</span>
+<span style="color:#f92672">+--------------------+</span>
+<span style="color:#ae81ff">3</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><p>如果用 <code>VARCHAR(10)</code> 字段存储相同的值，则字符串末尾的空格是不会被截断的。</p>
+<h2 id="三日期类型">三、日期类型</h2>
+<p>MySQL 提供了两种相似的日期类型：<code>DATETIME</code> 和 <code>TIMESTAMP</code>,使用起来傻傻分不清，看完本节后不要再说不知道如何选择了。</p>
+<p>对于应用程序而言，他们都能很好的表示日期，但是再某些场景下，各有不同。接下来让我们一起看看吧。</p>
+<h3 id="1datetime">1.DATETIME</h3>
+<p><code>DATETIME</code> 类型能够保持很大范围的日期，<strong>从 1001 年到 9999 年</strong>，精度为秒。它把日期和时间封装到格式为 <code>YYYYMMDDHHMMSS</code> 的整数中，<strong>与时区无关</strong>，使用8个字节的存储空间。</p>
+<p>默认情况下，MySQL 是以一种可排序、无歧义的格式显示 <code>DATETIME</code> 值，例如 <code>2020-03-05 22:38:40</code>。</p>
+<h3 id="2timestamp">2.TIMESTAMP</h3>
+<p><code>TIMESTAMP</code>，从它的名字不难看出，它和UNIX时间戳相同，保存了<strong>从 1970 年 1 月 1 日 0 时 0 分 0 秒以来的秒数</strong>。<code>TIMESTAMP</code> 只使用 4 个字节的存储空间，因此它的范围比<code>DATETIME</code>小得多，<strong>只能表示从 1970 年到 2038 年</strong>。</p>
+<p><code>TIMESTAMP</code> 显示的值依赖于时区，MySQL 服务器、操作系统，以及客户端连接都有时区设置。因此，存储值为0的<code>TIMESTAMP</code> 在美国东部时区显示为 <code>1969-12-31 19:00:00</code>，与格林尼治时差5个小时。</p>
+<p>通常应该尽量使用 <code>TIMESTAMP</code>，因为它比 <code>DATETIME</code> 更节省存储空间，而且对于跨时区的业务，<code>TIMESTAMP</code> 更为合适。</p>
+<p>如果需要存储比秒更小粒度的日期和时间值该怎么办？MySQL 目前没有提供合适的数据类型，但可以采用其他变通的方式，如可以使用自己的存储格式：可以使用 <code>BIGINT</code> 类型存储微妙级别的时间戳，或者使用 <code>DOUBLE</code> 存储秒之后的小数部分。或者也可以使用 <code>MariaDB</code> 数据库替代 <code>MySQL</code>。</p>
+<h2 id="四text-和-blob-类型">四、TEXT 和 BLOB 类型</h2>
+<p>一般在保存少了字符串的时候，我们会选择 <code>CHAR</code>或 <code>VARCHAR</code> 类型，而在保存较大文本等数据时，通常会选择使用 <code>TEXT</code> 和 <code>BLOB</code>。</p>
+<p><code>TEXT</code> 和 <code>BLOB</code> 类型都是存储很大的数据而设计的字符串数据类型，分别采用字符串和二进制方式存储。例如，TEXT 通常用来保存文章内容、日志等字符串内容，而BLOB通常用来保存图片、视频等二进制数据内容。有如下特点：</p>
+<ul>
+<li>TEXT 类型有字符集和排序规则。</li>
+<li>BLOB 类型存储的是二进制数据，没有排序规则或字符集。</li>
+<li>MySQL 中不能将 TEXT 和 BLOB 类型的列进行索引，也不能使用这些索引消除排序。</li>
+</ul>
+<p>与其他数据类型不同，MySQL 把每个 <code>TEXT</code> 和 <code>BLOB</code> 类型的值当作一个独立的对象处理。存储引擎在存储时通常会做特殊处理，当它们的值太大时，<code>InnoDB</code> 会使用专门的“外部”存储区域来进行存储，此时每个值在行内需要 1~4 个字节来存储一个指针，然后在外部存储区域存储实际的值。</p>
+<p>在面对 TEXT、BLOB 之间的选择时，应该根据实际情况选择能够满足需求的最小存储类型，接下来主要针对 TEXT、BLOB 类型存在的一些常见问题进行介绍。</p>
+<p><strong>1.在执行了大量的删除操作时，<code>TEXT</code> 和 <code>BLOB</code> 会引起一些性能问题</strong></p>
+<p>删除操作会在数据库表中留下很大的“空洞”，以后填入这些“空洞”的记录在插入的性能上会有影响。为了提高性能，建议定期使用 <code>OPTIMZE TABLE</code> 功能对这类表进行碎片整理，避免因为“空洞”导致性能问题。</p>
+<p>实战演示验证说明如下：</p>
+<p>1）创建测试表 <code>text_test</code>，字段 <code>id</code> 和 <code>context</code> 的类型分别为 <code>int(11)</code> 和 <code>text</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#a6e22e">text_test</span>(id <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">11</span>),context <span style="color:#66d9ef">text</span>);
+Query OK, <span style="color:#ae81ff">0</span> rows affected
+</code></pre></div><p>2）往表 <code>text_test</code> 中插入大量的数据，这里使用 <code>repeat</code> 函数插入字符串：</p>
+<blockquote>
+<p>repeat 函数用于字符串的复制</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">text_test</span>(id,context) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">1</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">1000</span>));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">text_test</span>(id,context) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">2</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">1000</span>));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">text_test</span>(id,context) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">3</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">1000</span>));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">text_test</span>(id,context) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">4</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">1000</span>));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">text_test</span>(id,context) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">5</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">1000</span>));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> <span style="color:#a6e22e">text_test</span>(id,context) <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">6</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">1000</span>));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+<span style="color:#960050;background-color:#1e0010">……</span>
+</code></pre></div><p>3）此时看看表 <code>text_test</code> 的物理文件大小：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">2020/03/07 周六  15:58           540,672 text_test.ibd
+</code></pre></div><p>这里显示数据文件大小为 <code>540Kb</code>。</p>
+<p>4）从表 <code>text_test</code> 中删除一大部分数据，这些数据占总数据量的2/3：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">from</span> text_test <span style="color:#66d9ef">where</span> id <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>;
+Query OK, <span style="color:#ae81ff">9</span> rows affected
+</code></pre></div><p>5）在此查看 <code>text_test</code> 的物理文件大小：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">2020/03/07 周六  16:05           573,440 text_test.ibd
+</code></pre></div><p>奇怪的是，数据文件大小并没有因为删除数据而减少，反而还增加了一点。</p>
+<p>6）接下来对表 <code>text_test</code> 进行<strong>OPTIMIZE 优化</strong>操作：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">optimize</span> <span style="color:#66d9ef">table</span> text_test;
+<span style="color:#f92672">+----------------+----------+----------+-------------------------------------------------------------------+</span>
+<span style="color:#f92672">|</span> <span style="color:#66d9ef">Table</span>          <span style="color:#f92672">|</span> Op       <span style="color:#f92672">|</span> Msg_type <span style="color:#f92672">|</span> Msg_text                                                          <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----------------+----------+----------+-------------------------------------------------------------------+</span>
+<span style="color:#f92672">|</span> test.text_test <span style="color:#f92672">|</span> <span style="color:#66d9ef">optimize</span> <span style="color:#f92672">|</span> note     <span style="color:#f92672">|</span> <span style="color:#66d9ef">Table</span> does <span style="color:#66d9ef">not</span> support <span style="color:#66d9ef">optimize</span>, doing recreate <span style="color:#f92672">+</span> <span style="color:#66d9ef">analyze</span> instead <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span> test.text_test <span style="color:#f92672">|</span> <span style="color:#66d9ef">optimize</span> <span style="color:#f92672">|</span> status   <span style="color:#f92672">|</span> OK                                                                <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----------------+----------+----------+-------------------------------------------------------------------+</span>
+<span style="color:#ae81ff">2</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><p>7）再次查看表 <code>text_test</code> 的物理文件大小：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">2020/03/07 周六  16:08           458,752 text_test.ibd
+</code></pre></div><p>可以发现，表的数据文件大小减少了，则说明“空洞”空间已经被回收了。</p>
+<p><strong>2.使用合成索引来提高大文本字段(<code>TEXT</code>、<code>BLOB</code> 类型)的查询性能</strong></p>
+<p>合成索引，就是根据大文本字段的内容建立一个散列值，并把这个值存储在单独的数据列中，接下来就可以通过检索散列值找到数据行了。</p>
+<p>但是，要注意这种技术只能用于精确匹配的查询（散列值对于类似 <code>&lt;</code> 或 <code>&gt;=</code> 等范围搜索操作符是没有用处的）。可以使用 <code>MD5()</code> 函数生成散列值，也可以使用 <code>SHA1()</code> 或  <code>CRC32()</code>，或者使用自己的应用程序逻辑来计算散列值。请记住数值型散列值可以很高效率地存储。同样，如果散列算法生成的字符串带有尾部空格，就不要把它们存储在 <code>CHAR</code> 或 <code>VARCHAR</code> 列中，它们会受到尾部空格去除的影响。合成的散列索引对于那些 <code>BLOB</code> 或 <code>TEXT</code> 数据列特别有用。用散列标识符值查找的速度比搜索 <code>BLOB</code> 列本身的速度快很多。</p>
+<p>实战演示验证说明如下：</p>
+<p>1）创建测试表 <code>text_test2</code>，字段 <code>id</code>、<code>context</code>、<code>hashValue</code> 字段类型分别为 <code>int(11)</code>、<code>text</code>、<code>varchar(40)</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> <span style="color:#a6e22e">text_test2</span>(id <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">11</span>),context <span style="color:#66d9ef">text</span>,hashValue <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">40</span>));
+Query OK, <span style="color:#ae81ff">0</span> rows affected
+</code></pre></div><p>2）往表 <code>text_test2</code> 中插入数据，其中 <code>hashValue</code> 用来存入 <code>context</code> 列内容的 <code>MD5</code> 值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> text_test2 <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">1</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">10</span>),<span style="color:#a6e22e">md5</span>(context));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> text_test2 <span style="color:#66d9ef">values</span>(<span style="color:#ae81ff">2</span>,<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">10</span>),<span style="color:#a6e22e">md5</span>(context));
+Query OK, <span style="color:#ae81ff">1</span> row affected
+
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> text_test2;
+<span style="color:#f92672">+----+----------------------------------------------------------------------------------+----------------------------------+</span>
+<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> context                                                                          <span style="color:#f92672">|</span> hashValue                        <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+----------------------------------------------------------------------------------+----------------------------------+</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> xcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyond <span style="color:#f92672">|</span> <span style="color:#ae81ff">537</span>f6020f5b2b59456a61271a2b3f285 <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span> xcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyond <span style="color:#f92672">|</span> <span style="color:#ae81ff">537</span>f6020f5b2b59456a61271a2b3f285 <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+----------------------------------------------------------------------------------+----------------------------------+</span>
+<span style="color:#ae81ff">2</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><p>3）如果需要查询 <code>context</code> 列的值，则通过散列值 <code>hashValue</code> 来查询：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> text_test2 <span style="color:#66d9ef">where</span> hashValue <span style="color:#f92672">=</span> <span style="color:#a6e22e">md5</span>(<span style="color:#66d9ef">repeat</span>(<span style="color:#e6db74">&#39;xcbeyond&#39;</span>,<span style="color:#ae81ff">10</span>));
+<span style="color:#f92672">+----+----------------------------------------------------------------------------------+----------------------------------+</span>
+<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> context                                                                          <span style="color:#f92672">|</span> hashValue                        <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+----------------------------------------------------------------------------------+----------------------------------+</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> xcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyond <span style="color:#f92672">|</span> <span style="color:#ae81ff">537</span>f6020f5b2b59456a61271a2b3f285 <span style="color:#f92672">|</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">2</span> <span style="color:#f92672">|</span> xcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyondxcbeyond <span style="color:#f92672">|</span> <span style="color:#ae81ff">537</span>f6020f5b2b59456a61271a2b3f285 <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+----------------------------------------------------------------------------------+----------------------------------+</span>
+<span style="color:#ae81ff">2</span> rows <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><p>上面的例子则是展示了合成索引的用法，由于这种技术只能用于精确匹配，在一定程度上减少 I/O，从而提高查询效率。</p>
+<p><strong>3.在不必要的情况下避免检索 <code>TEXT</code>、<code>BLOB</code> 类型的值</strong></p>
+<p>例如，<code>SELECT *</code> 查询就不是很好的操作，除非能够确定作为约束条件的 WHERE 子句只会找到所需要的数据行。否则，很可能毫无目的地在网络上传输大量的值。这也是 BLOB 或 TEXT标识符信息存储在合成的索引列中对用户有所帮助的例子。用户可以搜索索引列，决定需要的哪些数据行，然后从符合条件的数据行中检索 BLOB 或 TEXT 值。</p>
+<p><strong>4.把 BLOB 或 TEXT 列分离到单独的表中</strong></p>
+<p>在某些环境中，如果把这些数据列移动到第二张数据表中，可以把原数据表中的数据列转换为固定长度的数据行格式，那么它就是有意义的。这会减少主表中的碎片，可以得到固定长度数据行的性能优势。它还可以使主数据表在运行 SELECT * 查询的时候不会通过网络传输大量的 BLOB 或 TEXT 值。</p>
+<h2 id="五选择唯一标识符">五、选择唯一标识符</h2>
+<p>唯一标识符，也就是我们常常所说的主键，用于充当表记录的唯一判断依据。唯一标识符，选择合适的数据类型是非常重要的。</p>
+<p>通常唯一标识符更多的是用来与其它值或者其它表的值进行比较（如，关联查询中），标识列也可能在其它表中作为外键使用，所以为标识列选择数据类型时，应该选择根关联表中对应列一样的类型。</p>
+<p>当选择唯一标识符的类型时，不仅仅需要考虑存储类型，还需要考虑 MySQL 对这种类型怎么执行计算和比较的，因为比较在SQL查询中使用最多，而且也是制约性能的最大因素。</p>
+<p>一旦选定了一种类型，就一定要确保所有关联表中都使用相同的类型。因为类型直接往往都是需要精确匹配，混用不同数据类型可能导致性能问题，即使没有性能影响，在比较操作时隐式类型转换也可能导致很难发现的错误问题。</p>
+<p>在可以满足值的范围的需求，并且预留未来增长空间的前提下，应该选择最小的数据类型。</p>
+<p>下面是一些小技巧：</p>
+<p><strong>1.整数类型</strong></p>
+<p>整数通常是标识列最好的选择，因为它很快，并且可以使用 <code>AUTO_INCREMENT</code>。</p>
+<p><strong>2.字符串类型</strong></p>
+<p>如果可以避免，尽可能的避免使用字符串类型作为标识列的类型，因为它很消耗空间，并且通常比数字类型慢。尤其是在 <code>MyISAM</code> 存储引擎的表里使用字符串作为标识列时，要特别的小心，<code>MyISAM</code> 默认对字符串使用压缩索引，这会导致查询慢很多。</p>
+<p>对于完全“随机”的字符串也需多加注意，例如 <code>MD5()</code>、<code>SHA1()</code> 或者 <code>UUID()</code> 产生的字符串。这些函数生成的新值会任意分布在很大的空间内，会导致 insert 以及一些 select 操作变得很慢：</p>
+<ul>
+<li>因为插入值会随机地写到索引的不同位置，所以使得 <code>insert</code> 语句更慢。这会导致页分裂、磁盘随机访问。</li>
+<li><code>select</code> 语句会变得更慢，是因为逻辑上不相邻的数据会分布在磁盘和内存的不同地方。</li>
+<li>随机值会导致缓存对所有类型的查询语句效果很差，因为会使得缓存赖以工作的访问局部性原理失效。</li>
+</ul>
+<h2 id="六总结">六、总结</h2>
+<p>在实际开发中，有很多工具会自动生成建表脚本等等，自动生成前期给开发带来了很大的便利，但与此同时却导致严重的性能问题。有些工具生成的东西，在存储任何数据都会使用很大的 <code>VARCHAR</code> 类型，这往往是不正确的。如果是自动生成的，一定要反复检查确认是否合理。</p>
+<p>例如，一些 <code>ORM</code> 框架(如，<code>MyBatis</code>、<code>Hibernate</code>)，会存储任意类型的数据列到任意类型的后端数据，这通常意味着没有设计使用更优的数据类型来存储，后期安全隐患很大，出现问题也很难排查。总之，一定要反复检查确认是否合理。这也是我个人不太喜欢用这类类似的工具，来生成代码的原因，检查真的很浪费我的时间。</p>
+<p>在这里已经介绍了大部分常用的数据类型，各自都有哪些特点，哪些地方会严重影响性能等等。在选择数据类型时，把握好“选择原则”，你就成功了一半，其余细节在日常开发接触中慢慢琢磨、留意，选择类型时不要随意、盲目选择就好。</p>
+<p>简单归纳如下：</p>
+<ul>
+<li>
+<p>对于字符串类型，最好的策略是只分配真正需要的空间。</p>
+</li>
+<li>
+<p>日期类型，要根据实际需要选择能够满足应用的最小存储的日期类型。</p>
+</li>
+<li>
+<p>对含有 <code>TEXT</code> 和<code>BLOB</code> 字段的表，如果经常做删除和修改记录的操作要定时执行 <code>OPTIMIZE TABLE</code> 功能对表进行碎片整理。</p>
+</li>
+</ul>
+
+          </div>
+          
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a" class="d-block pb-3 mt-3">Go语言从入门到精通</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">Mysql性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/go">Go</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql">Mysql</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/migration.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/">
+          <h5 class="mt-0">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h5>
+        </a>
+        2021-04-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-04.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+          <h5 class="mt-0">2.1 Go语言从入门到精通：Go语言基础语法</h5>
+        </a>
+        2021-03-28
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-03.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/">
+          <h5 class="mt-0">1.4 Go语言从入门到精通：Go代理goproxy，让你轻松下载依赖包</h5>
+        </a>
+        2021-03-24
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.3-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AAgo%E7%A8%8B%E5%BA%8F/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/hello-world-by-golang.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.3-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AAgo%E7%A8%8B%E5%BA%8F/">
+          <h5 class="mt-0">1.3 Go语言从入门到精通：编写第一个Go程序</h5>
+        </a>
+        2021-02-25
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-02.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+          <h5 class="mt-0">1.2 Go语言从入门到精通：开发环境搭建</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-01.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/">
+          <h5 class="mt-0">1.1 Go语言从入门到精通：Go语言介绍</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一选择原则">一、选择原则</a>
+      <ul>
+        <li><a href="#1更小的通常更好">1.更小的通常更好</a></li>
+        <li><a href="#2简单就好">2.简单就好</a></li>
+        <li><a href="#3尽量避免用-null">3.尽量避免用 NULL</a></li>
+      </ul>
+    </li>
+    <li><a href="#二字符串类型">二、字符串类型</a>
+      <ul>
+        <li><a href="#1varchar">1.VARCHAR</a></li>
+        <li><a href="#2char">2.CHAR</a></li>
+      </ul>
+    </li>
+    <li><a href="#三日期类型">三、日期类型</a>
+      <ul>
+        <li><a href="#1datetime">1.DATETIME</a></li>
+        <li><a href="#2timestamp">2.TIMESTAMP</a></li>
+      </ul>
+    </li>
+    <li><a href="#四text-和-blob-类型">四、TEXT 和 BLOB 类型</a></li>
+    <li><a href="#五选择唯一标识符">五、选择唯一标识符</a></li>
+    <li><a href="#六总结">六、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="http://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/google-map/gmap.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="http://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>

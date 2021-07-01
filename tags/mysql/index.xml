@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MySQL on xcbeyond</title>
+    <link>http://xcbeyond.cn/tags/mysql/</link>
+    <description>Recent content in MySQL on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
+    <lastBuildDate>Sat, 07 Mar 2020 21:22:09 +0800</lastBuildDate><atom:link href="http://xcbeyond.cn/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL性能优化(二)：选择优化的数据类型</title>
+      <link>http://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%BA%8C%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</link>
+      <pubDate>Sat, 07 Mar 2020 21:22:09 +0800</pubDate>
+      
+      <guid>http://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%BA%8C%E9%80%89%E6%8B%A9%E4%BC%98%E5%8C%96%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</guid>
+      <description>良好的设计是高性能的基石，应该根据系统的实际业务需求、使用场景进行设计、优化、再调整，在这其中往往需要权衡各种因素，例如，数据库表究竟如何划分、字段如何选择合适的数据类型等等问题。
+MySQL 支持的数据类型非常之多，对于选择恐惧症的小伙伴而言，苦不可言。大部分人在创建数据库表时，基本一股脑的使用 INT、VARCHAR 这两种类型最多，至于长度，则会选择足够大即可，避免日后不够用咋办。只顾当时一时爽，之后坑谁谁难受。
+如果你是一个追求极致、高效的开发者，对于上面的情况肯定是不愿让其发生的。在众多的数据类型面前，如何选择正确的数据类型，对于高性能是至关重要的。本文将介绍如何选择优化的数据类型，来提高 MySQL 的性能，将会选取最为常用的类型进行说明，便于在实际开发中创建表、优化表字段类型时提供帮助。
+一、选择原则 不管存储哪种类型的数据，下面几个简单的原则将有助于你做出更好的选择。</description>
+    </item>
+    
+    <item>
+      <title>MySQL性能优化(一)：MySQL架构与核心问题</title>
+      <link>http://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%80mysql%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 01 Mar 2020 15:13:13 +0800</pubDate>
+      
+      <guid>http://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%80mysql%E6%9E%B6%E6%9E%84%E4%B8%8E%E6%A0%B8%E5%BF%83%E9%97%AE%E9%A2%98/</guid>
+      <description>一、前言 作为程序员的你，数据库作为一门必修课，而 MySQL 数据库毫无疑问已经是最常用的数据库了。系统的稳定、高效、高并发等指标，很大程度上取决于数据库性能是否够优，可见性能优化的重要性，这也就不难理解各位在任何一场面试中都会被问及到数据库调优相关的问题。
+因此，这就是我为何考虑写该系列文章的主要原因，希望该系列文章(MySQL性能优化)能够给你带来收获，让你更系统、更全面的掌握 MySQL 性能优化的技能、技巧。该系列文章将会持续分享、更新，如果觉得现在或者将来可能对你有用，不妨持续关注、收藏。
+在 MySQL 性能优化之前，你有必要重新再认识下 MySQL，便于后续更容易理解 MySQL 性能优化中涉及到的知识点。本文将从 MySQL 架构、核心问题来针对性展开讨论，这也将是 MySQL性能优化 系列文章的开篇之作。</description>
+    </item>
+    
+  </channel>
+</rss>

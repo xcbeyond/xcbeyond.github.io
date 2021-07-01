@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>MySQL性能优化(一)：MySQL架构与核心问题 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="在 MySQL 性能优化之前，你有必要重新再认识下 MySQL，便于后续更容易理解 MySQL 性能优化中涉及到的知识点。本文将从 MySQL 架构、核心问题来针对性展开讨论，这也将是 **MySQL性能优化** 系列文章的开篇之作。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="http://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">专题</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">MySQL性能优化(一)：MySQL架构与核心问题</li>
+        </ul>
+        <p class="text-lighten">在 MySQL 性能优化之前，你有必要重新再认识下 MySQL，便于后续更容易理解 MySQL 性能优化中涉及到的知识点。本文将从 MySQL 架构、核心问题来针对性展开讨论，这也将是 <strong>MySQL性能优化</strong> 系列文章的开篇之作。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/mysql-performance-optimization-01.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2020-03-01 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96"> 
+                  MySQL性能优化</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <h2 id="一前言">一、前言</h2>
+<p>作为程序员的你，数据库作为一门必修课，而 MySQL 数据库毫无疑问已经是最常用的数据库了。系统的稳定、高效、高并发等指标，很大程度上取决于数据库性能是否够优，可见性能优化的重要性，这也就不难理解各位在任何一场面试中都会被问及到数据库调优相关的问题。</p>
+<p>因此，这就是我为何考虑写该系列文章的主要原因，希望该系列文章(<strong>MySQL性能优化</strong>)能够给你带来收获，让你更系统、更全面的掌握 MySQL 性能优化的技能、技巧。该系列文章将会持续分享、更新，如果觉得现在或者将来可能对你有用，不妨持续关注、收藏。</p>
+<p>在 MySQL 性能优化之前，你有必要重新再认识下 MySQL，便于后续更容易理解 MySQL 性能优化中涉及到的知识点。本文将从 MySQL 架构、核心问题来针对性展开讨论，这也将是 <strong>MySQL性能优化</strong> 系列文章的开篇之作。</p>
+<h2 id="二mysql-逻辑架构">二、MySQL 逻辑架构</h2>
+<p>想深入探究 MySQL 之前，有必要了解一下 MySQL 的逻辑架构，逻辑架构图如下：</p>
+<p><img src="MySQL%E9%80%BB%E8%BE%91%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg" alt="MySQL逻辑架构图"></p>
+<p>MySQL 的逻辑架构中，分为三层，如上图红色虚线框的三部分。</p>
+<p>最上层架构并不是 MySQL 所独有的，大多数基于客户端/服务器形态的系统或者服务，都有类似的架构，其中包含 MySQL 的连接处理、授权认证、安全控制等等。</p>
+<p>第二层架构是 MySQL 中最为核心的部分，其中包括查询解析、分析、优化、缓存以及所有的内置函数(如：日期、时间、函数等)，所有跨存储引擎的功能都在这一层实现，例如：存储过程、触发器、视图等。</p>
+<p>第三层架构是存储引擎。存储引擎负责 MySQL 中数据的存储和提取，类似与 Linux 系统下的各种文件系统一样，不同存储引擎都有各自的优势和劣势，不同场景可选择不同的引擎。不同存储引擎之间是不会相互通信的，只是简单地响应上层的请求。</p>
+<h2 id="三如何控制高并发的读写">三、如何控制高并发的读写？</h2>
+<p>无论何时，对于数据库而言，高并发的读写操作是很常见的，针对同一条记录在同一时刻进行修改、查询操作，都会产生并发控制的问题，处理不当将会出现大量的<strong>脏数据</strong>。那么，如何控制高并发的读写操作呢？</p>
+<h3 id="1读写锁">1.读写锁</h3>
+<p>在我们学习任何一门语言时，针对处理并发问题都会选择<strong>锁机制</strong>来解决并加以控制，这也是解决并发控制的经典方法，MySQL也不例外。在MySQL处理高并发的读或者写时，可以通过实现两种类型的锁来解决，这两种类型的锁通常被称为<strong>共享锁(Shared lock)<strong>和</strong>排他锁(exclusive lock)</strong>，其实就是大家叫的<strong>读锁(read lock)<strong>和</strong>写锁(write lock)</strong>。</p>
+<p><strong>读锁</strong>，是共享的，也就是说是互相不阻塞的。多个请求在同一时刻可以同时读取同一条记录，而互不干扰。</p>
+<p><strong>写锁</strong>，是排他的，也就是说一个写锁会阻塞其他的写锁和读锁，避免在写的过程中进行读、再写的操作，这更是出于安全的考虑，只有这样才能确保数据的准确、干净。在数据库中，每时每刻都在发生锁定，当某次请求修改数据时，MySQL 都会通过锁来防止其他请求读取同一数据。</p>
+<h3 id="2锁策略">2.锁策略</h3>
+<p>有了锁的机制，就能更好的控制高并发的读写操作，我们都知道锁也是有范围的，锁定对象范围的选择，更具有挑战性。尽量只锁定需要修改的部分数据，而不是所有数据，这也是选择锁定对象范围最想满足的。锁定范围越精确，锁定的数据量就越小，则系统的并发程度越高，加锁本身消耗的资源也就越小。</p>
+<p>上述提到的无非就是设定锁的粒度，而MySQL则提供了多种选择，每种MySQL存储引擎都可以实现自己的锁策略和锁粒度。下面将介绍两种最常用的锁策略。</p>
+<h4 id="21-表级锁table-lock">2.1 表级锁(table lock)</h4>
+<p>表级锁是 MySQL 最基本的锁策略，并且是开销最小的策略，它会锁定整张表。一个请求在对表进行写操作(插入、修改、删除等)前，需要先获得写锁，此时会阻塞其他请求对该表的所有读写操作。只有没有写锁时，其他请求才能读取并获得读锁，<strong>读锁之间是不相互阻塞的</strong>。</p>
+<p>尽管存储引擎可以管理自己的锁，而且 MySQL 本身还会使用各种有效的表级锁来实现不同的目的。例如，诸如 <code>ALTER TABLE</code> 之类的语句就使用了表级锁，而忽略存储引擎的锁机制。</p>
+<p><strong>开销小，加锁快；不会出现死锁；锁定粒度大，发出锁冲突的概率最高，并发度最低。</strong></p>
+<p><strong>表级锁，更适用于以查询为主，只有少量按索引条件更新数据的应用。</strong></p>
+<h4 id="22-行级锁row-lock">2.2 行级锁(row lock)</h4>
+<p>行级锁可以最大程度地支持并发处理(同时也带来了最大的锁开销)。</p>
+<p><strong>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度最高。</strong></p>
+<p><strong>行级锁，更适合于有大量按索引发更新少量不同数据，同时又有并发查询的应用，如一些在线事务处理系统。</strong></p>
+<h2 id="四mysql-存储引擎是怎样的">四、MySQL 存储引擎是怎样的？</h2>
+<p>在文件系统中，MySQL 将每个数据库(即：<code>schema</code>)保存为数据目录 data 下的一个子目录。创建表时，MySQL 会在数据库 data 目录下创建一个和表同名的 <code>.frm</code> 文件来保存表的定义。</p>
+<p>不同的存储引擎保存数据和索引的方式是不同的，但表的定义则是在 MySQL 服务层统一处理的。</p>
+<p>可以使用 <code>show table status like '表名' \G</code> 命令来查看表的存储引擎以及表的其他相关信息，例如，查看 <code>mysql</code> 数据库中的 <code>user</code> 表：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">use</span> mysql;
+No connection. Trying <span style="color:#66d9ef">to</span> reconnect...
+Connection id:    <span style="color:#ae81ff">20587</span>
+Current <span style="color:#66d9ef">database</span>: <span style="color:#f92672">***</span> NONE <span style="color:#f92672">***</span>
+
+Reading <span style="color:#66d9ef">table</span> information <span style="color:#66d9ef">for</span> completion of <span style="color:#66d9ef">table</span> <span style="color:#66d9ef">and</span> <span style="color:#66d9ef">column</span> names
+You can turn off this feature <span style="color:#66d9ef">to</span> get a quicker startup <span style="color:#66d9ef">with</span> <span style="color:#f92672">-</span>A
+
+<span style="color:#66d9ef">Database</span> changed
+mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">table</span> status <span style="color:#66d9ef">like</span> <span style="color:#e6db74">&#39;user&#39;</span> <span style="color:#960050;background-color:#1e0010">\</span>G;
+<span style="color:#f92672">***************************</span> <span style="color:#ae81ff">1</span>. row <span style="color:#f92672">***************************</span>
+           Name: <span style="color:#66d9ef">user</span>
+         <span style="color:#66d9ef">Engine</span>: MyISAM
+        Version: <span style="color:#ae81ff">10</span>
+     Row_format: Dynamic
+           Rows: <span style="color:#ae81ff">3</span>
+ Avg_row_length: <span style="color:#ae81ff">125</span>
+    Data_length: <span style="color:#ae81ff">512</span>
+Max_data_length: <span style="color:#ae81ff">281474976710655</span>
+   Index_length: <span style="color:#ae81ff">4096</span>
+      Data_free: <span style="color:#ae81ff">136</span>
+ <span style="color:#66d9ef">Auto_increment</span>: <span style="color:#66d9ef">NULL</span>
+    Create_time: <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">07</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span> <span style="color:#ae81ff">14</span>:<span style="color:#ae81ff">45</span>:<span style="color:#ae81ff">17</span>
+    Update_time: <span style="color:#ae81ff">2019</span><span style="color:#f92672">-</span><span style="color:#ae81ff">12</span><span style="color:#f92672">-</span><span style="color:#ae81ff">20</span> <span style="color:#ae81ff">15</span>:<span style="color:#ae81ff">55</span>:<span style="color:#ae81ff">44</span>
+     Check_time: <span style="color:#66d9ef">NULL</span>
+      Collation: utf8_bin
+       Checksum: <span style="color:#66d9ef">NULL</span>
+ Create_options: 
+        Comment: Users <span style="color:#66d9ef">and</span> global <span style="color:#66d9ef">privileges</span>
+<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span> (<span style="color:#ae81ff">0</span>.<span style="color:#ae81ff">00</span> sec)
+
+ERROR: 
+No query specified
+</code></pre></div><p>从查询结果的 <code>Engine</code> 字段可以表明，user表的存储引擎类型为 <code>MyISAM</code>，其他字段在此就不一一说明，如想详细了解可查阅相关文档。</p>
+<p>在了解 MySQL 存储引擎前，可以先看看你的 MySQL 数据库支持哪些存储引擎，可通过 <code>show engines</code> 命令查看。我使用的MySQL版本为 <code>5.7.25</code>，查看结果如下图所示：</p>
+<p><img src="show-engines%E5%91%BD%E4%BB%A4%E6%98%BE%E7%A4%BA%E7%BB%93%E6%9E%9C.png" alt="show engines命令显示结果"></p>
+<p>从上述结果可以看出，支持的存储引擎有： <code>InnoDB</code>、<code>Mrg_Myisam</code>、<code>Memory</code>、<code>Blackhole</code>、<code>MyISAM</code>、<code>CSV</code>、 <code>Archive</code>、<code>Performance_Schema</code>、<code>Federated</code>，其中也做了简单的解释说明。</p>
+<p>本文只针对 <code>InnoDB</code>、<code>MyISAM</code> 两种最常见的存储引擎进行着重说明，其它存储引擎只做简单说明，详细可查阅官方文档。</p>
+<h3 id="1innodb-存储引擎">1.InnoDB 存储引擎</h3>
+<p><code>InnoDB</code> 是 MySQL 的默认<strong>事务型引擎</strong>，也是最重要、使用最广泛的存储引擎，并且有<strong>行级锁定</strong>和<strong>外键约束</strong>。</p>
+<p>它被设计用来处理大量的短期(short-lived)事务，短期事务大部分情况是正常提交，很少会被回滚。InnoDB 的性能和自动崩溃恢复特性，使得它在非事务型存储的需求中也很流行。除非有非常特别的原因需要使用其他的存储引擎，否则应该优先考虑 <code>InnoDB</code> 引擎。</p>
+<p><code>InnoDB</code> 的适用场景/特性，有以下几种：</p>
+<ul>
+<li>经常更新的表，适合处理多重并发的更新请求。</li>
+<li>支持事务。</li>
+<li>可以从灾难中恢复（通过 <code>bin-log</code> 日志等）。</li>
+<li>外键约束。只有他支持外键。</li>
+<li>支持自动增加列属性 <code>auto_increment</code>。</li>
+</ul>
+<h3 id="2myisam-存储引擎">2.MyISAM 存储引擎</h3>
+<p><code>MyISAM</code> 提供了大量的特性，包括<strong>全文检索、压缩等，但不支持事务和行级锁，支持表级锁</strong>。
+对于只读的数据，或者表较小、可以忍受修复操作的场景，依然可以使用 MyISAM。</p>
+<p><code>MyISAM</code> 的适用场景/特性，有以下几种：</p>
+<ul>
+<li>不支持事务的设计，但是并不代表着有事务操作的项目不能用 <code>MyISAM</code> 存储引擎，完全可以在程序层进行根据自己的业务需求进行相应的控制。</li>
+<li>不支持外键的表设计。</li>
+<li>查询速度很快，如果数据库 <code>insert</code> 和 <code>update</code> 的操作比较多的话比较适用。</li>
+<li>整天 对表进行加锁的场景。</li>
+<li><code>MyISAM</code> 极度强调快速读取操作。</li>
+<li><code>MyIASM</code> 中存储了表的行数，于是 <code>SELECT COUNT(*) FROM TABLE</code> 时只需要直接读取已经保存好的值而不需要进行全表扫描。如果表的读操作远远多于写操作且不需要数据库事务的支持，那么 <code>MyIASM</code> 也是很好的选择。</li>
+</ul>
+<h3 id="3mysql-内建的其他存储引擎">3.MySQL 内建的其他存储引擎</h3>
+<p>MySQL 还有一些特殊用途的存储引擎，在一些特殊场景下用起来会很爽的。在 MySQL 新版本中，有些可能因为一些原因已经不再支持了，还有一些会继续支持，但是需要明确地启用后才能使用。</p>
+<h4 id="31-archive-存储引擎">3.1 Archive 存储引擎</h4>
+<p><code>Archive</code> 引擎<strong>只支持 <code>insert</code> 和 <code>select</code> 操作</strong>，并且在 MySQL 5.1 之前连索引都不支持。</p>
+<p><code>Archive</code> 引擎会缓存所有的写并利用 zlib 对插入的行进行压缩，所以比 <code>MyISAM</code> 引擎的磁盘 I/O 更少。但是每次 <code>select</code> 查询都需要进行全表扫描，所以 Archive 更适合日志和数据采集类应用，况且这类应用在做数据分析时往往需要全表扫描。</p>
+<p><code>Archive</code> 引擎支持行级锁和专用的缓冲区，所以可以实现高并发的插入。在一个查询开始直到返回表中存在的所有行之前，<code>Archive</code> 引擎会阻止其他的 <code>select</code> 执行，以实现一致性读。另外，这也实现了批量插入在完成之前对读操作是不看见的。</p>
+<h4 id="32-blackhole-存储引擎">3.2 Blackhole 存储引擎</h4>
+<p><code>Blackhole</code> 引擎没有实现任何的存储机制，它会丢失所有插入的数据，不做任何保存。怪哉，岂不是一无用处？</p>
+<p>但是服务器会记录 <code>Blackhole</code> 的日志，所以可以用于复制数据到备库，或者只是简单地记录到日志。这种特殊的存储引擎可以在一些特殊的复制架构和日志审核时发挥作用。</p>
+<p>但这种存储引擎的存在，至今还是有些难以理解。</p>
+<h4 id="33-csv-存储引擎">3.3 CSV 存储引擎</h4>
+<p><code>CSV</code> 引擎可以将普通的 <code>CSV</code> 文件作为 MySQL 的表来处理，但这种表不支持索引。</p>
+<p><code>CSV</code> 引擎可以在数据库运行时拷入或者拷出文件，可以将 Excel 等电子表格软件中的数据存储为 <code>CSV</code> 文件，然后复制到MySQL数据目录下，就能在 MySQL 中打开使用。同样，如果将数据写入到一个 <code>CSV</code> 引擎表中，其他的外部程序也能立即从表的数据文件中读取 <code>CSV</code> 格式的数据。</p>
+<p>因此，<code>CSV</code> 引擎可以作为一种数据交换的机制，是非常有用的。</p>
+<h4 id="34-memory-存储引擎">3.4 Memory 存储引擎</h4>
+<p>如果需要快速地访问数据，并且这些数据不会被修改，重启以后丢失也没有关系，那么使用 <code>Memory</code> 引擎是非常有用的。<code>Memory</code> 引擎至少比<code>MyISAM</code> 引擎要快一个数量级，因为所有的数据都保存在内存中，不需要进行磁盘 I/O。<code>Memory</code> 引擎的表结构在重启以后还会保留，但数据会丢失。</p>
+<p><code>Memory</code> 引擎在很多场景下可以发挥很好的作用：</p>
+<ul>
+<li>用于查找或者映射表，例如将邮箱和州名映射的表。</li>
+<li>用于缓存周期性聚合数据的结果。</li>
+<li>用于保存数据分析中产生的中间数据。</li>
+</ul>
+<p><code>Memory</code> 引擎支持 Hash 索引，因此查找非常快。虽然 <code>Memory</code> 的速度非常快，但还是无法取代传统的基于磁盘的表。<code>Memory</code> 引擎是表级锁，因此并发吸入的性能较低。</p>
+<p>如果 MySQL 在执行查询的过程中，需要使用临时表来保存中间结果，<strong>内部使用的临时表就是 Memory 引擎</strong>。如果中间结果太大超出了 <code>Memory</code> 的限制，或者含有 <code>BLOB</code> 或 <code>TEXT</code> 字段，则临时表会转换成 <code>MyISAM</code> 的引擎。</p>
+<blockquote>
+<p>看了上面的说明，大家就会经常混淆Memory和临时表了。临时表是指使用<code>CREATE TEMPORARY TABLE</code>语句创建的表，它可以使用任何存储引擎，因此和Memory不是一回事。临时表只在单个连接中可见，当连接断开时，临时表也将不复存在。</p>
+</blockquote>
+<p>关于临时表和 Memory 引擎的那些事，可参考<a href="https://www.cnblogs.com/coderyuhui/p/10773143.html">MySQL · 引擎特性 · 临时表那些事儿</a>。</p>
+<p>MySQL 的存储引擎及第三方存储引擎，还有很多，在此就不一一介绍了，后续如有需要，再进一步来谈谈。</p>
+<h3 id="4如何选择合适的存储引擎呢">4.如何选择合适的存储引擎呢</h3>
+<p>这么多存储引擎，真是眼花缭乱，我们该如何选择呢？</p>
+<p>大部分情况下，都会选择默认的存储引擎—— <code>InnoDB</code>，并且这也是最正确的选择，所以 Oracle 在 MySQL 5.5 版本时终于将 <code>InnoDB</code> 作为默认的存储引擎了。</p>
+<p>对于如何选择合适的存储引擎，可以简单地归纳为一句话：<strong>”除非需要用到某些 InnoDB 不具备的特性，并且没有其他可以替代，否则都应该优先选择 InnoDB 引擎”</strong>。</p>
+<p>例如，如果要用到全文检索，建议优先考虑 <code>InnoDB</code> 加上 <code>Sphinx</code> 的组合，而不是使用支持全文检索的 <code>MyISAM</code>。当然，如果不需要用到 <code>InnoDB</code> 的特性，同时其他引擎的特性能够更好地满足需求，就可以考虑一下其他存储引擎。</p>
+<p><strong>除非万不得已，建议不要混合使用多种存储引擎，否则可能带来一系列复杂的问题，以及一些潜在的 bug 和边界问题。</strong></p>
+<p>如果需要使用不同的存储引擎，建议考虑从以下几个因素进行衡量考虑。</p>
+<ul>
+<li>事务</li>
+<li>备份</li>
+<li>恢复</li>
+<li>特有的特性</li>
+</ul>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://www.cnblogs.com/sunsky303/p/8274586.html">https://www.cnblogs.com/sunsky303/p/8274586.html</a></li>
+<li><a href="https://www.cnblogs.com/coderyuhui/p/10773143.html">https://www.cnblogs.com/coderyuhui/p/10773143.html</a></li>
+</ol>
+
+          </div>
+          
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a" class="d-block pb-3 mt-3">Go语言从入门到精通</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">Mysql性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/go">Go</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql">Mysql</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/migration.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/">
+          <h5 class="mt-0">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h5>
+        </a>
+        2021-04-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-04.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+          <h5 class="mt-0">2.1 Go语言从入门到精通：Go语言基础语法</h5>
+        </a>
+        2021-03-28
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-03.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/">
+          <h5 class="mt-0">1.4 Go语言从入门到精通：Go代理goproxy，让你轻松下载依赖包</h5>
+        </a>
+        2021-03-24
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.3-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AAgo%E7%A8%8B%E5%BA%8F/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/hello-world-by-golang.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.3-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AAgo%E7%A8%8B%E5%BA%8F/">
+          <h5 class="mt-0">1.3 Go语言从入门到精通：编写第一个Go程序</h5>
+        </a>
+        2021-02-25
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-02.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+          <h5 class="mt-0">1.2 Go语言从入门到精通：开发环境搭建</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-01.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/">
+          <h5 class="mt-0">1.1 Go语言从入门到精通：Go语言介绍</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一前言">一、前言</a></li>
+    <li><a href="#二mysql-逻辑架构">二、MySQL 逻辑架构</a></li>
+    <li><a href="#三如何控制高并发的读写">三、如何控制高并发的读写？</a>
+      <ul>
+        <li><a href="#1读写锁">1.读写锁</a></li>
+        <li><a href="#2锁策略">2.锁策略</a></li>
+      </ul>
+    </li>
+    <li><a href="#四mysql-存储引擎是怎样的">四、MySQL 存储引擎是怎样的？</a>
+      <ul>
+        <li><a href="#1innodb-存储引擎">1.InnoDB 存储引擎</a></li>
+        <li><a href="#2myisam-存储引擎">2.MyISAM 存储引擎</a></li>
+        <li><a href="#3mysql-内建的其他存储引擎">3.MySQL 内建的其他存储引擎</a></li>
+        <li><a href="#4如何选择合适的存储引擎呢">4.如何选择合适的存储引擎呢</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="http://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/google-map/gmap.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="http://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>
