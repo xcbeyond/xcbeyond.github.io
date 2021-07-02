@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>MySQL性能优化(四)：如何高效正确的使用索引 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="优化索引时，可以从本文的这些方面出发，进一步来加深对索引正确高效的使用。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="http://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="http://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="http://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn">专题</a>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="http://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">MySQL性能优化(四)：如何高效正确的使用索引</li>
+        </ul>
+        <p class="text-lighten">优化索引时，可以从本文的这些方面出发，进一步来加深对索引正确高效的使用。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/mysql-performance-optimization-04.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2020-03-29 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/mysql"> 
+                  MySQL</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>正确地创建和使用索引是实现高性能查询的基础。前面文章 <a href="http://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%89%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E7%B4%A2%E5%BC%95%E7%9A%84%E8%BF%99%E7%82%B9%E4%BA%8B/"><strong>MySQL性能优化(三)：深入理解索引的这点事</strong></a> 已经介绍了各种类型的索引及其特点，而在实际使用索引中，如何真正有效地发挥索引的价值，还需要进一步持续不断地学习、磨练。接下来本篇文章将分享如何高效、正确的使用索引。</p>
+<p><strong>实践是检验真理的唯一途径</strong>，本篇只是站在索引使用的全局来定位的，你只需要通读全篇并结合具体的例子，或回忆以往使用过的地方，对整体有个全面认识，并理解索引是如何工作的，就可以了。在后续使用索引，或者优化索引时，可以从这些方面出发，进一步来加深对索引正确高效的使用。</p>
+<h2 id="一索引失效">一、索引失效</h2>
+<p>索引失效，是一个老生常谈的话题了。只要提到数据库优化、使用索引，都能一口气说出一大堆索引失效的场景，什么不能用、什么不该用这类的话，在此，我就不再一一罗列啰嗦了。</p>
+<p>索引失效，是指表中有字段创建了索引，由于 sql 语句书写不当导致索引失效的情况。</p>
+<p><strong>在 sql 语句中，将索引列作为表达式的一部分、参与函数/数学等运算，将会导致索引失效。</strong></p>
+<p>例如，下面这个查询无法使用age列的索引：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">select</span> id,name,age <span style="color:#66d9ef">from</span> t_user <span style="color:#66d9ef">where</span> age <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>;
+</code></pre></div><p>很容易看出 where 中的表达式其实等价于 age=8，但是 MySQL 无法自动解析这个表达式，这完全是用户行为。</p>
+<p>（在上一篇文章中，我们知道 MySQL 先在索引上按值进行查找，然后返回索引值对应的数据行，一旦对索引列进行运算，则将无法正确的找到对应的数据行，从而改为全表逐行扫描查询对比）</p>
+<h2 id="二前缀索引和索引选择性">二、前缀索引和索引选择性</h2>
+<p>有时候将内容很长的列作为索引列，这将会让索引变得很大而且很慢。如果非要在该列添加索引，解决策略就是上一篇文章提到过的模拟哈希索引。</p>
+<p><strong>通常可以索引开始的部分字符，这样可以大大节约索引空间，从而提高索引效率，但这样也会降低索引的选择性。</strong></p>
+<p>索引的选择性是指，不重复的索引值(也称为基数)和表数据的记录总数 T 的比值，范围从 1/T 到 1 之间。索引的选择性越高，则查询效率越高，因为选择性高的索引可以让 MySQL 在查找时过滤掉更多的行。</p>
+<p><strong>唯一索引的选择性为 1，这是最好的索引选择性，性能也是最好的。</strong></p>
+<p>对于 BLOB、TEXT 或很大的 VARCHAR 类型的列，作为查询条件时（原则上是要避免这样的操作，但有时总是情非得已），该列必须使用前缀索引，这样来提高查询性能。因为 MySQL 是不允许索引这些列的完整长度的。</p>
+<h2 id="三多列索引">三、多列索引</h2>
+<p>多列索引，是指为每个列创立独立的索引。</p>
+<p>在 SQL 优化时，有人会采取“把 where 条件里面的列都建上索引”，希望能够对查询性能有所优化。但实际上这样的优化是非常错误的，这样一来最好的情况下也只能是“一星”索引，其性能比起真正最优的索引可能差几个数据级。有时如果无法设计一个“三星”索引，那么不如忽略掉 where 子句，集中精力优化索引列的顺序，或者创建一个全覆盖索引。</p>
+<blockquote>
+<p>三星索引：在 Lahdenmaki 和 Leach 编写的 Relational Database Index Design and the Optimizers 一书中，提到如何评价一个索引是否适合某个查询的“三星系统”：索引将相关的记录放到一起则获得“一星”；如果索引中的数据顺序和查找中的排序顺序一致则获得“二星”；如果索引中的列包含了查询中需要的全部列则获得“三星”。</p>
+</blockquote>
+<p><strong>在多个列上建立独立的单列索引，大部分情况下并不能提高 MySQL 的查询性能。</strong> 这也是将其错误的做法。</p>
+<p>MySQL 5.0 及之后版本引入了索引合并策略，一定程度上可以使用表上的多个单列索引来定位指定的行。更早的 MySQL 只能使用其中某一个单列索引，然而这个情况下没有哪一个独立的单列索引是非常有效的。</p>
+<p>索引合并策略有时候是一种优化的结果，但实际上更多时候说明了表上的索引建的很糟糕：</p>
+<p>1）当出现对多个索引做相交操作时（通常由多个 AND 条件），通常意味着需要一个包含所有相关列的多列索引，而不是多个独立的单列索引。</p>
+<p>2）当需要对多个索引做联合操作室（通常有多个 OR 条件），通常需要耗费大量的 CPU 和内存资源在算法的缓存、排序和合并操作上。特别是当其中有些索引的选择性不高，需要合并扫描返回的大量数据的时候。</p>
+<p>3）优化器不会把这些计算到“查询成本”中，优化器只关心随机页面读取。这会使得查询的成本被“低估”，导致该执行计划还不如直接走全表扫描。这样做不但会消耗更多的 CPU 和内存资源，还可能会影响查询的并发性，但如果是单独运行这样的查询，则往往会忽略对并发性的影响。</p>
+<p>如果在执行计划 <code>EXPLAIN</code> 中看到索引合并，应该好好检查一下查询和表的结构，看是不是已经是最优的。也可以通过参数 <code>optimizer_switch</code> 来关闭索引合并功能，也可以使用 <code>IGNORE INDEX</code> 提示让优化器忽略掉某些索引。</p>
+<p>对于多列索引，只要查询的条件中用到了最左边的列，索引一般就不会失效。</p>
+<p>举例说明如下：</p>
+<p>表 <code>t_user</code> 创建了(id,name)的多列索引，具体如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> <span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> t_user;
+<span style="color:#f92672">+--------+---------------+</span>
+<span style="color:#f92672">|</span> <span style="color:#66d9ef">Table</span>  <span style="color:#f92672">|</span> <span style="color:#66d9ef">Create</span> <span style="color:#66d9ef">Table</span>  <span style="color:#f92672">|</span>
+<span style="color:#f92672">+--------+---------------+</span>
+<span style="color:#f92672">|</span> t_user <span style="color:#f92672">|</span> <span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>t_user<span style="color:#f92672">`</span> (
+  <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">AUTO_INCREMENT</span>,
+  <span style="color:#f92672">`</span>name<span style="color:#f92672">`</span> <span style="color:#66d9ef">varchar</span>(<span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#f92672">`</span>age<span style="color:#f92672">`</span> <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span>,
+  <span style="color:#66d9ef">KEY</span> <span style="color:#f92672">`</span>idx<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>,<span style="color:#f92672">`</span>name<span style="color:#f92672">`</span>) <span style="color:#66d9ef">USING</span> BTREE
+) <span style="color:#66d9ef">ENGINE</span><span style="color:#f92672">=</span>InnoDB <span style="color:#66d9ef">AUTO_INCREMENT</span><span style="color:#f92672">=</span><span style="color:#ae81ff">8</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">CHARSET</span><span style="color:#f92672">=</span>utf8 <span style="color:#f92672">|</span>
+<span style="color:#f92672">+--------+-----------------------------------------+</span>
+<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><p>根据 id 进行查询，具体如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">explain</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> t_user <span style="color:#66d9ef">where</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+<span style="color:#f92672">+----+-------------+--------+------------+------+---------------+-----+---------+-------+------+----------+-------+</span>
+<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> select_type <span style="color:#f92672">|</span> <span style="color:#66d9ef">table</span>  <span style="color:#f92672">|</span> partitions <span style="color:#f92672">|</span> type <span style="color:#f92672">|</span> possible_keys <span style="color:#f92672">|</span> <span style="color:#66d9ef">key</span> <span style="color:#f92672">|</span> key_len <span style="color:#f92672">|</span> ref   <span style="color:#f92672">|</span> rows <span style="color:#f92672">|</span> filtered <span style="color:#f92672">|</span> Extra <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+-------------+--------+------------+------+---------------+-----+---------+-------+------+----------+-------+</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> SIMPLE      <span style="color:#f92672">|</span> t_user <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>       <span style="color:#f92672">|</span> ref  <span style="color:#f92672">|</span> idx           <span style="color:#f92672">|</span> idx <span style="color:#f92672">|</span> <span style="color:#ae81ff">4</span>       <span style="color:#f92672">|</span> const <span style="color:#f92672">|</span>    <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span>      <span style="color:#ae81ff">100</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>  <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+-------------+--------+------------+------+---------------+-----+---------+-------+------+----------+-------+</span>
+<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><p>从执行计划中的 type 可以看出，索引是有效的。但如果根据 name 进行查询，则索引将会失效(全表扫描)，如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql">mysql<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">explain</span> <span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> t_user <span style="color:#66d9ef">where</span> name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;xcbeyond&#39;</span>;
+<span style="color:#f92672">+----+-------------+--------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span style="color:#f92672">|</span> id <span style="color:#f92672">|</span> select_type <span style="color:#f92672">|</span> <span style="color:#66d9ef">table</span>  <span style="color:#f92672">|</span> partitions <span style="color:#f92672">|</span> type <span style="color:#f92672">|</span> possible_keys <span style="color:#f92672">|</span> <span style="color:#66d9ef">key</span>  <span style="color:#f92672">|</span> key_len <span style="color:#f92672">|</span> ref  <span style="color:#f92672">|</span> rows <span style="color:#f92672">|</span> filtered <span style="color:#f92672">|</span> Extra       <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+-------------+--------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span style="color:#f92672">|</span>  <span style="color:#ae81ff">1</span> <span style="color:#f92672">|</span> SIMPLE      <span style="color:#f92672">|</span> t_user <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>       <span style="color:#f92672">|</span> <span style="color:#66d9ef">ALL</span>  <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>          <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span>    <span style="color:#f92672">|</span> <span style="color:#66d9ef">NULL</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">7</span> <span style="color:#f92672">|</span>    <span style="color:#ae81ff">14</span>.<span style="color:#ae81ff">29</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Using</span> <span style="color:#66d9ef">where</span> <span style="color:#f92672">|</span>
+<span style="color:#f92672">+----+-------------+--------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span style="color:#ae81ff">1</span> row <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">set</span>
+</code></pre></div><h2 id="四选择合适的索引列顺序">四、选择合适的索引列顺序</h2>
+<p>索引列顺序实在是非常重要的。正确的顺序依赖于使用该索引的查询，并且同时需要考虑如何更好的满足排序和分组的需要（只用于 B-Tree 索引，哈希或者其他索引存储数据并不是顺序存储）。</p>
+<p>在一个多列 B-Tree 索引中，索引列的顺序意味着索引首先按照最左列进行排列。所以索引可以按照升序或者降序进行扫描，以满足符合列顺序的 order by，group by 和 distinct 等子句的查询需求。</p>
+<p>所以多列索引列的顺序至关重要。对于如何选择索引的列顺序有一个经验法则：<strong>将选择性最高的索引放在索引的最前列</strong>。在某些场景这个经验时非常有用，但是通常不如避免随机IO和排序那么重要，考虑问题需要更全面。</p>
+<p>当不需要考虑排序和分组时，将选择性最高的列放在前面通常是很好的。这时候索引的作用只是用于优化where条件的查找。这种情况下，这样设计的索引确实能够最快的过滤出需要的行，对于在where的子句中只是用了索引部分前缀列的查询来说选择性也更高。然而性能不只是依赖于所有索引列的选择性，也和查询条件的具体值有关，也就是和值的分布有关（需要根据那些运行频率最高的查询来调整索引列的顺序，让这种情况下的索引列的选择性最高）。</p>
+<h2 id="五聚簇索引">五、聚簇索引</h2>
+<p>聚簇索引并不是一种单独的索引类型，而是一种数据存储方式，将数据存储与索引放到了一块，找到索引页就找到了数据。具体的细节依赖于其实现方式，但 <code>InnoDB</code> 的聚簇索引实际上在同一个结构中保存了B-Tree索引和数据行。</p>
+<blockquote>
+<p>非聚簇索引：将数据存储与索引分开存储，索引结构的叶子节点指向了数据的对应行。当需要访问数据时（通过索引访问数据），在内存中直接搜索索引，然后通过索引找到磁盘相应数据，这也就是为什么索引不在key buffer命中时，速度慢的原因。</p>
+</blockquote>
+<p>当表有聚簇索引时，它的数据行实际上存放在索引的叶子页中。“聚簇”表示数据行和相邻的键值紧凑的存储在一起。因为无法同时把数据行存放在两个不同的地方，所以一个表只能有一个聚簇索引。</p>
+<p><img src="%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95.png" alt="聚簇索引"></p>
+<p>聚簇索引的设定：</p>
+<p>默认为主键。如果没有定义主键，<code>InnoDB</code> 会选择一个唯一的非空索引代替。如果没有这样的索引，<code>InnoD</code> 会隐式定义一个主键来作为聚簇索引。<code>InnoDB</code> 只聚集在同一个页面中的记录，包括相邻键值的页面可能会相距甚远。</p>
+<p>(看到这里，如果你对 B-Tree 索引结构熟悉的话，就知道为啥[key、data]作为一个二元组存放在一个节点了)</p>
+<p>聚簇主键可能对性能有帮助，但也可能导致严重的性能问题。所以需要仔细的考虑聚簇索引，尤其是将表的存储引擎从<code>InnoDB</code> 改成其他引擎的时候（反过来也一样）。</p>
+<p><strong>聚簇索引的优点：</strong></p>
+<ul>
+<li>可以把相关数据保存在一起。例如实现电子邮箱时，可以根据用户 ID 来聚集数据，这样子只需要从磁盘中读取少数的数据也技能获取某个用户的全部邮件。</li>
+<li>数据访问更快。聚簇索引把索引和数据都放在同一个 B-Tree 中，因此从聚簇索引中获取数据比从非聚簇索引中要快。</li>
+<li>使用覆盖索引扫描的查询可以直接使用页节点中的主键值。</li>
+</ul>
+<p><strong>聚簇索引的缺点：</strong></p>
+<ul>
+<li>最大限度的提高了 I/O 密集型应用的性能，但如果数据全部都放在内存中，则访问的顺序就没那么重要了，聚簇索引也就没什么优势了。</li>
+<li>插入速度严重依赖于插入顺序。按照主键的顺序插入是加载数据到 <code>InnoDB</code> 表中速度最快的方式。但如果不是按照逐渐顺序加载数据，那么在加载完成后最好使 <code>OPTIMIZE TABLE</code> 重新组织一下表。</li>
+<li>更新聚簇索引列的代价很高。因为要强制 InnoDB 将每个被更新的行移动到新的位置。</li>
+<li>基于聚簇索引的表在插入新行，或者主键被更新导致移动行的时候，可能面临“页分裂”的问题。当行的主键值要求必须将这一行插入到某个已满的页中时，存储引擎会将该页分裂成两个页来容纳该行，这就是一次页分裂操作，这也意味着这样导致表占用更多的磁盘空间。</li>
+<li>聚簇索引可能导致全表扫描变慢，尤其是行比较稀疏时，或者由于页分裂导致数据存储不连续的时候。</li>
+<li>二级索引(非聚簇索引)可能比想想的要更大。因为二级索引的叶子结点包含了引用行的主键列。</li>
+<li>二级索引访问需要两次索引查找，而不是一次。</li>
+</ul>
+<h2 id="六覆盖索引">六、覆盖索引</h2>
+<p>通常大家都会根据查询的 where 条件来创建合适的索引，不过这也只是索引优化的一个方面。设计优秀的索引应该考虑到整个查询，而不单单是 where 条件部分。索引确实是一种查找数据的高效方式，但是 MySQL 也可以使用索引来直接获取列的数据，这样就不再需要读取数据行。如果一个索引包含所有需要查询的字段值，我们就称其为“覆盖索引”，即：一个索引覆盖 where 条件的所有列。</p>
+<p>覆盖索引的好处如下：</p>
+<ul>
+<li>索引条目通常远小于数据行的大小，所以如果只需要读取索引，那么 MySQL 就会极大的减少数据访问量。这对缓存的负载非常重要，因为这种情况下响应时间大部分花费在数据拷贝下。覆盖索引对于 I/O 密集型的应用也有帮助，因为索引比数据更小，更容易全部放进去内存。</li>
+<li>因为索引是按照列值顺序存储的，对于 I/O 密集型的范围查询会比随机从磁盘读取每一行数据的I/O要少的多。对于某些存储引擎，例如 <code>MyISAM</code> 和 <code>Percona XtraDB</code>，甚至可以通过 <code>POTIMIZE</code> 命令使得索引完全顺序排列，这样就可以让简单的范围查询能使用完全排序的索引访问。</li>
+<li>一些存储引擎，如 <code>MyISAM</code> 在内存中只缓存索引。数据则依赖于操作系统来缓存，因此要访问数据需要一次系统调用。这可能会导致严重的性能问题，尤其是那些系统调用占了数据访问中的最大开销的场景。</li>
+<li>由于 <code>InnoDB</code> 的聚簇索引，覆盖索引对于 InnoDB 表特别有用。InnoDB 的二级索引在叶子节点保存了行的主键值，所以如果二级主键能够覆盖查询，则可以避免对主键索引的二次查询</li>
+</ul>
+<p>不是所有类型的索引都可以成为覆盖索引。覆盖索引必须要存储索引列，而哈希索引、空间索引和全文索引等都不存储索引列的值，所以MySQL只能使用B-Tree所以来做覆盖索引，另外不同的存储引擎实现覆盖索引的方式也不同，而且不是所有的引擎都支持覆盖索引。</p>
+<h2 id="七使用索引扫描来排序">七、使用索引扫描来排序</h2>
+<p>MySQL 有两种方式可以生成有序的结果集：通过排序操作，或者按索引顺序扫描。如果 <code>EXPLAIN</code> 出来的 type 列的值为 <code>index</code>，则说明 MySQL 使用了索引扫描来做排序。</p>
+<p>扫描索引本身是很快的，因为只需要从一条索引记录移动到紧接着的下一条记录。但如果索引不能覆盖查询所需的全部列，那就不得不每扫描一条索引记录就都回表查询一次对应的行。这基本上都是随机 I/O，因此按索引顺序读取数据的速度通常要比顺序的全表扫描慢，尤其是在 I/O 密集型的工作负载时。</p>
+<p><strong>MySQL 可以使用同一个索引既满足排序，又用于查找行。因此，如果可能，设计索引时应该尽可能的同时满足这两种情况，即：索引列作为排序列。</strong></p>
+<ul>
+<li>
+<p>只有当索引的列顺序和 <code>order by</code> 子句的顺序完全一致，并且所有列的排序方向都一样时，MySQL才能够使用索引来对结果做排序。</p>
+</li>
+<li>
+<p>如果查询需要关联多张表，则只有当 <code>order by</code> 子句引用的字段全部为第一个表时，才能使用索引做排序。<code>order by</code> 子句和查找性查询的限制是一样的：需要满足索引的最左前缀的要求；否则，MySQL都需要执行的顺序操作，而无法使用索引排序。</p>
+</li>
+</ul>
+<h2 id="八冗余重复索引">八、冗余、重复索引</h2>
+<p><strong>重复索引</strong>，是指在相同列上按照相同的顺序创建的相同类型的索引。<strong>应该避免这样的创建重复索引，发现以后也应该立即移除。</strong></p>
+<p>比如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> test<span style="color:#960050;background-color:#1e0010">{</span>
+    id <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span> <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span>,
+    a <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+    b <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+    <span style="color:#66d9ef">unique</span>(id)
+    <span style="color:#66d9ef">index</span>(id)
+<span style="color:#960050;background-color:#1e0010">}</span><span style="color:#66d9ef">engine</span><span style="color:#f92672">=</span>InnoDB;
+</code></pre></div><p>一个经验不足的人可能是想创建一个主键，先加上唯一限制(<code>unique(id)</code>)，然后再加上索引(<code>index(id)</code>)以供查询使用。然而唯一限制和主键限制都是通过索引使用，因此，上面的写法实际上在相同的列上创建了三个重复的索引。通常并没有理由要这样做，除非是在同一列上创建不同类型的索引来满足不同的查询需求。</p>
+<p><strong>冗余索引</strong>和<strong>重复索引</strong>有一些不同，比如：如果创建了索引 （A,B），再创建 （A） 那就是冗余索引，因为A就是前一个索引的前缀索引。索引 （A,B） 完全就可以当做 A 来使用。但是如果创建了索引 （B,A） 那就不是冗余索引了，索引 B 也不是。因为 B 不是索引 (A,B） 的最左前缀索引。另外，其他不同类型的索引，例如哈希，全文索引也不会是 B-Tree 的冗余索引。</p>
+<p>冗余索引通常发生在为表添加新索引的时候。例如，有人可能会增加一个新的索引 （A,B） 而不是拓展已有的索引 （A），还有一种情况是将一个索引扩展为 （A,ID），其中的 ID 是主键，对于 <code>InnoDB</code> 来说主键列已经包含在二级索引当中了， 所以这也是冗余的。</p>
+<p><strong>大多数情况下不需要冗余索引，应该尽量扩展已有的索引而不是创建新的索引。</strong> 但也有时候处于性能方面的考虑需要冗余索引，因为扩展已有的索引会导致其变得太大 ，从而影响其他使用该索引的查询的性能。例如，在一个整数列索引上添加一个很长的 <code>varchar</code> 列，那性能可能会急剧下降。特别是有索引把这个索引当中覆盖索引时，或者这是 <code>MyISAM</code> 表并且有很多范围查询的时候。</p>
+<p>解决冗余索引和重复索引的方法非常简单，删除这些索引就可以。但是首先要做的事找出这样的索引。可以通过写一些复杂的访问 <code>information_schema</code> 表的查询来找，不过还有两个更简单的方法就是使用 <code>Shlomi Noach</code> 的 <code>common_schema</code> 中的一些视图来定位（<code>common_schema</code>是一系列可以安装在服务器上的常用的存储和视图）。另外一个方法就是使用 <code>Percona Toolkit</code> 中的 <code>pt_duplicate-key-checker</code>，该工具通过分析表结构来找出冗余和重复索引。</p>
+<h2 id="九未使用的索引">九、未使用的索引</h2>
+<p>除了冗余索引和重复索引，可能还会有一些服务器永远不用的索引。<strong>这样的索引完全是累赘，建议直接删除。</strong></p>
+<p>可以使用 <code>Performance_schema</code> 中的 <code>table_io_waits_summary_by_index_usage</code> 表进行查找：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-mysql" data-lang="mysql"><span style="color:#66d9ef">SELECT</span> object_schema, object_name, index_name <span style="color:#66d9ef">FROM</span> performance_schema.table_io_waits_summary_by_index_usage <span style="color:#66d9ef">WHERE</span> index_name <span style="color:#66d9ef">IS</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">AND</span> count_star <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">ORDER</span> <span style="color:#66d9ef">BY</span> object_schema, object_name, index_name;
+</code></pre></div><h2 id="十索引和锁">十、索引和锁</h2>
+<p><strong>索引可以让查询锁定更少的行。</strong> 如果你的查询从不访问那些不需要的行，那么就会锁定更少的行，从两个方面来看这对性能都有什么好处。</p>
+<p>首先，虽然 <code>InnoDB</code> 的行锁效率很高，内存使用也很少，但是锁定行的时候仍然会带来额外的开销，其次，锁定超过需要的行会增加锁争用并减少并发性。</p>
+<h2 id="十一总结">十一、总结</h2>
+<p>通过上面大篇文字的讲解，都是用来说明如何高效的使用索引，避免错误使用。索引是一个看似简单，但实际用起来却是非常复杂的东西，要想真正用好它，需要不断的实践。<strong>实践是检验真理的唯一途径</strong>，本篇只是站在索引使用的全局来定位的，你只需要通读全篇并结合具体的例子，或回忆以往使用过的地方，对整体有个全面认识，并理解索引是如何工作的，就可以了。在后续使用索引，或者优化索引时，可以从这些方面出发，进一步来加深对索引正确高效的使用。</p>
+<p>在平时使用索引中，有以下几点总结及建议：</p>
+<ol>
+<li>在区分度高的字段上面建立索引可以有效的使用索引，区分度太低，无法有效的利用索引，可能需要扫描所有数据页，此时和不使用索引区别不大。</li>
+<li>联合索引，注意最左匹配原则：必须按照从左到右的顺序匹配，MySQL 会一直向右匹配直到遇到范围查询 <code>(&gt;、&lt;、between、like)</code> 就停止匹配，比如 <code>a = 1 and b = 2 and c &gt; 3 and d = 4</code> 如果建立 (a,b,c,d) 顺序的索引，d 是用不到索引的，如果建立 (a,b,d,c) 的索引则都可以用到，a,b,d 的顺序可以任意调整。</li>
+<li>查询记录的时候，少使用 <code>*</code>，尽量去利用索引覆盖，可以减少回表操作，提升效率。</li>
+<li>有些查询可以采用联合索引，进而使用到索引下推，也可以减少回表操作，提升效率。</li>
+<li>禁止对索引字段使用函数、运算符操作，这样将会使索引失效。</li>
+<li>字符串字段和数字比较的时候会使索引无效。</li>
+<li>模糊查询 <code>'%值%'</code> 会使索引无效，变为全表扫描，但是 <code>'值%'</code> 这种可以有效利用索引。</li>
+<li>排序中尽量使用到索引字段，这样可以减少排序，提升查询效率。</li>
+</ol>
+
+          </div>
+          
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/migration.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/">
+          <h5 class="mt-0">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h5>
+        </a>
+        2021-04-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-04.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+          <h5 class="mt-0">2.1 Go语言从入门到精通：Go语言基础语法</h5>
+        </a>
+        2021-03-28
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-03.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/">
+          <h5 class="mt-0">1.4 Go语言从入门到精通：Go代理goproxy，让你轻松下载依赖包</h5>
+        </a>
+        2021-03-24
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.3-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AAgo%E7%A8%8B%E5%BA%8F/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/hello-world-by-golang.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.3-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%BC%96%E5%86%99%E7%AC%AC%E4%B8%80%E4%B8%AAgo%E7%A8%8B%E5%BA%8F/">
+          <h5 class="mt-0">1.3 Go语言从入门到精通：编写第一个Go程序</h5>
+        </a>
+        2021-02-25
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-02.png"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.2-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+          <h5 class="mt-0">1.2 Go语言从入门到精通：开发环境搭建</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/"><img class="mr-3 post-thumb-sm" src="http://xcbeyond.cn/images/blog/golang-01.jpg"></a>
+      <div class="media-body">
+        <a href="http://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E4%BB%8B%E7%BB%8D/">
+          <h5 class="mt-0">1.1 Go语言从入门到精通：Go语言介绍</h5>
+        </a>
+        2021-02-21
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一索引失效">一、索引失效</a></li>
+    <li><a href="#二前缀索引和索引选择性">二、前缀索引和索引选择性</a></li>
+    <li><a href="#三多列索引">三、多列索引</a></li>
+    <li><a href="#四选择合适的索引列顺序">四、选择合适的索引列顺序</a></li>
+    <li><a href="#五聚簇索引">五、聚簇索引</a></li>
+    <li><a href="#六覆盖索引">六、覆盖索引</a></li>
+    <li><a href="#七使用索引扫描来排序">七、使用索引扫描来排序</a></li>
+    <li><a href="#八冗余重复索引">八、冗余、重复索引</a></li>
+    <li><a href="#九未使用的索引">九、未使用的索引</a></li>
+    <li><a href="#十索引和锁">十、索引和锁</a></li>
+    <li><a href="#十一总结">十一、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="http://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="http://xcbeyond.cn/plugins/google-map/gmap.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="http://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>
