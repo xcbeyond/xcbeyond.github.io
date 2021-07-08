@@ -27,7 +27,22 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>http://xcbeyond.cn/categories/</loc>
-    <lastmod>2021-04-09T14:50:21+08:00</lastmod>
+    <lastmod>2021-07-07T10:54:01+08:00</lastmod>
+  </url><url>
+    <loc>http://xcbeyond.cn/tags/</loc>
+    <lastmod>2021-07-07T10:54:01+08:00</lastmod>
+  </url><url>
+    <loc>http://xcbeyond.cn/tags/yapi/</loc>
+    <lastmod>2021-07-07T10:54:01+08:00</lastmod>
+  </url><url>
+    <loc>http://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/</loc>
+    <lastmod>2021-07-07T10:54:01+08:00</lastmod>
+  </url><url>
+    <loc>http://xcbeyond.cn/blog/</loc>
+    <lastmod>2021-07-07T10:54:01+08:00</lastmod>
+  </url><url>
+    <loc>http://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/</loc>
+    <lastmod>2021-07-07T10:54:01+08:00</lastmod>
   </url><url>
     <loc>http://xcbeyond.cn/tags/istio/</loc>
     <lastmod>2021-04-09T14:50:21+08:00</lastmod>
@@ -36,12 +51,6 @@
     <lastmod>2021-04-09T14:50:21+08:00</lastmod>
   </url><url>
     <loc>http://xcbeyond.cn/tags/spring-cloud/</loc>
-    <lastmod>2021-04-09T14:50:21+08:00</lastmod>
-  </url><url>
-    <loc>http://xcbeyond.cn/tags/</loc>
-    <lastmod>2021-04-09T14:50:21+08:00</lastmod>
-  </url><url>
-    <loc>http://xcbeyond.cn/blog/</loc>
     <lastmod>2021-04-09T14:50:21+08:00</lastmod>
   </url><url>
     <loc>http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/</loc>
@@ -123,9 +132,6 @@
     <lastmod>2020-03-01T15:13:13+08:00</lastmod>
   </url><url>
     <loc>http://xcbeyond.cn/tags/markdown/</loc>
-    <lastmod>2020-02-12T22:32:25+08:00</lastmod>
-  </url><url>
-    <loc>http://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/</loc>
     <lastmod>2020-02-12T22:32:25+08:00</lastmod>
   </url><url>
     <loc>http://xcbeyond.cn/blog/others/markdown-usage/</loc>

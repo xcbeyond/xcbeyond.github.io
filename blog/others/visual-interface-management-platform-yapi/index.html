@@ -2,13 +2,13 @@
 <html lang="zh-cn"><head>
   <meta charset="utf-8">
   
-  <title>中台到底是什么？ | xcbeyond</title>
+  <title>可视化接口管理平台 YApi，让你轻松搞定 API 的管理问题 | xcbeyond</title>
   
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description"
-    content="到处都在喊中台，到处都是中台，中台这个词在好多地方已经被滥用了。那么，中台到底是什么呢？">
+    content="高效、易用、功能强大的可视化接口管理平台 YApi,让我们能轻松帮助我们搞定 API 的管理问题。">
   
   <meta name="author" content="xcbeyond">
   <meta name="generator" content="Hugo 0.81.0" />
@@ -95,9 +95,9 @@
       <div class="col-md-12">
         <ul class="list-inline custom-breadcrumb">
           
-          <li class="list-inline-item text-white h3 font-secondary">中台到底是什么？</li>
+          <li class="list-inline-item text-white h3 font-secondary">可视化接口管理平台 YApi，让你轻松搞定 API 的管理问题</li>
         </ul>
-        <p class="text-lighten">到处都在喊中台，到处都是中台，中台这个词在好多地方已经被滥用了。那么，中台到底是什么呢？</p>
+        <p class="text-lighten">高效、易用、功能强大的可视化接口管理平台 YApi,让我们能轻松帮助我们搞定 API 的管理问题。</p>
       </div>
     </div>
   </div>
@@ -111,7 +111,7 @@
       <div class="col-lg-8 order-2 order-lg-1">
         <div class="row">
           <div class="col-12 mb-4">
-            <img src="/images/blog/technology-01.jpg" alt="blog-thumb" class="img-fluid w-100">
+            <img src="/images/blog/yapi.jpg" alt="blog-thumb" class="img-fluid w-100">
           </div>
           <div class="col-12">
             <ul class="list-inline">
@@ -120,12 +120,12 @@
                   href="/author/xcbeyond">Xcbeyond</a></li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
-                  :</span>2021-01-11 </li>
+                  :</span>2021-07-07 </li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
                   :</span><a
-                  href="/categories/%e4%b8%ad%e5%8f%b0"> 
-                  中台</a> </li>
+                  href="/categories/%e5%85%b6%e4%bb%96"> 
+                  其他</a> </li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
                   :</span><span id="busuanzi_value_page_pv"></span> </li>
@@ -138,63 +138,170 @@
           </div>
           
           <div class="col-12 mb-5 content">
-            <p>到处都在喊中台，到处都是中台，中台这个词在好多地方已经被滥用了。</p>
-<p>在有些人眼里：中台就是技术平台，像微服务开发框架、Devops 平台、PaaS 平台，容器云之类的，人们都叫它“技术中台”。</p>
-<p>在有些人眼里：中台就是微服务业务平台，像最常见的什么用户中心，订单中心，各种微服务集散地，人们都叫它“业务中台”。</p>
-<p>在有些人眼里：中台应该是组织的事情，类似于企业内部资源调度中心和内部创新孵化组织，人们都叫它“组织中台”。</p>
-<p><strong>中台</strong>，从字面意思上理解，是位于前台和后台之间。</p>
-<p>那么，中台到底是什么呢？</p>
-<p>谈到中台，首先会想到阿里巴巴，今天就从阿里中台开始，一起认识下中台到底是什么？到底如何发展而来的呢？</p>
-<h2 id="阿里中台的发展历程">阿里中台的发展历程</h2>
-<p><img src="%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E5%85%B1%E4%BA%AB%E4%B8%9A%E5%8A%A1%E4%BA%8B%E4%B8%9A%E9%83%A8%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B1.jpg" alt="阿里巴巴共享业务事业部的发展历程"></p>
-<p>阿里巴巴在 2003 年时成立了淘宝事业部，2008 年时成立了天猫事业部（其中一部分人来自淘宝事业部），没过多久，天猫与淘宝并驾齐驱，此时淘宝的技术团队同时支持着淘宝和天猫的业务，淘宝优先满足自己的业务，使得天猫的业务团队怨声载道，严重影响了天猫的业务发展。。</p>
-<p>另一个问题是业务架构层面的问题：当时淘宝和天猫的电商系统是完全独立的两套体系，但同时都包含了商品、交易、评价、支付、物流等相同功能。</p>
-<p>正因为上面的问题，2009 年，“共享事业部”应运而生，主要成员来自于之前的淘宝技术团队，在组织架构上与淘宝、天猫同级别（如上图中4），集团希望以这样的方式更好地让技术团队同时支持好淘宝和天猫的业务，并将两套电商的业务做了梳理和沉淀，把两个平台中公共的、通用的业务功能沉淀到了共享事业部，避免功能的重复建设和维护，更合理地利用技术资源。</p>
-<p>但接下来的发展却事与愿违。虽然组织架构上共享事业部和淘宝、天猫平级，但在对业务的理解和贡献上来说，显然淘宝和天猫拥有更多的话语权，结果是共享事业部在两大业务部门的夹缝中生存（如上图中5）。到此，共享事业部的发展与大多数人的期望有很大偏差。</p>
-<p>看看接下来又发生了什么故事，如下图：</p>
-<p><img src="%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E5%85%B1%E4%BA%AB%E4%B8%9A%E5%8A%A1%E4%BA%8B%E4%B8%9A%E9%83%A8%E7%9A%84%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B2.jpg" alt="阿里巴巴共享业务事业部的发展历程"></p>
-<p>2010 年聚划算出现了。聚划算平台刚一上线，就展现出强大的流量吸引力，所以一时间大家趋之若鹜，纷纷对接聚划算平台。</p>
-<p>后来 1688 也参与其中，三大电商运营人员各展所长，争占聚划算平台上的有利资源，面对如洪流般的业务对接需求，当时刚成立不久的聚划算团队应接不暇（如上图中上右）。</p>
-<p>这时，集团要求三大电商平台如果要与聚划算平台进行业务对接，必须通过共享事业部！正是有了这“点睛之笔”，共享事业部便有了一个极强的抓手，将原本与三大电商平台对话权不平等的情况拉平，这使得“共享事业部”成为了阿里巴巴集团的核心业务平台。</p>
-<h2 id="阿里中台的定位">阿里中台的定位</h2>
-<p>下图清晰地描述了阿里巴巴“厚平台、薄应用”架构形态，在后端阿里云技术平台和前端业务间有一个“共享业务事业部”，将阿里巴巴集团前端业务中公共、通用的业务沉淀到了这个事业部，共享业务事业部是“厚平台”的真实体现，为各种前端业务提供着相应服务中心领域内最为专业、稳定的业务服务，满足业务快速响应和业务模式创新需求。</p>
-<p><img src="%E5%85%B1%E4%BA%AB%E4%B8%9A%E5%8A%A1%E4%BA%8B%E4%B8%9A%E9%83%A8%E5%9C%A8%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E4%B8%9A%E5%8A%A1%E6%9E%B6%E6%9E%84%E4%B8%AD%E7%9A%84%E5%9C%B0%E4%BD%8D.jpg" alt="共享业务事业部在阿里巴巴业务架构中的地位"></p>
-<p>在 2015 年年底，在参观了芬兰游戏公司移动游戏公司 Supercell 后，阿里巴巴集团正式对外宣布全面启动阿里巴巴集团 2018 年中台战略，构建符合大数据时代的更具创新性、灵活性的<strong>大中台、小前台</strong>组织机制和业务机制，即：<strong>前台作为更敏捷、更快速响应业务变化需求，中台作为集合整个集团的运营数据能力、产品技术能力，对各前台业务形成强力支撑</strong>。</p>
-<p>“大中台、小前台”架构主要集中在业务共享服务层，业务共享服务团队，有独立的团队来做，也更利于业务的沉淀，降低研发成本，提高研发效率。打破了产品壁垒，之前是系统之间要数据，现在是都去找共享服务中心要数据，共享服务中心提供统一的，标准的数据。减少了系统间交互、团队间协作的成本。站在巨人的肩膀上。新产品研发不用考虑之前已有的东西，可以快速孵化新的产品，试错成本低，产品敢于创新，敢于拥抱变化，原来追竞争对手都很困难，现在相当于竞争对手的产品经理不停的给我们提供新点子。可持续发展，技术和业务能力能够沉淀积累。</p>
-<p>阿里通过多年不懈的努力，在业务的不断催化滋养下，将自己的技术和业务能力沉淀出一套综合能力平台，具备了对于前台业务变化及创新的快速响应能力。</p>
-<p><img src="%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E5%85%B1%E4%BA%AB%E4%B8%9A%E5%8A%A1%E4%BA%8B%E4%B8%9A%E9%83%A8%E7%9A%845%E5%A4%A7%E4%BB%B7%E5%80%BC%E5%AE%9A%E4%BD%8D.jpg" alt="阿里巴巴共享业务事业部的5大价值定位"></p>
-<h2 id="中台的定义">中台的定义</h2>
-<p>中台的定义，不同的人可能定义都不相同，但我认为只需抓住以下几个核心词汇，就很容易理解。</p>
+            <p>随着开发的推进，各种各样的文档会接踵而来，比如：需求文档、架构文档、接口文档等等，我们通过 SVN、Git 等可以很方便的管理，面对需求的不断变化，我们需要不断的对各类文档进行维护。但在开发阶段，针对接口文档而言，其具有不确定性、难维护、难测试等特点，接口的管理往往成为了难题。</p>
+<p>今天我们带着 API 接口管理的问题，一起来看看一款可视化接口管理平台 YApi，让能轻松帮助我们搞定 API 的管理问题。</p>
+<h2 id="yapi-介绍">YApi 介绍</h2>
+<p><a href="https://github.com/YMFE/yapi">YApi</a> 是高效、易用、功能强大的 API 管理平台，旨在为开发、产品、测试人员提供更优雅的接口管理服务。可以帮助开发者轻松创建、发布、维护 API，YApi 还为用户提供了优秀的交互体验，开发人员只需利用平台提供的接口数据写入工具以及简单的点击操作就可以实现接口的管理。</p>
+<p>在开始之前，可以先体验一把，体验地址：<a href="https://yapi.baidu.com">https://yapi.baidu.com</a></p>
+<h3 id="特性">特性</h3>
 <ul>
-<li><strong>能力沉淀</strong>：将原有分散的的能力，以某种形式沉淀在一起。</li>
-<li><strong>服务共享</strong>：将沉淀的能力，以服务的形式，为不同前台等提供服务共享的能力。</li>
-<li><strong>快速响应</strong>：为满足业务快速变化、探索和创新，能够实现快速响应用户的需求，以占领市场。</li>
+<li><strong>可视化接口管理</strong>，基于 Websocket 的多人协作接口编辑功能和类 Postman 测试工具，让多人协作成倍提升开发效率。</li>
+<li><strong>扁平化权限设计</strong>，即保证了大型企业级项目的管理，又保证了易用性。</li>
+<li><strong>自动化测试</strong>, 完善的接口自动化测试,保证数据的正确性，并支持对 Response 断言。</li>
+<li><strong>Mock Server</strong>，易用的 Mock Server，方便 Mock 数据的生成。除支持普通的随机 Mock 外，还增加了 Mock 期望功能，根据设置的请求过滤规则，返回期望数据。</li>
+<li><strong>数据导入导出</strong>，支持导入 Swagger, Postman, <a href="https://zh.wikipedia.org/wiki/.har">HAR</a> 数据格式，导出 HTML, Markdown, JSON 数据格式， 方便 API 接口文档的迁移及归档。</li>
+<li><strong>插件机制</strong>，强大的插件机制，满足各类业务需求，便于扩展对接等。</li>
+<li>基于 JSON5 和 Mockjs 定义接口返回数据的结构和文档，效率提升多倍。</li>
+<li><strong>免费开源</strong>，支持二次开发，内网部署，信息安全可靠。</li>
 </ul>
-<p>下面是阿里对中台的定义：</p>
-<p>“将企业的核心能力随着业务不断发展以数字化形式<strong>沉淀</strong>到平台，形成<strong>以服务为中心</strong>，由业务中台和数据中台构建起数据闭环运转的<strong>运营体系</strong>，供企业更高效的进行业务探索和创新，实现以<strong>数字化资产</strong>的形态构建企业核心<strong>差异化竞争力</strong>。”</p>
-<p><img src="%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E4%B8%AD%E5%8F%B0%E5%BB%BA%E8%AE%BE.png" alt="阿里巴巴中台建设"></p>
+<h3 id="谁在用">谁在用</h3>
 <ul>
-<li>
-<p><strong>业务中台</strong>
-将后台资源进行抽象包装整合，转化为前台友好的<strong>可重用共享</strong>的核心能力，实现后端业务资源到前台易用能力的转化。</p>
-</li>
-<li>
-<p><strong>数据中台</strong>
-从后台及业务中台将数据流入，完成海量数据的存储、计算、产品化包装过程，构成企业的核心数据能力，为前台基于数据的定制化创新和业务中台基于数据反馈的持续演进提供了强大支撑。</p>
-</li>
-<li>
-<p><strong>技术中台</strong>
-将使用云或其他基础设施的能力以及应用各种技术中间件的能力进行整合和包装，助力前台和业务中台及数据中台的快速建设。</p>
-</li>
-<li>
-<p><strong>研发中台</strong>
-为前台应用提供了流程和质量管控以及持续交付的能力，将企业的开发流程最佳实践沉淀成可重用的“能力”，从而助力创新性应用的快速开发迭代。</p>
-</li>
+<li>去哪儿</li>
+<li>携程</li>
+<li>艺龙</li>
+<li>美团</li>
+<li>百度</li>
+<li>腾讯</li>
+<li>阿里巴巴</li>
+<li>京东</li>
+<li>今日头条</li>
+<li>唯品支付</li>
+<li>链家网</li>
+<li>快手</li>
+<li>便利蜂</li>
+<li>中商惠民</li>
+<li>新浪</li>
+<li>VIPKID</li>
+<li>马蜂窝</li>
 </ul>
-<p>参考文档：</p>
+<h3 id="认识-yapi">认识 YApi</h3>
+<p>在开始使用 YApi 之前，我们先来熟悉一下 YApi 的网站结构，这将让你快速了解YApi。</p>
+<p><strong>登录与注册</strong>：</p>
+<p>想要使用 YApi ，首先要注册账号。</p>
+<p><img src="login.png" alt="登录"></p>
+<p><strong>首页</strong>：</p>
+<p>登录后进入首页，首页展示了分组与项目。</p>
+<p>此时你作为新用户，没有任何分组与项目的权限，因此只能搜索、浏览 “公开项目” 的接口，如果在首页找不到任何项目，请联系管理员将你加入对应项目。</p>
 <ol>
-<li>钟华《企业IT架构转型之道：阿里巴巴中台》</li>
-<li>王健《白话中台战略》</li>
+<li>
+<p>首页头部展示了当前所在的位置、搜索框、新建项目、查看文档和用户信息。</p>
+</li>
+<li>
+<p>首页左侧展示分组信息，“分组”是“项目”的集合，只有超级管理员可以管理分组。</p>
+</li>
+<li>
+<p>首页右侧是分组下的项目和成员列表，点击左侧的某个分组，右侧会出现该分组下的项目和成员信息。</p>
+</li>
+<li>
+<p>点击项目右上角的星星即可关注项目，关注的项目可以在“我的关注”页面查看。</p>
+</li>
+</ol>
+<p><img src="index.png" alt="首页"></p>
+<p><strong>项目页</strong>:</p>
+<p>点击一个项目，进入项目页，项目页展示了属于该项目的全部接口，并提供项目、接口的全部操作。</p>
+<p>此时你作为新用户，只能浏览接口信息，不可以编辑项目或接口，如果需要编辑，请联系管理员将你加入该项目。</p>
+<ol>
+<li>
+<p>项目页左侧的 “接口列表” 展示了该项目下的所有接口，右侧默认显示该项目下所有接口的列表。</p>
+</li>
+<li>
+<p>点击左侧的某个接口，右侧会出现“预览”、“编辑”和“运行”。</p>
+</li>
+<li>
+<p>点击左侧的 “测试集合” 使用测试集功能。</p>
+</li>
+<li>
+<p>点击二级导航的“设置”，项目组长即可编辑项目信息和管理成员列表。</p>
+</li>
+<li>
+<p>点击二级导航的“动态”，即可查看项目的操作日志。</p>
+</li>
+</ol>
+<p><img src="project.png" alt="项目"></p>
+<p><strong>个人中心</strong>：</p>
+<p>鼠标移动到右上角的用户头像或用户名上，即可点击“个人中心”查看个人信息。</p>
+<p><img src="hover.png" alt="个人中心"></p>
+<p>在个人信息页面可以查看并修改自己的用户名、密码等信息。</p>
+<p><img src="user.png" alt="个人设置"></p>
+<h2 id="yapi-操作手册">YApi 操作手册</h2>
+<p>可直接参考<a href="https://hellosean1025.github.io/yapi/documents/index.html">官方教程</a>。</p>
+<h2 id="部署">部署</h2>
+<p>在决定使用 YApi 后，首先会考虑如何部署。虽说官方提供了详细的部署文档，但一顿操作下来却踩了不少坑，却被难倒了门外。在此，结合官方提供的部署教程，自己基于docker-compose、Kubernetes等方式提供了一键离线安装 YApi，更加的方便。</p>
+<h3 id="官方部署教程推荐可视化部署">官方部署教程（推荐可视化部署）</h3>
+<p>可直接参考<a href="https://hellosean1025.github.io/yapi/devops/index.html">官方教程</a>，除了部署本身之外，通过该教程让我们进一步了解到 YApi 的一些细节问题，如：依赖什么、配置什么等，这也为我接下来 Docker 部署提供了参考。</p>
+<h3 id="docker-在线离线部署个人推荐">Docker 在线/离线部署（个人推荐）</h3>
+<p>在有网络的条件下，可直接通过可视化部署（yapi-cli 工具）是非常简单的，但在内网（无外网）下，却无能为力。因此，特制作 Docker 镜像，可通过 docker-compose 或 Kubernetes 等方式一键部署 YApi。</p>
+<h4 id="镜像制作">镜像制作</h4>
+<p><strong>这部分主要讲述镜像的制作过程，docker 镜像已推送至 <a href="https://hub.docker.com/r/xcbeyond/yapi">docker hub</a>，直接拉取，无需自己动手制作镜像。</strong></p>
+<blockquote>
+<p>config.json: YApi 配置文件，可按需修改打入到镜像。</p>
+<p>commons.js：解决 YApi <a href="https://github.com/YMFE/yapi/issues/2231">bug 问题</a>。</p>
+</blockquote>
+<ol>
+<li>
+<p>克隆本项目代码到本地</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone https://github.com/xcbeyond/deploy-scripts.git
+</code></pre></div></li>
+<li>
+<p>构建镜像</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 切换到 yapi 目录</span>
+cd yapi
+<span style="color:#75715e"># 需要花费一点时间</span>
+docker build -t xcbeyond/yapi:1.9.2 .
+</code></pre></div></li>
+<li>
+<p>推送镜像</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker push xcbeyond/yapi:1.9.2
+</code></pre></div></li>
+</ol>
+<h4 id="一键部署">一键部署</h4>
+<p>支持通过 docker-compose 和 Kubernetes 两种方式一键部署。</p>
+<h5 id="docker-镜像-tar-包获取">docker 镜像 tar 包获取</h5>
+<blockquote>
+<p>有外网时，可忽略该操作。</p>
+</blockquote>
+<p>如果在离线（无外网）情况下，需事先准备好 docker 镜像tar包。</p>
+<ol>
+<li>
+<p>在能正常连接外网的 docker 环境下，拉取镜像 <code>xcbeyond/yapi</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker pull xcbeyond/yapi:1.9.2
+</code></pre></div></li>
+<li>
+<p>生成 docker 镜像 tar 包。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker save -o yapi-1.9.2.tar xcbeyond/yapi:1.9.2
+</code></pre></div></li>
+<li>
+<p>将镜像 tar 包 yapi-1.9.2.tar 上传将要部署的环境上。</p>
+</li>
+<li>
+<p>导入镜像 tar 包。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">docker load &lt; yapi-1.9.2.tar
+</code></pre></div></li>
+</ol>
+<h5 id="docker-compose-部署">docker-compose 部署</h5>
+<p>将 docker-compose 文件 <a href="./docker-compose.yaml">/yaip/docker-compose.yaml</a> 上传至部署环境上，执行 docker-compose 命令 <code>docker-compose up -d</code> 完成部署即可。</p>
+<p>浏览器访问地址 <code>http://&lt;部署环境IP&gt;:3000</code>，可用超级管理员登录或直接注册新账号。</p>
+<blockquote>
+<p>超级管理员：<code>admin@admin.com</code>、<code>ymfe.org</code>，登录后建议修改密码。</p>
+</blockquote>
+<h5 id="kubernetes-部署">Kubernetes 部署</h5>
+<p>将 <a href="./kubernetes/">Kubernetes 部署资源文件</a>上传至部署环境上，分别通过命令 <code>kubectl apply -f</code> 执行文件 <a href="./kubernetes/mongodb.yaml">mongodb.yaml</a> 和 <a href="./kubernetes/yapi.yaml">yapi.yaml</a> 完成部署即可。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl apply -f mongodb.yaml
+<span style="color:#75715e"># 等待 mongodb 启动成功后，再执行 yapi</span>
+kubectl apply -f yapi.yaml
+</code></pre></div><p><strong>注：先启动 mongodb、再启动 yapi。</strong></p>
+<p>浏览器访问地址 <code>http://&lt;部署环境IP&gt;:30300</code>，可用超级管理员登录或直接注册新账号。</p>
+<blockquote>
+<p>超级管理员：<code>admin@admin.com</code>、<code>ymfe.org</code>，登录后建议修改密码。</p>
+</blockquote>
+<p>参考资料：</p>
+<ol>
+<li>
+<p><a href="https://hellosean1025.github.io/yapi/">https://hellosean1025.github.io/yapi/</a></p>
+</li>
+<li>
+<p><a href="https://github.com/xcbeyond/deploy-scripts/tree/master/yapi">https://github.com/xcbeyond/deploy-scripts/tree/master/yapi</a></p>
+</li>
 </ol>
 
           </div>
@@ -304,9 +411,20 @@
     <h4 class="mb-4">目录</h4>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#阿里中台的发展历程">阿里中台的发展历程</a></li>
-    <li><a href="#阿里中台的定位">阿里中台的定位</a></li>
-    <li><a href="#中台的定义">中台的定义</a></li>
+    <li><a href="#yapi-介绍">YApi 介绍</a>
+      <ul>
+        <li><a href="#特性">特性</a></li>
+        <li><a href="#谁在用">谁在用</a></li>
+        <li><a href="#认识-yapi">认识 YApi</a></li>
+      </ul>
+    </li>
+    <li><a href="#yapi-操作手册">YApi 操作手册</a></li>
+    <li><a href="#部署">部署</a>
+      <ul>
+        <li><a href="#官方部署教程推荐可视化部署">官方部署教程（推荐可视化部署）</a></li>
+        <li><a href="#docker-在线离线部署个人推荐">Docker 在线/离线部署（个人推荐）</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
   </div>
