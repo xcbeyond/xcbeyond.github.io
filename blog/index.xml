@@ -20,6 +20,16 @@ YApi 介绍 YApi 是高效、易用、功能强大的 API 管理平台，旨在�
     </item>
     
     <item>
+      <title>我与InfoQ写作平台的这些事</title>
+      <link>http://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/</link>
+      <pubDate>Sun, 02 May 2021 22:10:09 +0800</pubDate>
+      
+      <guid>http://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/</guid>
+      <description>大家好，我是 xcbeyond，xcbeyond 就是我，大家也可以叫我“超哥”！
+1、相识 早在 2019 年，甚至更早，从“InfoQ”公众号、InfoQ 技术大会开始，让我知道 InfoQ 的存在，作为“为一线互联网公司核心技术人员提供优质内容。科技圈的观察者，前沿技术的传播者”，它名副其实，其文章的深度、广度更合我的胃口。 InfoQ 官网更是卧虎藏龙，无论是对前沿技术的分析，还是对热点领域的深耕，都有着独到的见解，这些创作者大多都是各个领域的专家、标杆，比如：钰湚，他也是我在 InfoQ 平台认识的第一位好友（准确来说应该是“网友”吧），他们身后更有 InfoQ 平台的编辑支持、策划，因此，文章质量可想而知。</description>
+    </item>
+    
+    <item>
       <title>构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</title>
       <link>http://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/</link>
       <pubDate>Fri, 09 Apr 2021 14:50:21 +0800</pubDate>

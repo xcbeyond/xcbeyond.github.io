@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>InfoQ on xcbeyond</title>
+    <link>http://xcbeyond.cn/tags/infoq/</link>
+    <description>Recent content in InfoQ on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
+    <lastBuildDate>Sun, 02 May 2021 22:10:09 +0800</lastBuildDate><atom:link href="http://xcbeyond.cn/tags/infoq/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>我与InfoQ写作平台的这些事</title>
+      <link>http://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/</link>
+      <pubDate>Sun, 02 May 2021 22:10:09 +0800</pubDate>
+      
+      <guid>http://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/</guid>
+      <description>大家好，我是 xcbeyond，xcbeyond 就是我，大家也可以叫我“超哥”！
+1、相识 早在 2019 年，甚至更早，从“InfoQ”公众号、InfoQ 技术大会开始，让我知道 InfoQ 的存在，作为“为一线互联网公司核心技术人员提供优质内容。科技圈的观察者，前沿技术的传播者”，它名副其实，其文章的深度、广度更合我的胃口。 InfoQ 官网更是卧虎藏龙，无论是对前沿技术的分析，还是对热点领域的深耕，都有着独到的见解，这些创作者大多都是各个领域的专家、标杆，比如：钰湚，他也是我在 InfoQ 平台认识的第一位好友（准确来说应该是“网友”吧），他们身后更有 InfoQ 平台的编辑支持、策划，因此，文章质量可想而知。</description>
+    </item>
+    
+  </channel>
+</rss>
