@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>云原生 on xcbeyond</title>
-    <link>http://xcbeyond.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+    <link>https://xcbeyond.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
     <description>Recent content in 云原生 on xcbeyond</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Sun, 21 Feb 2021 14:33:54 +0800</lastBuildDate><atom:link href="http://xcbeyond.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Feb 2021 14:33:54 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>解读云原生技术</title>
-      <link>http://xcbeyond.cn/blog/cloudnative/%E8%A7%A3%E8%AF%BB%E4%BA%91%E5%8E%9F%E7%94%9F%E6%8A%80%E6%9C%AF/</link>
+      <link>https://xcbeyond.cn/blog/cloudnative/%E8%A7%A3%E8%AF%BB%E4%BA%91%E5%8E%9F%E7%94%9F%E6%8A%80%E6%9C%AF/</link>
       <pubDate>Sun, 21 Feb 2021 14:33:54 +0800</pubDate>
       
-      <guid>http://xcbeyond.cn/blog/cloudnative/%E8%A7%A3%E8%AF%BB%E4%BA%91%E5%8E%9F%E7%94%9F%E6%8A%80%E6%9C%AF/</guid>
+      <guid>https://xcbeyond.cn/blog/cloudnative/%E8%A7%A3%E8%AF%BB%E4%BA%91%E5%8E%9F%E7%94%9F%E6%8A%80%E6%9C%AF/</guid>
       <description>云原生的技术体系看似纷乱繁杂，但在不同视角都体现着“牵一发而动全身”的主线。从时间线来看，容器技术的发展催生了云原生思潮，在底层解决了资源供给问题，随后开源的 Kubernetes 成为容器编排的标准规范，当基于 Kubernetes 可扩展能力的开放应用平台逐渐丰富，使其成为了云原生生态最重要的基石。随后 Service Mesh、Serverless 技术的核心思想更偏重在业务侧实现价值——将更多的能力下沉到基础设施，为应用的轻量化、上云提供可能。
 从技术需求的角度来看，微服务架构是解决单体复杂度问题的首选方式，却带来整个系统的整体复杂度大幅增加，容器技术和 Kubernetes 分别解决了微服务架构下大量应用的部署、以及容器的管理和调度问题，同时，Kubernetes 也为 Service Mesh 提供了更好的底层支撑，也带来了底层基础设施的 Serverless 云原生化和中间件能力的进一步下沉。</description>
     </item>
