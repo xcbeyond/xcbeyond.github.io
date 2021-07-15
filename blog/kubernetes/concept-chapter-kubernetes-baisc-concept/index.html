@@ -317,7 +317,7 @@ Labels:             beta.kubernetes.io/arch=amd64
 <h2 id="10volume">10、Volume</h2>
 <p><code>Volume</code>（存储卷）是Pod中能够被多个容器访问的共享目录。Kubernetes的Volume概念、用途和目的与Docker的Volume比较类似，但两者不能等价。首先，Kubernetes中的Volume定义在Pod上，然后被一个Pod里的多个容器挂载到具体的文件目录下；其次，Kubernetes中的Volume中的数据也不会丢失。最后，Kubernetes支持多种类型的Volume，例如Gluster、Ceph等先进的分布式文件系统。</p>
 <h2 id="11namespace">11、Namespace</h2>
-<p><code>Namespace</code>（命名空间）是Kubernetes系统中的另一个非常重要的概念，Namespace在很多情况下用于实现多租户的资源隔离。Nameaspace通过将集群内部的资源对象“分配”到不同的Namespce中，形成逻辑上分组的不同项目、小组或用户组，便于不同的分组在共享使用整个集群的资源的同时还能被分别管理。</p>
+<p><code>Namespace</code>（命名空间）是Kubernetes系统中的另一个非常重要的概念，Namespace在很多情况下用于实现多租户的资源隔离。Nameaspace通过将集群内部的资源对象“分配”到不同的 Namespace 中，形成逻辑上分组的不同项目、小组或用户组，便于不同的分组在共享使用整个集群的资源的同时还能被分别管</p>
 <p>Kubernetes集群默认会创建一个名为default的Namespace，通过<code>kubectl</code>可以查看：</p>
 <pre><code>[xcbeyond@bogon ~]$ kubectl get namespaces
 NAME                   STATUS   AGE
