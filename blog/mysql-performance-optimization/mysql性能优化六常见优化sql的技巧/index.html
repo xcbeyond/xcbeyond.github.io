@@ -2,13 +2,13 @@
 <html lang="zh-cn"><head>
   <meta charset="utf-8">
   
-  <title>博客 | xcbeyond</title>
+  <title>MySQL性能优化(六)：常见优化SQL的技巧 | xcbeyond</title>
   
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description"
-    content="让技术变得更简单，学的更轻松。">
+    content="SQL 优化技巧是性能优化的重中之重。">
   
   <meta name="author" content="xcbeyond">
   <meta name="generator" content="Hugo 0.81.0" />
@@ -96,15 +96,15 @@
 
 
 	
-<section class="page-title-section overlay" style="background-image: url('/images/backgrounds/page-title.jpg'),url('/images/backgrounds/page-title.jpg');" >
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
   <div class="container">
     <div class="row">
       <div class="col-md-12">
         <ul class="list-inline custom-breadcrumb">
           
-          <li class="list-inline-item text-white h3 font-secondary">博客</li>
+          <li class="list-inline-item text-white h3 font-secondary">MySQL性能优化(六)：常见优化SQL的技巧</li>
         </ul>
-        <p class="text-lighten">让技术变得更简单，学的更轻松。</p>
+        <p class="text-lighten">SQL 优化技巧是性能优化的重中之重。</p>
       </div>
     </div>
   </div>
@@ -112,180 +112,155 @@
 	
 
 
-<section class="section">
+<section class="section-sm">
   <div class="container">
     <div class="row">
       <div class="col-lg-8 order-2 order-lg-1">
         <div class="row">
-          
-          
-          
-          <div class="col-sm-6 mb-5">
-            <article
-              class="card rounded-0 border-bottom border-primary border-top-0 border-left-0 border-right-0 hover-shadow">
-              <img class="card-img-top rounded-0" src="/images/blog/technology-01.jpg" alt="中台到底是什么？">
-              <div class="card-body">
-                
-                <ul class="list-inline mb-3">
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-calendar"></i>
-                    2021-01-11</li>
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-user"></i> <a
-                      href="/author/xcbeyond">Xcbeyond</a>
-                  </li>
-                </ul>
-                <h4 class="card-title"><a href="https://xcbeyond.cn/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/">中台到底是什么？</a></h4>
-                <p class="card-text">到处都在喊中台，到处都是中台，中台这个词在好多地方已经被滥用了。
-在有些人眼里：中台就是技术平台，像微服务开发框架、Devops 平台、PaaS 平台，容器云之类的，人们都叫它“技术中台”。
-在有些人 …</p>
-                <a href="https://xcbeyond.cn/blog/architecture/%E4%B8%AD%E5%8F%B0%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88/" class="btn btn-primary btn-sm">阅读更多</a>
-              </div>
-            </article>
+          <div class="col-12 mb-4">
+            <img src="/images/blog/mysql-performance-optimization-06.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2020-04-19 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/mysql"> 
+                  MySQL</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
           </div>
           
-          <div class="col-sm-6 mb-5">
-            <article
-              class="card rounded-0 border-bottom border-primary border-top-0 border-left-0 border-right-0 hover-shadow">
-              <img class="card-img-top rounded-0" src="/images/blog/bridge.jpg" alt="Kubernetes概念篇：基本概念和术语">
-              <div class="card-body">
-                
-                <ul class="list-inline mb-3">
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-calendar"></i>
-                    2020-10-26</li>
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-user"></i> <a
-                      href="/author/xcbeyond">Xcbeyond</a>
-                  </li>
-                </ul>
-                <h4 class="card-title"><a href="https://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/">Kubernetes概念篇：基本概念和术语</a></h4>
-                <p class="card-text">在开始使用之前，应当先了解一下关于Kubernetes的相关概念术语，对后续的学习、使用将有很大的帮助。（Kubernetes的概念比较多，建议加强理解，并清楚各种所处位置及关联！） …</p>
-                <a href="https://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/" class="btn btn-primary btn-sm">阅读更多</a>
-              </div>
-            </article>
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
           </div>
           
-          <div class="col-sm-6 mb-5">
-            <article
-              class="card rounded-0 border-bottom border-primary border-top-0 border-left-0 border-right-0 hover-shadow">
-              <img class="card-img-top rounded-0" src="/images/blog/kubernetes-01.jpg" alt="Kubernetes介绍篇：是什么？为什么要用？">
-              <div class="card-body">
-                
-                <ul class="list-inline mb-3">
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-calendar"></i>
-                    2020-10-26</li>
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-user"></i> <a
-                      href="/author/xcbeyond">Xcbeyond</a>
-                  </li>
-                </ul>
-                <h4 class="card-title"><a href="https://xcbeyond.cn/blog/kubernetes/introduction-chapter-what-is-kubernetes/">Kubernetes介绍篇：是什么？为什么要用？</a></h4>
-                <p class="card-text">是时候该学习Kubernetes了，不然都不敢说自己了解容器、了解Docker。
- 1、Kubernetes的前世 Kubernetes，它是一个全新的基于容器技术的分布式架构方案，近些年在容器领域使 …</p>
-                <a href="https://xcbeyond.cn/blog/kubernetes/introduction-chapter-what-is-kubernetes/" class="btn btn-primary btn-sm">阅读更多</a>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-sm-6 mb-5">
-            <article
-              class="card rounded-0 border-bottom border-primary border-top-0 border-left-0 border-right-0 hover-shadow">
-              <img class="card-img-top rounded-0" src="/images/blog/mysql-performance-optimization-07.png" alt="MySQL性能优化(七)：MySQL执行计划，真的很重要，来一起学习吧">
-              <div class="card-body">
-                
-                <ul class="list-inline mb-3">
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-calendar"></i>
-                    2020-05-10</li>
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-user"></i> <a
-                      href="/author/xcbeyond">Xcbeyond</a>
-                  </li>
-                </ul>
-                <h4 class="card-title"><a href="https://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%83mysql%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E7%9C%9F%E7%9A%84%E5%BE%88%E9%87%8D%E8%A6%81%E6%9D%A5%E4%B8%80%E8%B5%B7%E5%AD%A6%E4%B9%A0%E5%90%A7/">MySQL性能优化(七)：MySQL执行计划，真的很重要，来一起学习吧</a></h4>
-                <p class="card-text">一条 SQL 被一个懵懂的少年，一阵蹂躏，扔向了 MySQL 服务器的尽头，少年苦苦等待，却迟迟等不来那满载而归的硕果。于是少年气愤，费尽苦心想从度娘那边寻求帮助，面对执行计划 EXPLAIN，却等来 …</p>
-                <a href="https://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%83mysql%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E7%9C%9F%E7%9A%84%E5%BE%88%E9%87%8D%E8%A6%81%E6%9D%A5%E4%B8%80%E8%B5%B7%E5%AD%A6%E4%B9%A0%E5%90%A7/" class="btn btn-primary btn-sm">阅读更多</a>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-sm-6 mb-5">
-            <article
-              class="card rounded-0 border-bottom border-primary border-top-0 border-left-0 border-right-0 hover-shadow">
-              <img class="card-img-top rounded-0" src="/images/blog/mysql-performance-optimization-06.png" alt="MySQL性能优化(六)：常见优化SQL的技巧">
-              <div class="card-body">
-                
-                <ul class="list-inline mb-3">
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-calendar"></i>
-                    2020-04-19</li>
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-user"></i> <a
-                      href="/author/xcbeyond">Xcbeyond</a>
-                  </li>
-                </ul>
-                <h4 class="card-title"><a href="https://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%85%AD%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96sql%E7%9A%84%E6%8A%80%E5%B7%A7/">MySQL性能优化(六)：常见优化SQL的技巧</a></h4>
-                <p class="card-text">在面对不够优化、或者性能极差的 SQL 语句时，我们通常的想法是将重构这个 SQL 语句，让其查询的结果集和原来保持一样，并且希望 SQL 性能得以提升。而在重构 SQL 时，一般都有一定方法技巧可供 …</p>
-                <a href="https://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%85%AD%E5%B8%B8%E8%A7%81%E4%BC%98%E5%8C%96sql%E7%9A%84%E6%8A%80%E5%B7%A7/" class="btn btn-primary btn-sm">阅读更多</a>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-sm-6 mb-5">
-            <article
-              class="card rounded-0 border-bottom border-primary border-top-0 border-left-0 border-right-0 hover-shadow">
-              <img class="card-img-top rounded-0" src="/images/blog/mysql-performance-optimization-05.png" alt="MySQL性能优化(五)：为什么查询速度这么慢">
-              <div class="card-body">
-                
-                <ul class="list-inline mb-3">
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-calendar"></i>
-                    2020-04-07</li>
-                  
-                  <li class="list-inline-item mr-3 ml-0"><i class="ti-user"></i> <a
-                      href="/author/xcbeyond">Xcbeyond</a>
-                  </li>
-                </ul>
-                <h4 class="card-title"><a href="https://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6%E8%BF%99%E4%B9%88%E6%85%A2/">MySQL性能优化(五)：为什么查询速度这么慢</a></h4>
-                <p class="card-text">前面章节我们介绍了如何选择优化的数据类型、如何高效的使用索引，这些对于高性能的 MySQL 来说是必不可少的。但这些还完全不够，还需要合理的设计查询。如果查询写的很糟糕，即使表结构再合理、索引再合适， …</p>
-                <a href="https://xcbeyond.cn/blog/mysql-performance-optimization/mysql%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%BA%94%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9F%A5%E8%AF%A2%E9%80%9F%E5%BA%A6%E8%BF%99%E4%B9%88%E6%85%A2/" class="btn btn-primary btn-sm">阅读更多</a>
-              </div>
-            </article>
-          </div>
-          
-          <div class="col-12 mt-4">
-            
-<ul class="pagination">
-  <li class="page-item">
-    <a href="/blog/" class="page-link" aria-label="First"><span aria-hidden="true">&laquo;&laquo;</span></a>
-  </li>
-  <li class="page-item">
-    <a href="/blog/page/2/" class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/blog/">1</a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/blog/page/2/">2</a>
-  </li>
-  <li class="page-item active">
-    <a class="page-link" href="/blog/page/3/">3</a>
-  </li>
-  <li class="page-item">
-    <a class="page-link" href="/blog/page/4/">4</a>
-  </li>
-  <li class="page-item">
-    <a href="/blog/page/4/" class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-  </li>
-  <li class="page-item">
-    <a href="/blog/page/4/" class="page-link" aria-label="Last"><span aria-hidden="true">&raquo;&raquo;</span></a>
-  </li>
+          <div class="col-12 mb-5 content">
+            <p>在面对不够优化、或者性能极差的 SQL 语句时，我们通常的想法是将重构这个 SQL 语句，让其查询的结果集和原来保持一样，并且希望 SQL 性能得以提升。而在重构 SQL 时，一般都有一定方法技巧可供参考，本文将介绍如何通过这些技巧方法来重构 SQL。</p>
+<h2 id="一分解-sql">一、分解 SQL</h2>
+<p>有时候对于一个复杂 SQL，我们首先想到的是是否需要<strong>将一个复杂 SQL 分解成多个简单 SQL</strong>，来完成相同业务处理结果。</p>
+<p>在以前，大家总是强调需要数据库层来完成尽可能的工作，这也就不难理解在一些老的产品、项目中时常会看见很多超级复杂、超级长的 SQL 语句，这样做的逻辑在以前认为多次交互，在网络带宽、程序与数据库间网络通信等方面是一件代价很高的事情。然后在现在，无论是带宽还是延迟，网络速度比以前要快的很多，多次交互也没有太大的问题。即使在一个通用服务器上，也能够运行每秒超过 10 万的查询，所以运行多个小查询现在已经不是大问题了。</p>
+<p>复杂 SQL 的分解，在面对超级复杂 SQL 语句时，性能提升尤为明显。所以，<strong>在面对超级复杂 SQL 语句，并且存在性能问题时，推荐分解为小查询来进行优化。</strong></p>
+<p>不过，在应用设计的时候，如果一个查询能够胜任并且不会产生性能问题，这时完全可以用一个稍微复杂的SQL来完成的，倘若再死板的强制拆分成多个小查询是不明智的。</p>
+<p>**在当今很多高性能的应用系统中，都是极力推荐使用单表操作，然后将单表查询结果在应用程序中进行关联，以满足复杂业务的查询需求。**一个 SQL 可以搞定事情，为何要分开来写，而且还得在应用程序中多次执行 SQL 查询，再进行结果集的关联，这到底为什么要这么做呢？</p>
+<p>乍一看，这样做复杂不说而且没有什么好处，原本一条查询，这样却变成了多条查询。事实上，这样分解有如下的优势：</p>
+<ul>
+<li>让缓存更高效。在应用程序中，可以很方便地缓存单表查询结果对应的结果对象，便于后续任何时候可以直接从结果对象中获取数据。</li>
+<li>分解查询后，执行单个查询可以减少表锁的竞争。</li>
+<li>在程序应用层做关联，可以更容易对数据库进行拆分，更容易做到高性能和可扩展。</li>
+<li>单表查询效率高于多表复杂查询。</li>
+<li>减少冗余记录的查询。在程序应用层关联，意味着对于某条记录应用只需要查询一次，而在数据库中做关联查询，则可能需要重复地访问一部分数据记录。从这点来看，这样的重构还可能减少网络和内存的消耗。</li>
 </ul>
-
+<h2 id="二查询切分">二、查询切分</h2>
+<p>有时候对于一个大查询，即：结果集很大的查询，我们需要采用“分而治之”的思想，将大查询切分为小查询，每个查询功能完全一样，只是完成一小部分，每次只返回一小部分查询结果。通俗来讲，就是对 where 条件的过滤范围进行切分，每次只查询其中一部分数据，即：类似于分页查询。</p>
+<p>这样做，不管对于 SQL 查询本身，还是对于上层业务来说，都是很小的开销。最典型的的案例就是分页查询，目前各类框架都有了很好的支持，如：<code>MyBatis</code> 等，只需在实际使用时稍加留意就可避免。</p>
+<h1 id="三执行计划">三、执行计划</h1>
+<p>使用执行计划 <code>EXPLAIN</code> 关键字，可以使我们知道 MySQL 是如何执行 SQL 语句的，这样可以帮助我们分析我们的查询语句或是表结构的性能瓶颈。EXPLAIN 的查询结果还会告诉我们索引主键是如何被利用的，数据表是如何被搜索或排序的等等。</p>
+<p>语法格式是：</p>
+<p><code>EXPLAIN SELECT语句;</code></p>
+<p>通过执行计划结果，将会指导我们进一步来重构 SQL 语句，如：增加索引、调整索引顺序、避免使用某些函数等等。</p>
+<p>关于执行计划，后续章节将会单独详细讲解。</p>
+<h2 id="四遵守原则">四、遵守原则</h2>
+<p>在平时写 SQL 时，养成好的习惯，多加留意，很大程度上就会避免一些 SQL 性能问题。汇总如下：</p>
+<ul>
+<li>
+<p>永远为每张表设置一个 ID 主键。</p>
+</li>
+<li>
+<p>避免使用 <code>SELECT *</code>。</p>
+</li>
+<li>
+<p>为搜索字段建立索引。</p>
+</li>
+<li>
+<p>在 Join 表的时候使用对应类型的列，并将其索引。</p>
+</li>
+<li>
+<p>尽可能的使用 <code>NOT NULL</code>。</p>
+</li>
+<li>
+<p>越小的列会越快。</p>
+</li>
+<li>
+<p>当只要一行数据时使用 <code>LIMIT 1</code>。</p>
+</li>
+<li>
+<p>操作符的优化，尽量不采用不利于索引的操作符，目的就是为了避免全表扫描。</p>
+<p>1）<code>in</code> 和<code> not in</code> 慎用，尽量用 <code>between</code> 代替 <code>in</code>，用 <code>not exists</code> 代替 <code>not in</code></p>
+<p>2）<code>is null</code> 和 <code>is not null</code> 慎用</p>
+<p>3）<code>!=</code> 或 <code>&lt;&gt;</code> 操作符能不用就不用，否则将使引擎放弃使用索引而进行全表扫描。</p>
+</li>
+<li>
+<p>……</p>
+</li>
+</ul>
+<h2 id="五使用查询缓存">五、使用查询缓存</h2>
+<p>当有很多相同的查询被执行了多次的时候，这些查询结果会被放入一个缓存中，这样后续的相同查询就不用操作而直接访问缓存结果了。</p>
+<p>MySQL 查询缓存保存查询返回的完整结果。当查询命中该缓存，MySQL 会 like 返回结果，跳过了解析、优化和执行截断。</p>
+<p>这是提高查询性能最有效的方法之一，而且这是被 MySQL 引擎处理的，通常 MySQL 默认是不开启查询缓存的，需要手动开启。</p>
+<p>查询缓存对应用程序是完全透明的。应用程序无需关心 MySQL 是通过查询返回的还是实际执行返回的结果。事实上，这两种方式执行的结果是完全相同的。换句话说，查询缓存无需使用任何语法。</p>
+<p>随着现在的通用服务器越来越强大，查询缓存被发现是一个影响服务器扩展性的因素。它可能成为整个服务器的资源竞争单点，在多核服务器上还可能导致服务器僵死。所以大部分时候应该默认关闭查询缓存，如果查询缓存作用很大的话，可以配置个几十兆的小缓存空间。（在选择时，需要进行权衡）</p>
+<p>关于查询缓存有如下参数可供配置：</p>
+<ul>
+<li>
+<p><code>query_cache_type</code></p>
+<p>是否打开查询缓存。可以设置 <code>OFF</code>、<code>ON</code>、<code>DEMAND</code>，<code>DEMAND</code> 表示只有在查询语句中明确写入 <code>sql_cache</code> 的语句才放入查询缓存。</p>
+</li>
+<li>
+<p><code>query_cache_size</code></p>
+<p>查询缓存使用的总内存空间，单位是字节。这个值必须是 1024 的整倍数，否则实际分配的数据会和指定的大小有区别。</p>
+</li>
+<li>
+<p><code>query_cache_min_res_unit</code></p>
+<p>在查询缓存中分配内存块时的最小单位。</p>
+</li>
+<li>
+<p><code>query_cache_limit</code></p>
+<p>缓存的最大查询结果。如果查询结果大于这个值，则不会被缓存。因为查询缓存在数据生成的时候就开始尝试缓存数据，所以只有当结果全部返回后，MySQL 才知道查询结果是否超出限制。</p>
+</li>
+</ul>
+<p>关于查询缓存，后续章节将会单独详细讲解。</p>
 
           </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
         </div>
       </div>
       <!-- sidebar -->
@@ -388,6 +363,20 @@
   </div>
   <!-- toc -->
   
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一分解-sql">一、分解 SQL</a></li>
+    <li><a href="#二查询切分">二、查询切分</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#四遵守原则">四、遵守原则</a></li>
+    <li><a href="#五使用查询缓存">五、使用查询缓存</a></li>
+  </ul>
+</nav>
+  </div>
 </aside>
 <!-- /sidebar -->
     </div>
