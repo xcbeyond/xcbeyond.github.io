@@ -7,7 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Mon, 26 Oct 2020 23:28:43 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 15 Nov 2020 20:51:34 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes安装篇（下）：基于Kubeadm方式的集群部署</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part2-deploy-cluster-environment-based-on-kubeadm/</link>
+      <pubDate>Sun, 15 Nov 2020 20:51:34 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part2-deploy-cluster-environment-based-on-kubeadm/</guid>
+      <description>上一篇文章《Kubernetes安装篇（上）：基于Minikube方式部署本地环境》介绍了基于本地环境下的 Kubernetes 安装，目的在于搭建本地开发环境。但在实际生产环境中，Kubernetes 环境就比这复杂的多，起码也是集群起步，因此，本文将从生产环境出发，为你带来基于生产环境下的 Kubernetes 集群部署，让你真正懂得该如何部署真正的 Kubernetes 集群环境。
+1、环境准备 采用 VMware 虚拟机安装 Kubernetes 集群，准备环境情况如下：</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes安装篇（上）：基于Minikube方式部署本地环境</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part1-deploy-local-environment-based-on-minikube/</link>
+      <pubDate>Sat, 07 Nov 2020 20:23:01 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part1-deploy-local-environment-based-on-minikube/</guid>
+      <description>一切先从安装开始！
+学习一门新的技术，一般先从安装开始，实实在在的安装完，使用它，逐步深入了解。
+为了方便大家开发、学习和体验 Kubernetes，Kubernetes 社区提供了可以在本地部署的 minikube，通过 minikube 方式可以在本地运行 Kubernetes。
+（Kubernetes 的部署方式还有很多，本文是基于本地开发环境的部署方式，学习它足够了。想要部署一套符合生产环境的集群不是一件容易的事，随后其他篇章将会涉及。）</description>
+    </item>
+    
     <item>
       <title>Kubernetes概念篇：基本概念和术语</title>
       <link>https://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/</link>

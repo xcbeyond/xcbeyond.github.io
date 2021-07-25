@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Kubernetes安装篇（上）：基于Minikube方式部署本地环境 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="为了方便大家开发、学习和体验 Kubernetes，Kubernetes 社区提供了可以在本地部署的 minikube，通过 minikube 方式可以在本地运行 Kubernetes。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">golang-handbook</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Kubernetes安装篇（上）：基于Minikube方式部署本地环境</li>
+        </ul>
+        <p class="text-lighten">为了方便大家开发、学习和体验 Kubernetes，Kubernetes 社区提供了可以在本地部署的 minikube，通过 minikube 方式可以在本地运行 Kubernetes。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/minikube.jpeg" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2020-11-07 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/kubernetes"> 
+                  Kubernetes</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p><strong>一切先从安装开始！</strong></p>
+<p>学习一门新的技术，一般先从安装开始，实实在在的安装完，使用它，逐步深入了解。</p>
+<p>为了方便大家开发、学习和体验 <code>Kubernetes</code>，<code>Kubernetes</code> 社区提供了可以在本地部署的 <code>minikube</code>，通过 <code>minikube</code> 方式可以在本地运行 <code>Kubernetes</code>。</p>
+<p>（<code>Kubernetes</code> 的部署方式还有很多，本文是基于本地开发环境的部署方式，学习它足够了。想要部署一套符合生产环境的集群不是一件容易的事，随后其他篇章将会涉及。）</p>
+<h2 id="1minikube">1、Minikube</h2>
+<p><code>Minikube</code> 是一个可以在本地轻松运行 <code>Kubernetes</code> 的工具。<code>Minikube</code> 会在您的电脑中的虚拟机上运行一个单节点的 <code>Kubernetes</code> 集群，以便用户对<code>Kubernetes</code> 进行使用或者在之上进行 <code>Kubernetes</code> 的日常开发。</p>
+<p><img src="minikube.jpg" alt="minikube"></p>
+<p><strong>特征：</strong></p>
+<p><code>minikube</code> 运行 <code>Kubernetes</code> 的最新稳定版本，并支持标准的 <code>Kubernetes</code> 功能，例如：</p>
+<ul>
+<li><strong>负载均衡：</strong> 使用 <code>minikube tunnel</code></li>
+<li><strong>多集群：</strong> 使用 <code>minikube start -p &lt;name&gt;</code></li>
+<li><strong>NodePorts：</strong> 使用 <code>minikube service</code></li>
+<li><strong>持久卷</strong></li>
+<li><strong>Ingress</strong></li>
+<li><strong>Dashboard：</strong> 仪表盘，使用 <code>minikube dashboard</code> 启动。</li>
+</ul>
+<h2 id="2安装">2、安装</h2>
+<p>可以在本地虚拟机环境下安装。</p>
+<p>由于网络访问原因，很多朋友无法直接使用 <code>minikube</code> 进行安装。在最新的 Minikube 中，已经提供了配置化的方式，可以帮助大家利用阿里云的镜像地址来获取所需 Docker 镜像和配置。</p>
+<h3 id="21-安装-kubectl">2.1 安装 kubectl</h3>
+<p><code>kubectl</code> 是一个用于管理 <code>Kubernetes</code> 的命令行工具，可以检查集群资源、创建、删除和更新组件，查看你的新集群，并启动实例应用程序。</p>
+<p>(1) 使用国内阿里云源安装</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>xcbeyond@localhost ~<span style="color:#f92672">]</span>$ curl -LO http://kubernetes.oss-cn-hangzhou.aliyuncs.com/kubernetes-release/release/<span style="color:#e6db74">`</span>curl -s http://kubernetes.oss-cn-hangzhou.aliyuncs.com/kubernetes-release/release/stable.txt<span style="color:#e6db74">`</span>/bin/linux/amd64/kubectl <span style="color:#f92672">&amp;&amp;</span> chmod +x kubectl <span style="color:#f92672">&amp;&amp;</span> sudo mv kubectl /usr/local/bin/kubectl
+</code></pre></div><p>(2) 查看版本</p>
+<p>安装完，执行命令 <code>kubectl version</code> 查看版本，确认是否安装成功。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>xcbeyond@localhost ~<span style="color:#f92672">]</span>$ kubectl version
+
+Client Version: version.Info<span style="color:#f92672">{</span>Major:<span style="color:#e6db74">&#34;1&#34;</span>, Minor:<span style="color:#e6db74">&#34;19&#34;</span>, GitVersion:<span style="color:#e6db74">&#34;v1.19.2&#34;</span>, GitCommit:<span style="color:#e6db74">&#34;f5743093fd1c663cb0cbc89748f730662345d44d&#34;</span>, GitTreeState:<span style="color:#e6db74">&#34;clean&#34;</span>, BuildDate:<span style="color:#e6db74">&#34;2020-09-16T13:41:02Z&#34;</span>, GoVersion:<span style="color:#e6db74">&#34;go1.15&#34;</span>, Compiler:<span style="color:#e6db74">&#34;gc&#34;</span>, Platform:<span style="color:#e6db74">&#34;linux/amd64&#34;</span><span style="color:#f92672">}</span>
+
+Server Version: version.Info<span style="color:#f92672">{</span>Major:<span style="color:#e6db74">&#34;1&#34;</span>, Minor:<span style="color:#e6db74">&#34;19&#34;</span>, GitVersion:<span style="color:#e6db74">&#34;v1.19.0&#34;</span>, GitCommit:<span style="color:#e6db74">&#34;e19964183377d0ec2052d1f1fa930c4d7575bd50&#34;</span>, GitTreeState:<span style="color:#e6db74">&#34;clean&#34;</span>, BuildDate:<span style="color:#e6db74">&#34;2020-08-26T14:23:04Z&#34;</span>, GoVersion:<span style="color:#e6db74">&#34;go1.15&#34;</span>, Compiler:<span style="color:#e6db74">&#34;gc&#34;</span>, Platform:<span style="color:#e6db74">&#34;linux/amd64&#34;</span><span style="color:#f92672">}</span>
+</code></pre></div><h3 id="22-安装-minikube">2.2 安装 minikube</h3>
+<p><code>minikube</code> 是一个本地 Kubernetes 集群的实现，<code>minikube</code> 的主要目标是，成为本地开发 Kubernetes 和支持 Kubernetes 全部特性的最佳工具。用于在你电脑中的虚拟机上运行一个单节点的 Kubernetes 集群。</p>
+<p>(1) 使用国内阿里云源安装</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>xcbeyond@localhost ~<span style="color:#f92672">]</span>$ curl -Lo minikube https://kubernetes.oss-cn-hangzhou.aliyuncs.com/minikube/releases/v1.13.0/minikube-linux-amd64 <span style="color:#f92672">&amp;&amp;</span> chmod +x minikube <span style="color:#f92672">&amp;&amp;</span> sudo mv minikube /usr/local/bin/
+</code></pre></div><p>(2) 安装启动</p>
+<p>可以运行命令 <code>minikube start</code> 来启动本地 Kubernetes 集群。</p>
+<blockquote>
+<p>为了访问海外的资源，阿里云提供了一系列基础设施，请按照如下参数进行配置。其中常见参数:</p>
+<ul>
+<li>
+<p>&ndash;driver=***： 从 1.5.0 版本开始，Minikube 缺省使用本地最好的驱动来创建 Kubernetes 本地环境，测试过的版本 docker，kvm</p>
+</li>
+<li>
+<p>&ndash;image-mirror-country cn： 将缺省利用 <code>registry.cn-hangzhou.aliyuncs.com/google_containers</code> 作为安装 Kubernetes 的容器镜像仓库 （阿里云版本可选）</p>
+</li>
+<li>
+<p>&ndash;iso-url=***： 利用阿里云的镜像地址下载相应的 .iso 文件（阿里云版本可选）</p>
+</li>
+<li>
+<p>&ndash;registry-mirror=***： 为了拉取 Docker Hub 镜像，需要为 Docker daemon 配置镜像加速，参考阿里云镜像服务</p>
+</li>
+<li>
+<p>&ndash;cpus=2：为 minikube 虚拟机分配 CPU 核数</p>
+</li>
+<li>
+<p>&ndash;memory=2048mb：为 minikube 虚拟机分配内存数</p>
+</li>
+<li>
+<p>&ndash;kubernetes-version=***：minikube 虚拟机将使用的 kubernetes 版本</p>
+</li>
+</ul>
+</blockquote>
+<p>启动 minikube：</p>
+<blockquote>
+<p>首次启动需要下载镜像，需要耐心等待&hellip;</p>
+<p>如果中途失败，可再次执行命令。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>xcbeyond@localhost ~<span style="color:#f92672">]</span>$ minikube start --driver<span style="color:#f92672">=</span>docker
+* Centos 7.8.2003 上的 minikube v1.13.0
+* 根据现有的配置文件使用 docker 驱动程序
+* Starting control plane node minikube in cluster minikube
+* Pulling base image ...
+* Creating docker container <span style="color:#f92672">(</span>CPUs<span style="color:#f92672">=</span>2, Memory<span style="color:#f92672">=</span>2200MB<span style="color:#f92672">)</span> ...
+* 正在 Docker 19.03.8 中准备 Kubernetes v1.19.0…
+    &gt; kubectl.sha256: <span style="color:#ae81ff">65</span> B / <span style="color:#ae81ff">65</span> B <span style="color:#f92672">[</span>--------------------------<span style="color:#f92672">]</span> 100.00% ? p/s 0s
+    &gt; kubelet.sha256: <span style="color:#ae81ff">65</span> B / <span style="color:#ae81ff">65</span> B <span style="color:#f92672">[</span>--------------------------<span style="color:#f92672">]</span> 100.00% ? p/s 0s
+    &gt; kubeadm.sha256: <span style="color:#ae81ff">65</span> B / <span style="color:#ae81ff">65</span> B <span style="color:#f92672">[</span>--------------------------<span style="color:#f92672">]</span> 100.00% ? p/s 0s
+    &gt; kubectl: 41.01 MiB / 41.01 MiB <span style="color:#f92672">[</span>-----------<span style="color:#f92672">]</span> 100.00% 496.18 KiB p/s 1m24s
+    &gt; kubeadm: 37.30 MiB / 37.30 MiB <span style="color:#f92672">[</span>---------------<span style="color:#f92672">]</span> 100.00% 3.15 MiB p/s 12s
+    &gt; kubelet: 104.88 MiB / 104.88 MiB <span style="color:#f92672">[</span>-------------<span style="color:#f92672">]</span> 100.00% 3.34 MiB p/s 32s
+* Verifying Kubernetes components...
+* Enabled addons: default-storageclass, storage-provisioner
+* Done! kubectl is now configured to use <span style="color:#e6db74">&#34;minikube&#34;</span> by default
+</code></pre></div><p>(3) 打开 Kubernetes 控制台</p>
+<p>在本地(虚拟机桌面内)执行命令 <code>minikube dashboard</code>，将会自动在浏览器中打开 Kubernetes 控制台。</p>
+<p>（如果通过 shell 远程登录执行，必会出现在浏览器中打开失败的错误提示，可忽略。）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#f92672">[</span>xcbeyond@localhost ~<span style="color:#f92672">]</span>$ minikube dashboard
+
+🤔  正在验证 dashboard 运行情况 ...
+
+🚀  Launching proxy ...
+
+🤔  正在验证 proxy 运行状况 ...
+
+🎉  Opening http://127.0.0.1:38620/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/ in your default browser...
+
+This tool has been deprecated, use <span style="color:#e6db74">&#39;gio open&#39;</span> instead.
+
+See <span style="color:#e6db74">&#39;gio help open&#39;</span> <span style="color:#66d9ef">for</span> more info.
+</code></pre></div><p><strong>如何能够外部访问呢？只需要添加一层代理即可。</strong></p>
+<p>使用 proxy 代理到虚拟机的指定端口，执行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl proxy --port<span style="color:#f92672">=</span>&lt;指定访问端口&gt; --address<span style="color:#f92672">=</span>&lt;实际IP&gt; --accept-hosts<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;^.*&#39;</span> &amp;
+</code></pre></div><p>比如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@localhost ~<span style="color:#f92672">]</span>$ kubectl proxy --port<span style="color:#f92672">=</span><span style="color:#ae81ff">8001</span> --address<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;192.168.11.129&#39;</span> --accept-hosts<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;^.*&#39;</span> &amp;
+
+<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span> <span style="color:#ae81ff">83066</span>
+
+<span style="color:#f92672">[</span>xcbeyond@localhost ~<span style="color:#f92672">]</span>$ Starting to serve on 192.168.11.129:8001
+</code></pre></div><p>浏览器访问地址：<code>http://192.168.11.129:8001/api/v1/namespaces/kubernetes-dashboard/services/http:kubernetes-dashboard:/proxy/#/overview?namespace=default</code></p>
+<p><img src="Kubernetes-Dashboard.png" alt="Kubernetes-Dashboard"></p>
+<p>好了，开始探索 <code>Kubernetes</code> 的世界吧！</p>
+<hr>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://developer.aliyun.com/article/221687">https://developer.aliyun.com/article/221687</a></li>
+<li><a href="https://kubernetes.io/zh/docs/tasks/tools/">https://kubernetes.io/zh/docs/tasks/tools/</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/I-have-been-signed-up-by-InfoQ.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/">
+          <h5 class="mt-0">我被InfoQ写作平台签约啦</h5>
+        </a>
+        2021-07-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/yapi.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/">
+          <h5 class="mt-0">可视化接口管理平台 YApi，让你轻松搞定 API 的管理问题</h5>
+        </a>
+        2021-07-07
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/my-stories-with-the-InfoQ-writing-platform.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/">
+          <h5 class="mt-0">我与InfoQ写作平台的这些事</h5>
+        </a>
+        2021-05-02
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/migration.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/">
+          <h5 class="mt-0">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h5>
+        </a>
+        2021-04-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-04.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+          <h5 class="mt-0">2.1 Go语言从入门到精通：Go语言基础语法</h5>
+        </a>
+        2021-03-28
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-03.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/1.4-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E4%BB%A3%E7%90%86goproxy%E8%AE%A9%E4%BD%A0%E8%BD%BB%E6%9D%BE%E4%B8%8B%E8%BD%BD%E4%BE%9D%E8%B5%96%E5%8C%85/">
+          <h5 class="mt-0">1.4 Go语言从入门到精通：Go代理goproxy，让你轻松下载依赖包</h5>
+        </a>
+        2021-03-24
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1minikube">1、Minikube</a></li>
+    <li><a href="#2安装">2、安装</a>
+      <ul>
+        <li><a href="#21-安装-kubectl">2.1 安装 kubectl</a></li>
+        <li><a href="#22-安装-minikube">2.2 安装 minikube</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/google-map/gmap.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>
