@@ -150,7 +150,7 @@
 <h3 id="11-cobra-概述">1.1 Cobra 概述</h3>
 <p><code>Cobra</code> 是一个 Golang 包，它提供了简单的接口来创建命令行程序。同时，<code>Cobra</code> 也是一个应用程序，用来生成应用框架，从而开发以 <code>Cobra</code> 为基础的应用。</p>
 <p><img src="Cobra.png" alt="Cobra"></p>
-<h4 id="111-主要功能">1.1.1 主要功能</h4>
+<h3 id="12-主要功能">1.2 主要功能</h3>
 <p>Cobra 的主要功能如下：</p>
 <ul>
 <li>简易的子命令行模式，如 <code>app server</code>， <code>app fetch</code> 等等。</li>
@@ -169,7 +169,7 @@
 <li>可选的与 <a href="http://github.com/spf13/viper"><code>viper</code></a> 的紧密集成。</li>
 </ul>
 <p>对于命令行程序而言，上面这些功能简直就是量身打造。</p>
-<h4 id="112-应用举例">1.1.2 应用举例</h4>
+<h3 id="13-应用举例">1.3 应用举例</h3>
 <p><code>Cobra</code> 被用于许多 Go 项目中，例如：<a href="http://kubernetes.io/">Kubernetes</a>、<a href="https://gohugo.io/">Hugo</a>和<a href="https://github.com/cli/cli">Github CLI</a>等，更多广泛使用的项目有：</p>
 <p>（来源于：<a href="https://github.com/spf13/cobra/blob/master/projects_using_cobra.md">https://github.com/spf13/cobra/blob/master/projects_using_cobra.md</a>）</p>
 <ul>
@@ -287,10 +287,9 @@ to quickly create a Cobra application.
 <li>
 <p>添加 show 命令</p>
 <p>通过命令 <code>cobra add</code> 添加 show 命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"> xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % ../bin/cobra add show
- show created at /Users/xcbeyond/github/cobra-demo
-</code></pre></div><p>``</p>
-<p>此时，项目目录下会创建一个 <code>show.go</code> 文件，在该文件中可完成命令的具体操作逻辑。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % ../bin/cobra add show
+show created at /Users/xcbeyond/github/cobra-demo
+</code></pre></div><p>此时，项目目录下会创建一个 <code>show.go</code> 文件，在该文件中可完成命令的具体操作逻辑。</p>
 <p>下面是 <code>show.go</code> 文件的初始代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// showCmd represents the show command
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">showCmd</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>{
@@ -320,8 +319,7 @@ to quickly create a Cobra application.
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// is called directly, e.g.:
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// showCmd.Flags().BoolP(&#34;toggle&#34;, &#34;t&#34;, false, &#34;Help message for toggle&#34;)
 </span><span style="color:#75715e"></span>}
-</code></pre></div><p>``</p>
-<p><code>&amp;cobra.Command</code> 作为命令的定义，其中有如下变量：</p>
+</code></pre></div><p><code>&amp;cobra.Command</code> 作为命令的定义，其中有如下变量：</p>
 <ul>
 <li><code>Use</code>：用于指定具体的命令，如：show。</li>
 <li><code>Short</code>：命令的简短描述。</li>
@@ -347,8 +345,7 @@ to quickly create a Cobra application.
 </span><span style="color:#75715e"></span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>())
     },
 }
-</code></pre></div><p>``</p>
-</li>
+</code></pre></div></li>
 <li>
 <p>修改 help 命令</p>
 <p>help 命令有两个，一个是 short，一个是 lang，很明显 short 命令用来定义简短的说明，lang 命令用来定义详细说明，下面我们修改 show 命令的 help:</p>
@@ -364,15 +361,13 @@ to quickly create a Cobra application.
 </span><span style="color:#75715e"></span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>())
     },
 }
-</code></pre></div><p>``</p>
-</li>
+</code></pre></div></li>
 <li>
 <p>运行</p>
 <p>执行 show 命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % go run main.go show
 2021-07-31 14:49:27.3582836 +0800 CST m<span style="color:#f92672">=</span>+0.176660901
-</code></pre></div><p>``</p>
-<p>执行 show &ndash;help 命令：</p>
+</code></pre></div><p>执行 show &ndash;help 命令：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % go run main.go show --help
 You can use the time show command to view the current time. For example:
 
@@ -387,8 +382,7 @@ Flags:
 
 Global Flags:
         --config string   config file <span style="color:#f92672">(</span>default is $HOME/.cobra-demo.yaml<span style="color:#f92672">)</span>
-</code></pre></div><p>``</p>
-</li>
+</code></pre></div></li>
 </ol>
 <h2 id="4总结">4、总结</h2>
 <p>Cobra-demo 只是简单的阐述了由几部分组成，在实际项目中要比这复杂的很多，一般都是拥有多个子命令，但核心内容都是类似的。</p>
@@ -535,6 +529,8 @@ Global Flags:
     <li><a href="#1cobra-介绍">1、Cobra 介绍</a>
       <ul>
         <li><a href="#11-cobra-概述">1.1 Cobra 概述</a></li>
+        <li><a href="#12-主要功能">1.2 主要功能</a></li>
+        <li><a href="#13-应用举例">1.3 应用举例</a></li>
       </ul>
     </li>
     <li><a href="#2概念">2、概念</a></li>
