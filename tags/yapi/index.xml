@@ -7,11 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Wed, 07 Jul 2021 10:54:01 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/yapi/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 07 Jul 2021 22:54:01 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/yapi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>可视化接口管理平台 YApi，让你轻松搞定 API 的管理问题</title>
       <link>https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/</link>
-      <pubDate>Wed, 07 Jul 2021 10:54:01 +0800</pubDate>
+      <pubDate>Wed, 07 Jul 2021 22:54:01 +0800</pubDate>
       
       <guid>https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/</guid>
       <description>随着开发的推进，各种各样的文档会接踵而来，比如：需求文档、架构文档、接口文档等等，我们通过 SVN、Git 等可以很方便的管理，面对需求的不断变化，我们需要不断的对各类文档进行维护。但在开发阶段，针对接口文档而言，其具有不确定性、难维护、难测试等特点，接口的管理往往成为了难题。
