@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Cobra 快速入门 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="Cobra 专为命令行程序而生，是众多命令行工具的最佳选择。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">golang-handbook</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Cobra 快速入门</li>
+        </ul>
+        <p class="text-lighten">Cobra 专为命令行程序而生，是众多命令行工具的最佳选择。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/cobra.jpeg" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2021-08-01 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/go"> 
+                  Go</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>最近一直在看 <a href="https://istio.io/">Istio</a>（一个 <code>Service Mesh</code> 框架）相关的东西，当看到其源码时发现了一个新东西 <a href="https://github.com/spf13/cobra"><code>Cobra</code></a>，一查却发现这是个好东西，用的地方可不少，比如：<code>Docker</code>、<code>Kubernetes</code> 等都有它的身影存在。为了更好的了解这些开源框架（如，<code>Istio</code>、<code>Kubernetes</code> 等），势必需要对 <code>Cobra</code> 做一个详细的了解，后续可能用到它的地方会很多。今天就 <code>Cobra</code> 做一个整体的介绍，让我们对它能有所认识，或许今后你的项目中也会用到它。</p>
+<h2 id="1cobra-介绍">1、Cobra 介绍</h2>
+<h3 id="11-cobra-概述">1.1 Cobra 概述</h3>
+<p><code>Cobra</code> 是一个 Golang 包，它提供了简单的接口来创建命令行程序。同时，<code>Cobra</code> 也是一个应用程序，用来生成应用框架，从而开发以 <code>Cobra</code> 为基础的应用。</p>
+<p><img src="Cobra.png" alt="Cobra"></p>
+<h4 id="111-主要功能">1.1.1 主要功能</h4>
+<p>Cobra 的主要功能如下：</p>
+<ul>
+<li>简易的子命令行模式，如 <code>app server</code>， <code>app fetch</code> 等等。</li>
+<li>完全兼容 <code>posix</code> 命令行模式。</li>
+<li>嵌套子命令 <code>subcommand</code>。</li>
+<li>支持全局，局部，串联 <code>flags</code>。</li>
+<li>使用 <code>cobra</code> 很容易生成应用程序和命令（<code>cobra init appname</code> 和 <code>cobra add cmdname</code>）。</li>
+<li>提供智能化的提示（如，输出 <code>app srver</code> 命令，将提示 你是要输入 <code>app server</code> 吗？）。</li>
+<li>自动生成 <code>commands</code> 和 <code>flags</code> 的帮助信息。</li>
+<li>自动生成详细的 <code>help</code> 信息，如 <code>app -help</code>。</li>
+<li>自动识别帮助 <code>flag</code>、 <code>-h</code>，<code>--help</code>。</li>
+<li>自动生成应用程序在 <code>bash</code> 下命令自动完成功能。</li>
+<li>自动生成应用程序的 <code>man</code> 手册。</li>
+<li>命令行别名。</li>
+<li>自定义 <code>help</code> 和 <code>usage</code> 信息。</li>
+<li>可选的与 <a href="http://github.com/spf13/viper"><code>viper</code></a> 的紧密集成。</li>
+</ul>
+<p>对于命令行程序而言，上面这些功能简直就是量身打造。</p>
+<h4 id="112-应用举例">1.1.2 应用举例</h4>
+<p><code>Cobra</code> 被用于许多 Go 项目中，例如：<a href="http://kubernetes.io/">Kubernetes</a>、<a href="https://gohugo.io/">Hugo</a>和<a href="https://github.com/cli/cli">Github CLI</a>等，更多广泛使用的项目有：</p>
+<p>（来源于：<a href="https://github.com/spf13/cobra/blob/master/projects_using_cobra.md">https://github.com/spf13/cobra/blob/master/projects_using_cobra.md</a>）</p>
+<ul>
+<li><a href="https://github.com/arduino/arduino-cli">Arduino CLI</a></li>
+<li><a href="http://www.blevesearch.com/">Bleve</a></li>
+<li><a href="http://www.cockroachlabs.com/">CockroachDB</a></li>
+<li><a href="https://github.com/cosmos/cosmos-sdk">Cosmos SDK</a></li>
+<li><a href="https://github.com/derekparker/delve">Delve</a></li>
+<li><a href="https://github.com/docker/distribution">Docker (distribution)</a></li>
+<li><a href="https://etcd.io/">Etcd</a></li>
+<li><a href="https://github.com/gardener/gardenctl">Gardener</a></li>
+<li><a href="https://github.com/giantswarm/gsctl">Giant Swarm&rsquo;s gsctl</a></li>
+<li><a href="https://github.com/erdaltsksn/git-bump">Git Bump</a></li>
+<li><a href="https://github.com/cli/cli">Github CLI</a></li>
+<li><a href="https://github.com/erdaltsksn/gh-label">GitHub Labeler</a></li>
+<li><a href="https://golangci-lint.run/">Golangci-lint</a></li>
+<li><a href="http://www.gopherjs.org/">GopherJS</a></li>
+<li><a href="https://helm.sh/">Helm</a></li>
+<li><a href="https://gohugo.io/">Hugo</a></li>
+<li><a href="https://istio.io/">Istio</a></li>
+<li><a href="https://github.com/kool-dev/kool">Kool</a></li>
+<li><a href="http://kubernetes.io/">Kubernetes</a></li>
+<li><a href="https://linkerd.io/">Linkerd</a></li>
+<li><a href="https://github.com/mattermost/mattermost-server">Mattermost-server</a></li>
+<li><a href="https://github.com/metal-stack/metalctl">Metal Stack CLI</a></li>
+<li><a href="https://github.com/moby/moby">Moby (former Docker)</a></li>
+<li><a href="https://github.com/nanobox-io/nanobox">Nanobox</a>/<a href="https://github.com/nanopack">Nanopack</a></li>
+<li><a href="https://www.openshift.com/">OpenShift</a></li>
+<li><a href="https://github.com/ory/hydra">Ory Hydra</a></li>
+<li><a href="https://github.com/ory/kratos">Ory Kratos</a></li>
+<li><a href="https://github.com/alibaba/pouch">Pouch</a></li>
+<li><a href="http://www.projectatomic.io/">ProjectAtomic (enterprise)</a></li>
+<li><a href="https://github.com/uber/prototool">Prototool</a></li>
+<li><a href="https://github.com/erdaltsksn/random">Random</a></li>
+<li><a href="https://rclone.org/">Rclone</a></li>
+<li><a href="https://skaffold.dev/">Skaffold</a></li>
+<li><a href="https://github.com/tendermint/tendermint">Tendermint</a></li>
+<li><a href="https://github.com/twitchdev/twitch-cli">Twitch CLI</a></li>
+<li><a href="https://werf.io/">Werf</a></li>
+</ul>
+<p>看了这些，一个字“赞”，两个字“优秀”!</p>
+<p>了解了 <code>Cobra</code> 后，再去看这些 <code>Kubernetes</code>、<code>etcd</code>、<code>Registry</code> 等开源项目的代码时，也就大概知道如何去看了，这也就是我学习 <code>Cobra</code> 的目的。</p>
+<h2 id="2概念">2、概念</h2>
+<p>Cobra 是基于命令（<code>commands</code>）、参数（<code>arguments</code> ）、选项（<code>flags</code>）而创建的。</p>
+<p>在具体了解、使用Cobra前有一些概念需要提前知晓一下：命令（<code>commands</code>）、参数（<code>arguments</code> ）、选项（<code>flags</code>）这几个概念。</p>
+<ul>
+<li><strong>commands</strong>：命令代表行为,一般表示 action，即运行的二进制命令服务。同时可以拥有子命令（children commands）</li>
+<li><strong>arguments</strong>：参数代表命令行参数。</li>
+<li><strong>flags</strong>：选项代表对命令行为的改变，即命令行选项。二进制命令的配置参数，可对应配置文件。参数可分为全局参数和子命令参数。</li>
+</ul>
+<p>最好的命令行程序在实际使用时，就应该像在读一段优美的语句，能够更加直观的知道如何与用户进行交互。执行命令行程序应该遵循一般的格式： <code>APPNAME VERB NOUN --ADJECTIVE  </code>或 <code>APPNAME COMMAND ARG --FLAG</code>。</p>
+<p>比如下面的示例:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># server是 commands，port 是 flag</span>
+hugo server --port<span style="color:#f92672">=</span><span style="color:#ae81ff">1313</span>
+
+<span style="color:#75715e"># clone 是 commands，URL 是 arguments，brae 是 flag</span>
+git clone URL --bare
+</code></pre></div><p>再比如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro ~ % docker info --help 
+
+Usage:  docker info <span style="color:#f92672">[</span>OPTIONS<span style="color:#f92672">]</span>
+
+Display system-wide information
+
+Options:
+  -f, --format string   Format the output using the given Go template
+</code></pre></div><p>你没有看错，像 Docker 这种这么复杂的命令都是用 Cobra 是实现的，其必有过人之处，下一节就让我们一起来看看如何实现一套属于自己的命令行工具吧！</p>
+<h2 id="3cobra-实战">3、Cobra 实战</h2>
+<p><strong>实战是最好的学习方式！</strong> 本节将从一个实战带你快速入门 Cobra。</p>
+<h3 id="31-环境准备">3.1 环境准备</h3>
+<h4 id="311-前提条件环境">3.1.1 前提条件&amp;环境</h4>
+<ul>
+<li>操作系统：MacOS</li>
+<li>Go 环境：go 1.16</li>
+<li>Go 开发 IDE：VSCode</li>
+</ul>
+<p>(上述环境可以个人环境而定，不做限制)</p>
+<h4 id="312-cobra-安装">3.1.2 Cobra 安装</h4>
+<p>使用 <code>go get</code> 命令获取最新版本的 Cobra 库。下面命令将会安装 Cobra 及其相关依赖包：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">go get -u github.com/spf13/cobra/cobra
+</code></pre></div><p>下载安装完 Cobra 后，打开 GOPATH 目录，在 bin 目录下会下载好 cobra 程序（Window: cobra.exe, MacOS: cobra）。</p>
+<h4 id="313-工程初始化cobra-代码生成器">3.1.3 工程初始化（Cobra 代码生成器）</h4>
+<p>假设现需要开发一个基于 Cobra 的 CLI 的命令行程序，命名为 <code>cobra-demo</code>。</p>
+<p>由于 Cobra 提供了代码生成器的功能，我们可以直接使用 Cobra 提供的初始化命令 <code>cobra init</code> 进行快速初始化创建 Cobra 工程。</p>
+<p>切换到 <code>GOPATH</code> 目录（如，<code>/Users/xcbeyond/github</code>），执行命令 <code>cobra init &lt;name&gt; --pkg-name &lt;pkgname&gt;</code>,如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro github % .<span style="color:#ae81ff">\b</span>in<span style="color:#ae81ff">\c</span>obra init cobra-demo --pkg-name github.com/xcbeyond/cobra-demo
+Your Cobra application is ready at
+/Users/xcbeyond/github/cobra-demo
+</code></pre></div><p>初始化成功后，cobra-demo 程序目录结构如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">.
+├── cmd
+│   ├── root.go
+│   └── show.go
+├── go.mod
+├── go.sum
+└── main.go
+</code></pre></div><h4 id="314-运行">3.1.4 运行</h4>
+<p>执行命令 <code>go run</code> 运行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % go run main.go
+A longer description that spans multiple lines and likely contains
+examples and usage of using your application. For example:
+
+Cobra is a CLI library <span style="color:#66d9ef">for</span> Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.
+</code></pre></div><h3 id="32-实战">3.2 实战</h3>
+<p>这里以一个简单的 <code>time</code> 命令为例，实战讲解如何 Cobra 开发一个命令。</p>
+<p>功能如下：</p>
+<ul>
+<li><code>show</code>：查看当前时间。</li>
+<li><code>parse</code>：指定时间格式 &ndash;format，parse 为 show 的子命令。</li>
+</ul>
+<h4 id="321-实现-show-命令command命令">3.2.1 实现 show 命令（Command命令）</h4>
+<ol>
+<li>
+<p>添加 show 命令</p>
+<p>通过命令 <code>cobra add</code> 添加 show 命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"> xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % ../bin/cobra add show
+ show created at /Users/xcbeyond/github/cobra-demo
+</code></pre></div><p>``</p>
+<p>此时，项目目录下会创建一个 <code>show.go</code> 文件，在该文件中可完成命令的具体操作逻辑。</p>
+<p>下面是 <code>show.go</code> 文件的初始代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// showCmd represents the show command
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">showCmd</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>{
+    <span style="color:#a6e22e">Use</span>:   <span style="color:#e6db74">&#34;show&#34;</span>,
+    <span style="color:#a6e22e">Short</span>: <span style="color:#e6db74">&#34;A brief description of your command&#34;</span>,
+    <span style="color:#a6e22e">Long</span>: <span style="color:#e6db74">`A longer description that spans multiple lines and likely contains examples
+</span><span style="color:#e6db74">and usage of using your command. For example:
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Cobra is a CLI library for Go that empowers applications.
+</span><span style="color:#e6db74">This application is a tool to generate the needed files
+</span><span style="color:#e6db74">to quickly create a Cobra application.`</span>,
+    <span style="color:#a6e22e">Run</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>, <span style="color:#a6e22e">args</span> []<span style="color:#66d9ef">string</span>) {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;show called&#34;</span>)
+    },
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+    <span style="color:#a6e22e">rootCmd</span>.<span style="color:#a6e22e">AddCommand</span>(<span style="color:#a6e22e">showCmd</span>)
+
+    <span style="color:#75715e">// Here you will define your flags and configuration settings.
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// Cobra supports Persistent Flags which will work for this command
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// and all subcommands, e.g.:
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// showCmd.PersistentFlags().String(&#34;foo&#34;, &#34;&#34;, &#34;A help for foo&#34;)
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// Cobra supports local flags which will only run when this command
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// is called directly, e.g.:
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// showCmd.Flags().BoolP(&#34;toggle&#34;, &#34;t&#34;, false, &#34;Help message for toggle&#34;)
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>``</p>
+<p><code>&amp;cobra.Command</code> 作为命令的定义，其中有如下变量：</p>
+<ul>
+<li><code>Use</code>：用于指定具体的命令，如：show。</li>
+<li><code>Short</code>：命令的简短描述。</li>
+<li><code>Long</code>：命令的详细描述。</li>
+<li><code>Run</code>：命令执行入口，用于实现命令的具体处理逻辑。</li>
+</ul>
+<p><code>rootCmd.AddCommand(showCmd)</code> 命令的添加，将命令添加到根命令。（Cobra 支持命令的子命令）</p>
+</li>
+<li>
+<p>实现显示当前时间逻辑</p>
+<p>在 &amp;cobra.Command.Run 中添加获取当前时间逻辑 <code>time.Now()</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">showCmd</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>{
+    <span style="color:#a6e22e">Use</span>:   <span style="color:#e6db74">&#34;show&#34;</span>,
+    <span style="color:#a6e22e">Short</span>: <span style="color:#e6db74">&#34;A brief description of your command&#34;</span>,
+    <span style="color:#a6e22e">Long</span>: <span style="color:#e6db74">`A longer description that spans multiple lines and likely contains examples
+</span><span style="color:#e6db74">and usage of using your command. For example:
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">Cobra is a CLI library for Go that empowers applications.
+</span><span style="color:#e6db74">This application is a tool to generate the needed files
+</span><span style="color:#e6db74">to quickly create a Cobra application.`</span>,
+    <span style="color:#a6e22e">Run</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>, <span style="color:#a6e22e">args</span> []<span style="color:#66d9ef">string</span>) {
+        <span style="color:#75715e">// show current time
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>())
+    },
+}
+</code></pre></div><p>``</p>
+</li>
+<li>
+<p>修改 help 命令</p>
+<p>help 命令有两个，一个是 short，一个是 lang，很明显 short 命令用来定义简短的说明，lang 命令用来定义详细说明，下面我们修改 show 命令的 help:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">showCmd</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>{
+    <span style="color:#a6e22e">Use</span>:   <span style="color:#e6db74">&#34;show&#34;</span>,
+    <span style="color:#a6e22e">Short</span>: <span style="color:#e6db74">&#34;Displays the current time&#34;</span>,
+    <span style="color:#a6e22e">Long</span>: <span style="color:#e6db74">`You can use the time show command to view the current time. For example:
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">$ ./cobra-demo show
+</span><span style="color:#e6db74">2021-03-19 14:34:20.9320241 +0800 CST m=+0.378845301`</span>,
+    <span style="color:#a6e22e">Run</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>, <span style="color:#a6e22e">args</span> []<span style="color:#66d9ef">string</span>) {
+        <span style="color:#75715e">// show current time
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>())
+    },
+}
+</code></pre></div><p>``</p>
+</li>
+<li>
+<p>运行</p>
+<p>执行 show 命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % go run main.go show
+2021-07-31 14:49:27.3582836 +0800 CST m<span style="color:#f92672">=</span>+0.176660901
+</code></pre></div><p>``</p>
+<p>执行 show &ndash;help 命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro cobra-demo % go run main.go show --help
+You can use the time show command to view the current time. For example:
+
+$ ./cobra-demo show
+2021-07-31 14:34:20.9320241 +0800 CST m<span style="color:#f92672">=</span>+0.378845301
+
+Usage:
+cobra-demo show <span style="color:#f92672">[</span>flags<span style="color:#f92672">]</span>
+
+Flags:
+-h, --help   help <span style="color:#66d9ef">for</span> show
+
+Global Flags:
+        --config string   config file <span style="color:#f92672">(</span>default is $HOME/.cobra-demo.yaml<span style="color:#f92672">)</span>
+</code></pre></div><p>``</p>
+</li>
+</ol>
+<h2 id="4总结">4、总结</h2>
+<p>Cobra-demo 只是简单的阐述了由几部分组成，在实际项目中要比这复杂的很多，一般都是拥有多个子命令，但核心内容都是类似的。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cobra.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/">
+          <h5 class="mt-0">Cobra 快速入门</h5>
+        </a>
+        2021-08-01
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/I-have-been-signed-up-by-InfoQ.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/">
+          <h5 class="mt-0">我被InfoQ写作平台签约啦</h5>
+        </a>
+        2021-07-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/yapi.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/">
+          <h5 class="mt-0">可视化接口管理平台 YApi，让你轻松搞定 API 的管理问题</h5>
+        </a>
+        2021-07-07
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/my-stories-with-the-InfoQ-writing-platform.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/">
+          <h5 class="mt-0">我与InfoQ写作平台的这些事</h5>
+        </a>
+        2021-05-02
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/migration.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/servicemesh/migration-from-springcloud-to-servicemesh/">
+          <h5 class="mt-0">构建基于Spring Cloud向Service Mesh框架迁移的解决方案及思路</h5>
+        </a>
+        2021-04-09
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-04.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/2.1-go%E8%AF%AD%E8%A8%80%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9Ago%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/">
+          <h5 class="mt-0">2.1 Go语言从入门到精通：Go语言基础语法</h5>
+        </a>
+        2021-03-28
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1cobra-介绍">1、Cobra 介绍</a>
+      <ul>
+        <li><a href="#11-cobra-概述">1.1 Cobra 概述</a></li>
+      </ul>
+    </li>
+    <li><a href="#2概念">2、概念</a></li>
+    <li><a href="#3cobra-实战">3、Cobra 实战</a>
+      <ul>
+        <li><a href="#31-环境准备">3.1 环境准备</a></li>
+        <li><a href="#32-实战">3.2 实战</a></li>
+      </ul>
+    </li>
+    <li><a href="#4总结">4、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/google-map/gmap.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>
