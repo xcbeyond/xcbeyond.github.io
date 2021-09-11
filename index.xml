@@ -63,6 +63,18 @@
     </item>
     
     <item>
+      <title>全方位解读服务网格（Service Mesh）的背景和概念</title>
+      <link>https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/</link>
+      <pubDate>Sat, 11 Sep 2021 21:34:31 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/</guid>
+      <description>一直以来“微服务”都是一个热门的词汇，在各种技术文章、大会上，关于微服务的讨论和主题都很多。对于基于 Dubbo、SpringCloud 技术体系的微服务架构，已经相当成熟并被大家所知晓，但伴随着互联网场景的复杂度提升、业务快速变更以及快速响应，如何快速、稳定、高效的应对变幻莫测的业务市场需求，这类技术体系（如：Spring Cloud）的传统微服务架构就变得力不从心，此时微服务架构再次升级，将服务网格作为了新一代微服务架构。
+本文将从传统微服务架构出发，为大家阐述新一代微服务架构&amp;ndash;服务网格，它能解决什么问题，为用户带来什么，可作为你对服务网格的认知文章。
+1、背景 微服务，也称之为微服务架构，是一种架构风格，相比单体应用，它将应用程序拆分为一组服务，并将这些服务组合起来来完成整个复杂的业务功能。下面这些特征就能高度反映出它的价值所在：
+ 高度可维护和可测试性 松耦合 独立部署 围绕业务能力进行组织 小团队拥有  简单的回顾完微服务架构的概念，我们一起看看新一代微服务架构是如何诞生的。</description>
+    </item>
+    
+    <item>
       <title>Cobra 快速入门 - 专为命令行程序而生</title>
       <link>https://xcbeyond.cn/blog/golang/cobra-quick-start/</link>
       <pubDate>Sun, 01 Aug 2021 13:58:02 +0800</pubDate>
