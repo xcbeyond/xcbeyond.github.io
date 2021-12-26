@@ -63,6 +63,21 @@
     </item>
     
     <item>
+      <title>利用 Github Pages 和 Hugo 快速搭建免费的个人网站</title>
+      <link>https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/</link>
+      <pubDate>Sat, 25 Dec 2021 22:24:57 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/</guid>
+      <description>你有个人网站吗？
+在自媒体时代，人人都在不断向互联网等不同媒介输出内容，如：博客、微博以及抖音等，并在特定领域，依靠于广大社交媒体/平台，如：CSDN、掘金、知乎、InfoQ 等等，发表着自己的心得、学习经历、日常生活等。随着内容的不断输出，总有一些时候，你会想寻找一块“互联网自留地”，“为所欲为”，或是想要进行一些完整而非碎片化的记录，或者想要避免无穷无尽的内容审查，又或者你只是不喜欢社交平台那杂乱的界面和不必要的互动，此时拥有一个个人网站总是一个更好的选择。
+提起个人网站，你或许心中一震，钱呢？服务器呢
+今天我就和大家分享一种不花钱、不要独立服务器，也能搞起个人网站的方法。
+1、需求分析 个人网站，主要是用来记录属于个人的东西，将内容以最直接方式呈现给大家，其中文字、图片占比最多，基本不存在其它用户的注册场景。
+对于个人网站，大家主要有以下方面的思考：
+  网站系统：自己从头写？搞个开源的自己改？花钱买吗？</description>
+    </item>
+    
+    <item>
       <title>全方位解读服务网格（Service Mesh）的背景和概念</title>
       <link>https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/</link>
       <pubDate>Sat, 11 Sep 2021 21:34:31 +0800</pubDate>

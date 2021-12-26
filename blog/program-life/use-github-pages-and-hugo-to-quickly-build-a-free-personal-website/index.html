@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>利用 Github Pages 和 Hugo 快速搭建免费的个人网站 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="人人都可以拥有自己的个人网站。今天我就和大家分享一种不花钱、不要独立服务器，也能搞起个人网站的方法。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">利用 Github Pages 和 Hugo 快速搭建免费的个人网站</li>
+        </ul>
+        <p class="text-lighten">人人都可以拥有自己的个人网站。今天我就和大家分享一种不花钱、不要独立服务器，也能搞起个人网站的方法。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/github-pages-hugo.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2021-12-25 22:24:57 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f"> 
+                  程序人生</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>你有个人网站吗？</p>
+<p>在自媒体时代，人人都在不断向互联网等不同媒介输出内容，如：博客、微博以及抖音等，并在特定领域，依靠于广大社交媒体/平台，如：CSDN、掘金、知乎、InfoQ 等等，发表着自己的心得、学习经历、日常生活等。随着内容的不断输出，总有一些时候，你会想寻找一块“互联网自留地”，“为所欲为”，或是想要进行一些完整而非碎片化的记录，或者想要避免无穷无尽的内容审查，又或者你只是不喜欢社交平台那杂乱的界面和不必要的互动，此时拥有一个个人网站总是一个更好的选择。</p>
+<p>提起个人网站，你或许心中一震，<strong>钱呢？服务器呢</strong></p>
+<p>今天我就和大家分享一种不花钱、不要独立服务器，也能搞起个人网站的方法。</p>
+<h2 id="1需求分析">1、需求分析</h2>
+<p>个人网站，主要是用来记录属于个人的东西，将内容以最直接方式呈现给大家，其中文字、图片占比最多，基本不存在其它用户的注册场景。</p>
+<p>对于个人网站，大家主要有以下方面的思考：</p>
+<ul>
+<li>
+<p>网站系统：自己从头写？搞个开源的自己改？花钱买吗？</p>
+</li>
+<li>
+<p>网站维护：不懂网站的搭建、维护等操作，毕竟对于一个正规网站其本身的维护就是一门学问。对于个人而言，即使能力允许，但精力肯定是不允许。</p>
+</li>
+<li>
+<p>服务器：搞个个人网站，还得每年承担服务器的费用，随着时间的推移，你可能就不太愿意再花钱买了。（10年前的我，曾这么搞过，最终以失败告终。）</p>
+</li>
+</ul>
+<p>因此，有没有对技术要求不高、不花钱、也能长久维护下来的个人建站方法呢？</p>
+<p>答案是肯定的，接下来我就沿着这个思路一探究竟，让你轻松创建属于个人的免费站点。</p>
+<h2 id="2站点规划">2、站点规划</h2>
+<p>面对上述的需求，很早以前就有人这么干了，将<strong>静态站点</strong>作为一种最佳的选择，使你无需掌握过多的前端技术就能轻松搞定。</p>
+<p>通过参考众多优秀的个人站点，我最终选择以 Github Pages + Hugo 的方式来搭建属于自己的<a href="https://xcbeyond.cn/">个人网站</a>。</p>
+<ul>
+<li>
+<p>Hugo：由 Go 语言实现的静态网站生成器，简单、易用、高效、易扩展、快速部署。只需在本地编写 markdown 文件，即可完成日常文章的维护。</p>
+</li>
+<li>
+<p>Github Pages：是一个静态站点托管服务，直接将个人、组织或项目的页面托管于 GitHub 仓库中。（关键是不花钱，用来将个人站点资源存放于此。）</p>
+</li>
+</ul>
+<h2 id="3开始建站">3、开始建站</h2>
+<p>接下来，看看如何一步一步地为自己搭建一个个人网站吧！</p>
+<h3 id="31-hugo-搭建">3.1 Hugo 搭建</h3>
+<h4 id="311-安装-hugo">3.1.1 安装 Hugo</h4>
+<ol>
+<li>
+<p>参考 Hugo 官方的安装指南。</p>
+<p>参考：<a href="https://gohugo.io/getting-started/installing/">Quick Install</a>。</p>
+<p>根据你的操作系统，选择对应的安装方式。例如，我是 macOS, 则直接用 <code>brew</code> 命令快速安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">brew install hugo
+</code></pre></div><p>如果你是 Windows 或者其他操作系统，则可选择二进制文件安装，到 <a href="https://github.com/gohugoio/hugo/releases">Hugo Releases</a> 下载对应的 Hugo 二进制文件，直接安装即可。</p>
+</li>
+<li>
+<p>Hugo 确认。</p>
+<p>安装完成后，输入以下命令确认：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">hugo version
+</code></pre></div><p>正常输出结果，则说明 Hugo 安装成功。</p>
+</li>
+</ol>
+<h4 id="312-新建-hugo-网站">3.1.2 新建 Hugo 网站</h4>
+<p>本步骤是在本地创建个人站点工程（即：hugo 网站源文件）。</p>
+<ol>
+<li>
+<p>新建 Hugo 站点。</p>
+<p>在本地选择合适的目录，执行 hugo 站点创建命令 <code>hugo new site &lt;site-dir&gt;</code>，例如：</p>
+<p>(&ldquo;hugo-site-demo&rdquo; 为本示例而创建的 demo，并非 <a href="https://xcbeyond.cn/">https://xcbeyond.cn</a> 实际站点。)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro github % hugo new site hugo-site-demo
+Congratulations! Your new Hugo site is created in /Users/xcbeyond/github/hugo-site-demo.
+
+Just a few more steps and you<span style="color:#960050;background-color:#1e0010">&#39;</span>re ready to go:
+
+1. Download a theme into the same-named folder.
+   Choose a theme from https://themes.gohugo.io/ or
+   create your own with the <span style="color:#e6db74">&#34;hugo new theme &lt;THEMENAME&gt;&#34;</span> command.
+2. Perhaps you want to add some content. You can add single files
+   with <span style="color:#e6db74">&#34;hugo new &lt;SECTIONNAME&gt;/&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;</span>.
+3. Start the built-in live server via <span style="color:#e6db74">&#34;hugo server&#34;</span>.
+
+Visit https://gohugo.io/ <span style="color:#66d9ef">for</span> quickstart guide and full documentation.
+</code></pre></div></li>
+<li>
+<p>Hugo 站点目录查看。</p>
+<p>进入站点目录 <code>hugo-site-demo</code>，默认文件目录结构如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">│-config.toml
+├─archetypes
+├─content
+├─data
+├─layouts
+├─static
+└─themes
+</code></pre></div><ul>
+<li>
+<p>config.toml : 网站的配置文件，可配置网站名称、关键字、插件等。</p>
+</li>
+<li>
+<p>content : 文章存放目录。</p>
+</li>
+<li>
+<p>themes : 网站主题存放目录。</p>
+</li>
+<li>
+<p>static : 静态资源存放目录, 如：图片、样式文件、脚本文件等。</p>
+</li>
+</ul>
+<p>作为以写作为主打的博主, 知道以上目录的含义, 现在就可以开始写作了.</p>
+</li>
+</ol>
+<h4 id="313-选择-hugo-主题">3.1.3 选择 Hugo 主题</h4>
+<p>为了让你的站点更好看，可根据个人喜欢选择你喜欢的主题。</p>
+<ol>
+<li>
+<p>可以在 <a href="https://themes.gohugo.io">Hugo Themes</a> 中选择自己喜欢的主题。</p>
+<p><img src="hugo-themes.png" alt="Hugo Themes"></p>
+</li>
+<li>
+<p>将选择的主题下载到本地 hugo 站点主题目录下。</p>
+<p>以 <a href="https://themes.gohugo.io/themes/hugo-universal-theme/">Universal</a> 为例进行说明。</p>
+<p>切换到本地 hugo 站点的主题目录 themes，下载主题。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro hugo-site-demo % cd themes 
+xcbeyond@xcbeyonddeMacBook-Pro themes % git clone https://github.com/devcows/hugo-universal-theme.git
+Cloning into <span style="color:#e6db74">&#39;hugo-universal-theme&#39;</span>...
+remote: Enumerating objects: 2386, <span style="color:#66d9ef">done</span>.
+remote: Counting objects: 100% <span style="color:#f92672">(</span>1108/1108<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+remote: Compressing objects: 100% <span style="color:#f92672">(</span>474/474<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+remote: Total <span style="color:#ae81ff">2386</span> <span style="color:#f92672">(</span>delta 516<span style="color:#f92672">)</span>, reused <span style="color:#ae81ff">930</span> <span style="color:#f92672">(</span>delta 393<span style="color:#f92672">)</span>, pack-reused <span style="color:#ae81ff">1278</span>
+Receiving objects: 100% <span style="color:#f92672">(</span>2386/2386<span style="color:#f92672">)</span>, 10.76 MiB | 3.52 MiB/s, <span style="color:#66d9ef">done</span>.
+Resolving deltas: 100% <span style="color:#f92672">(</span>1270/1270<span style="color:#f92672">)</span>, <span style="color:#66d9ef">done</span>.
+</code></pre></div></li>
+</ol>
+<h4 id="314-配置站点">3.1.4 配置站点</h4>
+<p>根据主题中的说明进行配置，一般主题中都有站点示例。</p>
+<p>（不同主题配置略有差异，具体以主题中说明为准。）</p>
+<p>下面以主题 Universal 为例说明。</p>
+<ol>
+<li>
+<p>将主题 hugo-universal-theme 中示例站点 exampleSite 文件夹的内容，全部复制到你的站点根目录。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro hugo-site-demo % cp -r themes/hugo-universal-theme/exampleSite/ ./
+</code></pre></div></li>
+<li>
+<p>修改站点配置文件 config.toml</p>
+<p>在 Hugo 网站文件夹的根目录下，打开 config.toml 文件，修改主题的正确路径，需将配置 <code>themesDir = &quot;../..&quot;</code> 注释掉。</p>
+<p>修改站点的 baseurl，可修改为你的 Github Pages 地址，如：https://xcbeyond.github.io。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">baseurl</span> = <span style="color:#e6db74">&#34;https://xcbeyond.github.io&#34;</span> <span style="color:#75715e"># Configure URL. if using gh-pages https://github.com/&lt;username&gt;/hugo-universal-theme URL: https://&lt;username&gt;.github.io/hugo-universal-theme/</span>
+<span style="color:#a6e22e">title</span> = <span style="color:#e6db74">&#34;Hugo 示例站点&#34;</span>
+<span style="color:#a6e22e">theme</span> = <span style="color:#e6db74">&#34;hugo-universal-theme&#34;</span>
+<span style="color:#75715e"># themesDir = &#34;../..&#34;</span>
+<span style="color:#a6e22e">languageCode</span> = <span style="color:#e6db74">&#34;en-us&#34;</span>
+<span style="color:#960050;background-color:#1e0010">……</span>
+</code></pre></div><p>更多 config.toml 配置说明可参考 <a href="https://gohugo.io/getting-started/configuration/">Configure Hugo</a> 和 <a href="https://themes.gohugo.io/themes/hugo-universal-theme/#configuration">主题Universal配置</a>。</p>
+</li>
+</ol>
+<h4 id="315-本地预览">3.1.5 本地预览</h4>
+<ol>
+<li>
+<p>启动 Hugo server。</p>
+<p>执行命令 <code>hugo serve</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro hugo-site-demo % hugo serve
+Start building sites … 
+hugo v0.85.0+extended darwin/arm64 BuildDate<span style="color:#f92672">=</span>unknown
+
+                  | EN   
+-------------------+------
+Pages            |  <span style="color:#ae81ff">43</span>  
+Paginator pages  |   <span style="color:#ae81ff">0</span>  
+Non-page files   |   <span style="color:#ae81ff">0</span>  
+Static files     | <span style="color:#ae81ff">105</span>  
+Processed images |   <span style="color:#ae81ff">0</span>  
+Aliases          |  <span style="color:#ae81ff">17</span>  
+Sitemaps         |   <span style="color:#ae81ff">1</span>  
+Cleaned          |   <span style="color:#ae81ff">0</span>  
+
+Built in <span style="color:#ae81ff">40</span> ms
+Watching <span style="color:#66d9ef">for</span> changes in /Users/xcbeyond/github/hugo-site-demo/<span style="color:#f92672">{</span>archetypes,content,data,layouts,static,themes<span style="color:#f92672">}</span>
+Watching <span style="color:#66d9ef">for</span> config changes in /Users/xcbeyond/github/hugo-site-demo/config.toml
+Environment: <span style="color:#e6db74">&#34;development&#34;</span>
+Serving pages from memory
+Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+Web Server is available at http://localhost:1313/ <span style="color:#f92672">(</span>bind address 127.0.0.1<span style="color:#f92672">)</span>
+Press Ctrl+C to stop
+</code></pre></div></li>
+<li>
+<p>在浏览器中打开 http://localhost:1313 预览。</p>
+<p><img src="hugo-site-preview.png" alt="站点预览"></p>
+<p><strong>恭喜你，个人站点本地搭建成功！</strong></p>
+</li>
+</ol>
+<h4 id="316-创建文章">3.1.6 创建文章</h4>
+<p>日常站点文件，都是采用 markdown 文件进行维护。例如，创建一篇新文件。</p>
+<ol>
+<li>
+<p>切换到站点 hugo-site-demo 目录下。</p>
+</li>
+<li>
+<p>执行命令 <code>hugo new &lt;xxx.md&gt;</code>，创建一个 about 页面。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro hugo-site-demo % hugo new about.md 
+/Users/xcbeyond/github/hugo-site-demo/content/about.md created
+</code></pre></div><p>about.md 自动生成到了 content/about.md ，打开 about.md:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-md" data-lang="md">---
+title: &#34;About&#34;
+date: 2021-12-05T20:40:17+08:00
+draft: true
+---
+
+</code></pre></div><p>这是 markdown 格式， <code>---</code> 之间的内容用于设置文章的属性内容，<code>---</code> 下面就是正文部分。</p>
+</li>
+</ol>
+<h3 id="32-站点部署">3.2 站点部署</h3>
+<p>本地已经搭建好啦，接下来如何对外发布呢？</p>
+<p>Github 是绝对的最佳选择。</p>
+<p><strong>为了确保个人站点文章（markdown 文件）的相对安全，采取将站点源码仓库和站点分开，即：站点源码仓库设置为私有，站点 GitHub Pages 仓库设为公开。</strong></p>
+<h4 id="321-推送站点源码仓库">3.2.1 推送站点源码仓库</h4>
+<p>将本地站点 hugo-site-demo 推送到自己的 github 上。</p>
+<ol>
+<li>
+<p>注册一个 <a href="https://github.com/">GitHub</a> 账号。如果你已有账号，直接登录。如果没有账号，注册并登录。</p>
+</li>
+<li>
+<p><a href="https://github.com/new">新建</a> 仓库，如：<a href="https://github.com/xcbeyond/hugo-site-demo">hugo-site-demo</a>。</p>
+<blockquote>
+<p>注：<a href="https://github.com/xcbeyond/hugo-site-demo">hugo-site-demo</a> 为示例仓库，故设置为公开仓库，实践中建议设置为私有仓库。</p>
+</blockquote>
+</li>
+<li>
+<p>从 github 将 hugo-site-demo 下载到本地。</p>
+<p>可选择与本地 hugo-site-demo 不相同的目录，将 github 上新建的仓库克隆到本地。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone https://github.com/xcbeyond/hugo-site-demo.git
+</code></pre></div></li>
+<li>
+<p>将本地站点源码复制到本地github库，并提交、推送到 github。</p>
+</li>
+</ol>
+<h4 id="322-创建-github-pages">3.2.2 创建 GitHub Pages</h4>
+<p>利用 GitHub Pages 来作为个人对外站点。</p>
+<ol>
+<li>
+<p>打开 GitHub Pages 官网，浏览并了解 User or organization site 部分对应的操作步骤。</p>
+<p>GitHub Pages: <a href="https://pages.github.com/">https://pages.github.com</a></p>
+</li>
+<li>
+<p>新建一个 GitHub repository，库名为 <code>&lt;username&gt;.github.io</code>，其中 username 是你的 GitHub 账号。例如：<a href="https://github.com/xcbeyond/xcbeyond.github.io">xcbeyond.github.io</a>。</p>
+</li>
+</ol>
+<h4 id="323-自动化部署">3.2.3 自动化部署</h4>
+<p>利用 <a href="https://github.com/features/actions">Github Actions</a>实现将站点源文件（如：<a href="https://github.com/xcbeyond/hugo-site-demo">hugo-site-demo</a>）自动化部署到 GitHub Pages （如：<a href="https://github.com/xcbeyond/xcbeyond.github.io">xcbeyond.github.io</a>
+）上。</p>
+<p>创建 Github Actions 文件。</p>
+<p>在站点源文件根目录，创建 <code>.github/workflows/deploy.yml</code> 文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># This is a basic workflow to help you get started with Actions</span>
+
+<span style="color:#f92672">name</span>: <span style="color:#ae81ff">hugo-deploy-CI</span>
+
+<span style="color:#75715e"># Controls when the action will run. </span>
+<span style="color:#f92672">on</span>: <span style="color:#ae81ff">push</span>
+
+<span style="color:#75715e"># A workflow run is made up of one or more jobs that can run sequentially or in parallel</span>
+<span style="color:#f92672">jobs</span>:
+  <span style="color:#75715e"># docs：https://github.com/peaceiris/actions-gh-pages</span>
+  <span style="color:#f92672">deploy</span>:
+    <span style="color:#f92672">runs-on</span>: <span style="color:#ae81ff">ubuntu-18.04</span>
+    <span style="color:#f92672">steps</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Git checkout</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">actions/checkout@v2</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Setup hugo</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">peaceiris/actions-hugo@v2</span>
+        <span style="color:#f92672">with</span>:
+          <span style="color:#f92672">hugo-version</span>: <span style="color:#e6db74">&#39;0.81.0&#39;</span>
+          <span style="color:#f92672">extended</span>: <span style="color:#66d9ef">true</span>
+
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Build</span>
+        <span style="color:#f92672">run</span>: <span style="color:#ae81ff">hugo</span>
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Deploy</span>
+        <span style="color:#f92672">uses</span>: <span style="color:#ae81ff">peaceiris/actions-gh-pages@v3</span>
+        <span style="color:#f92672">with</span>:
+          <span style="color:#f92672">personal_token</span>: <span style="color:#ae81ff">${{ secrets.PERSONAL_TOKEN }}</span>
+          <span style="color:#f92672">external_repository</span>: <span style="color:#ae81ff">xcbeyond/xcbeyond.github.io</span> <span style="color:#75715e"># 修改为自己的地址</span>
+          <span style="color:#f92672">publish_dir</span>: <span style="color:#ae81ff">./public</span>
+        <span style="color:#75715e">#   keep_files: true</span>
+          <span style="color:#f92672">publish_branch</span>: <span style="color:#ae81ff">master</span>
+          <span style="color:#f92672">cname</span>: <span style="color:#ae81ff">xcbeyond.cn</span> <span style="color:#75715e"># 如有独立域名，修改为自己的域名</span>
+</code></pre></div><p>其中，<code>on: push</code> 表示提交时触发 Action，自动编译并部署到 GitHub Pages。</p>
+<p>以后每次提交个人站点内容时，会自动编译并部署。</p>
+<h2 id="4总结">4、总结</h2>
+<p>个人网站的创建、部署、上线已经完成，为确保站点持续运转，需要你的精心维护、优化。站点功能的完善、好看，还需持续优化，可通过添加 Hugo 插件、修改主题样式等一系列方法完成。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/github-pages-hugo.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/">
+          <h5 class="mt-0">利用 Github Pages 和 Hugo 快速搭建免费的个人网站</h5>
+        </a>
+        2021-12-25 22:24:57
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/service-mesh.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/">
+          <h5 class="mt-0">全方位解读服务网格（Service Mesh）的背景和概念</h5>
+        </a>
+        2021-09-11 21:34:31
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cobra.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/">
+          <h5 class="mt-0">Cobra 快速入门 - 专为命令行程序而生</h5>
+        </a>
+        2021-08-01 13:58:02
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/I-have-been-signed-up-by-InfoQ.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/">
+          <h5 class="mt-0">我被InfoQ写作平台签约啦</h5>
+        </a>
+        2021-07-09 07:03:34
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/yapi.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/visual-interface-management-platform-yapi/">
+          <h5 class="mt-0">可视化接口管理平台 YApi，让你轻松搞定 API 的管理问题</h5>
+        </a>
+        2021-07-07 22:54:01
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/my-stories-with-the-InfoQ-writing-platform.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/my-stories-with-the-infoq-writing-platform/">
+          <h5 class="mt-0">我与InfoQ写作平台的这些事</h5>
+        </a>
+        2021-05-02 22:10:09
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1需求分析">1、需求分析</a></li>
+    <li><a href="#2站点规划">2、站点规划</a></li>
+    <li><a href="#3开始建站">3、开始建站</a>
+      <ul>
+        <li><a href="#31-hugo-搭建">3.1 Hugo 搭建</a></li>
+        <li><a href="#32-站点部署">3.2 站点部署</a></li>
+      </ul>
+    </li>
+    <li><a href="#4总结">4、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>

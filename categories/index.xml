@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Sat, 11 Sep 2021 21:34:31 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 25 Dec 2021 22:24:57 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>程序人生</title>
+      <link>https://xcbeyond.cn/categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/</link>
+      <pubDate>Sat, 25 Dec 2021 22:24:57 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Service Mesh</title>
       <link>https://xcbeyond.cn/categories/service-mesh/</link>
@@ -23,15 +32,6 @@
       <pubDate>Sun, 01 Aug 2021 13:58:02 +0800</pubDate>
       
       <guid>https://xcbeyond.cn/categories/go/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>程序人生</title>
-      <link>https://xcbeyond.cn/categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/</link>
-      <pubDate>Fri, 09 Jul 2021 07:03:34 +0800</pubDate>
-      
-      <guid>https://xcbeyond.cn/categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/</guid>
       <description></description>
     </item>
     
