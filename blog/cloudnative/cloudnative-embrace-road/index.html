@@ -2,13 +2,13 @@
 <html lang="zh-cn"><head>
   <meta charset="utf-8">
   
-  <title>0 Go语言从入门到精通：开篇介绍，Go语言我来啦 | xcbeyond</title>
+  <title>盘点 2021 ｜ 云原生拥抱之路 | xcbeyond</title>
   
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description"
-    content="在过去几年，崛起了一门新的语言：Go 或者 GoLang。没有什么比一门新的编程语言更令开发者兴奋了，不是么?">
+    content="回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。">
   
   <meta name="author" content="xcbeyond">
   <meta name="generator" content="Hugo 0.81.0" />
@@ -106,9 +106,9 @@
       <div class="col-md-12">
         <ul class="list-inline custom-breadcrumb">
           
-          <li class="list-inline-item text-white h3 font-secondary">0 Go语言从入门到精通：开篇介绍，Go语言我来啦</li>
+          <li class="list-inline-item text-white h3 font-secondary">盘点 2021 ｜ 云原生拥抱之路</li>
         </ul>
-        <p class="text-lighten">在过去几年，崛起了一门新的语言：Go 或者 GoLang。没有什么比一门新的编程语言更令开发者兴奋了，不是么?</p>
+        <p class="text-lighten">回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。</p>
       </div>
     </div>
   </div>
@@ -122,7 +122,7 @@
       <div class="col-lg-8 order-2 order-lg-1">
         <div class="row">
           <div class="col-12 mb-4">
-            <img src="/images/blog/Go%e8%af%ad%e8%a8%80%e6%88%91%e6%9d%a5%e5%95%a6.png" alt="blog-thumb" class="img-fluid w-100">
+            <img src="/images/blog/cloudnative-01.jpeg" alt="blog-thumb" class="img-fluid w-100">
           </div>
           <div class="col-12">
             <ul class="list-inline">
@@ -131,12 +131,14 @@
                   href="/author/xcbeyond">Xcbeyond</a></li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
-                  :</span>2021-01-14 21:30:24 </li>
+                  :</span>2021-12-31 21:18:56 </li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
                   :</span><a
-                  href="/categories/go"> 
-                  Go</a> </li>
+                  href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f"> 
+                  云原生</a> <a
+                  href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f"> , 
+                  程序人生</a> </li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
                   :</span><span id="busuanzi_value_page_pv"></span> </li>
@@ -149,29 +151,84 @@
           </div>
           
           <div class="col-12 mb-5 content">
-            <blockquote>
-<p>“Go will be the server language of the future.” — Tobias Lütke, Shopify</p>
-</blockquote>
-<p>在过去几年，崛起了一门新的语言：<code>Go</code> 或者 <code>GoLang</code>。没有什么比一门新的编程语言更令开发者兴奋了，不是么?</p>
-<p><img src="golang.jpg" alt="golang"></p>
-<p>目前一些开源社区，纷纷采用Go语言开发了许多平台、框架等，如：<a href="https://github.com/docker/docker-ce">Docker</a>、<a href="https://github.com/kubernetes/kubernetes">Kubernetes</a>等，甚至逐步从其它语言（如：<code>C</code>、<code>Java</code> 等）转换到了 <code>Go</code>，相信这一点你已经体会到了。当您在看一些开源代码时，全是Go语言编写的，你该咋办呢？</p>
-<p>此外，伴随着近两年来云原生技术的发展迅猛，<code>Go</code> 语言作为新生代的编译型编程语言，凭借语法简单、高并发性能良好和编译速度快等特点，成为了云原生技术落地实践的绝妙利器。云原生的到来，这也将迫使您不得不多学习一门新语言了。</p>
-<p>因此，从今天开始从零开始学 <code>Go</code> 语言，一方面是督促自己不断前行且学习新的知识，另一方面是分享给读者，希望与大家一起进步。该专栏文章将从零基础开始，以通俗易懂的方式一起学习、分享Go语言的学习历程，且看且珍惜吧，加油！</p>
-<p><strong>适合人群：</strong></p>
+            <p>2021 即将结束，又到了一年一度的盘点时刻，今年该说点啥？</p>
+<p>回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。</p>
+<h2 id="1背景">1、背景</h2>
+<p>之前一直专注于微服务体系架构的研发工作，以 Java 语言作为我的第一程序语言，并伴随了我很多年。随着 2020 年 8 月份工作的变动，全身投入到新架构体系产品的技术预研及研发中，从此开启了我的云原生之路。</p>
+<p>IT技术的演进，行业的竞争，促使了软件产品的迭代更新。传统微服务架构产品在当下显得力不从心，为寻求市场竞争力，只有向前迈出新的一步，紧跟时代步伐，才有可能立足于市场。</p>
+<p>今天，我将站在云原生的代表技术出发，通过这些技术来阐述我的云原生之路。</p>
+<h2 id="2云原生">2、云原生</h2>
+<p>先来回顾、重温一下云原生的概念吧！</p>
+<p>云原生是近几年云计算领域炙手可热的话题，云原生技术更是成为驱动业务增长的重要引擎。提及云原生我们不得不提及 <a href="https://www.cncf.io/">CNCF</a>（CNCF：Cloud Native Computing Foundation，云原生计算基金会），CNCF 的成立标志着云原生从技术理念转化为开源实现，并给出了目前被广泛接受的定义：</p>
+<p>云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括<strong>容器、服务网格、微服务、不可变基础设施和声明式 API</strong>。</p>
+<p><img src="cloudnative-technology.png" alt="云原生技术"></p>
+<h2 id="3微服务">3、微服务</h2>
+<p>微服务不用多说，在 2022 年来临之际应该没有人不了解微服务吧。</p>
+<p>微服务是服务架构演进的产物，在历经单体架构、垂直架构、面向服务的架构（SOA）之后，微服务架构（MSA）可视为 SOA 架构的分布式实现方式。随着业务发展与需求不断增加，单体应用功能愈发复杂，应用迭代效率由于集中式研发、测试、发布、沟通模式而显著下滑。</p>
+<p><img src="../../cloudnative/%E8%A7%A3%E8%AF%BB%E4%BA%91%E5%8E%9F%E7%94%9F%E6%8A%80%E6%9C%AF/%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84%E3%80%81%E5%9E%82%E7%9B%B4%E6%9E%B6%E6%9E%84%E3%80%81SOA%E3%80%81%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94.png" alt="单体架构、垂直架构、SOA、微服务架构对比"></p>
+<p><strong>微服务架构本质上是通过承受更高的运维复杂度来换取更好的敏捷性，其优势在于小而治之、去中心化，但也导致基础架构的需求、成本和复杂性激增。</strong></p>
+<h2 id="4容器">4、容器</h2>
+<p>早在 2018 年就开始接触容器，开启了我的容器之路，其中 Docker 作为容器化的一种典型方案或者技术，入门比较简单。</p>
+<p><strong>一次构建，多次交付</strong>成为当时吸引我的主要原因，在软件部署层面，传统模式和 Docker 模式存在着如下差异：</p>
+<p><img src="deployment-compare-for-docker.png" alt="传统模式和Docker模式在软件部署上的比较"></p>
+<p>容器是将进程有效的划分一个独立空间，以便在独立的空间之间平衡资源使用冲突的技术。本质上，容器是一种特殊的进程，其核心功能是通过约束和修改进程的动态表现创造出一个“边界”，此外，其资源限制能力、以及基于镜像功能表现出的“强一致性”，都使得容器技术成为云原生最关键的底层技术之一。</p>
+<p>2021 年可以称得上是容器大规模应用的一年。基于 Kubernetes 来屏蔽异构环境的差异，搭建分布式云架构已经成为企业和云厂商的共识。</p>
+<p>对于容器而言，在此给初学者一些建议：掌握/理解容器相关概念、基本操作即可，如容器技术的特征、Docker部署、Docker镜像制作等，其他内容可结合后续 Kubernetes 的学习、项目实际应用中加强。</p>
+<h2 id="5kubernetes">5、Kubernetes</h2>
+<p>Kubernetes 是我 2020 年底开始接触的东西，作为容器编排的优秀作品，被广为使用。在学习的过程中也输出了部分文章：</p>
+<ul>
+<li><a href="https://xcbeyond.cn/blog/kubernetes/introduction-chapter-what-is-kubernetes/">Kubernetes介绍篇：是什么？为什么要用？</a></li>
+<li><a href="https://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/">Kubernetes概念篇：基本概念和术语</a></li>
+<li>……</li>
+</ul>
+<p>更多内容可持续关注：<a href="https://xcbeyond.cn/categories/kubernetes/">kubernetes分类</a> 或 <a href="https://xcbeyond.cn/kubernetes-handbook/">kubernetes实践手册</a></p>
+<p>如今，Kubernetes 项目不仅是容器技术的事实标准，更成为整个云原生体系发展的基石，重新定义了基础设施领域对应用编排与管理的各种可能。</p>
+<p>在整个云原生生态中，Kubernetes 项目起到了承上启下的作用。对上，Kubernetes 暴露出基础设施能力的格式化数据抽象，如 Service、Ingress、Pod、Deployment，都是 Kubernetes 本身原生 API 为用户暴露出来的能力。而对下，Kubernetes 提供了基础设施能力接入的标准接口，如 CNI、CSI、DevicePlugin、CRD，让云能够作为能力提供商，通过标准化的方式把能力接入到 Kubernetes 的体系中。</p>
+<p>伴随着微服务、DevOps 等技术理念的发展，基于 Kubernetes 可扩展能力的开放应用平台将取代 PaaS 成为主流，而云的价值会回归应用本身，越来越多的开源项目会以云原生理念去开发、部署和运维，最后直接演进成为一种云服务。</p>
+<h2 id="6服务网格">6、服务网格</h2>
+<p>服务网格，是今年新接触的内容之一，更是开启我云原生技术栈的核心，截止目前为止算是入门吧，更多扩展、进阶内容还需后续深入学习。</p>
+<p>想进一步了解服务网格的背景和概念可参考之前写的一篇文章：<a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/">全方位解读服务网格（Service Mesh）的背景和概念</a></p>
+<p><img src="../../servicemesh/what-is-servie-mesh/service-mesh-architecture.png" alt="服务网格"></p>
+<p>服务网格中的典型代表框架为 Istio，学习服务网格的重点也就放在了对 Istio 的学习。目前市场上对于 Istio 的资料非常少，主要借助于 <a href="https://istio.io/">istio官网</a>。</p>
+<p>在学习过程中，已输出一本精简版的PDF版学习资料（暂未公开），其中一部分已发布在：<a href="https://xcbeyond.cn/istio-handbook/">Istio 实践手册</a>。</p>
+<h2 id="7go-语言">7、Go 语言</h2>
+<p>Go 语言被称为云时代的语言，在云原生技术栈中 Go 语言占据很大的比例。</p>
+<p><img src="cloudnative-technology-stack-language.png" alt="云原生技术栈语言组成分布"></p>
+<p>比如，Docker、Kubernetes 等众多云原生领域的优秀技术或框架都是基于 Go 语言开发的，所以掌握 Go 语言比不可少。今年，我也是从零开始全身投入到 Go 的语言学习当中，将 Go 语言作为我的第二大开发语言，利用 Go 语言开发公司新产品的研发。</p>
+<p>在经过一年时间的学习及产品实践，总结了一套 Go 语言的快速学习路线供大家参考：</p>
 <ul>
 <li>
-<p>编程爱好者</p>
+<p><strong>第一阶段（基础语法）</strong></p>
+<p>快速了解基本语法，如：数据类型、条件、循环等，熟悉Go的编程习惯。<strong>可写代码片段。</strong></p>
 </li>
 <li>
-<p><code>Go</code> 语言初学者</p>
+<p><strong>第二阶段 （高级语法）</strong></p>
+<p>逐步了解更高级的特性，如：channel、并发、接口等。</p>
+</li>
+<li>
+<p><strong>第三阶段 （常用代码库）</strong></p>
+<p>熟练掌握常用的代码库，如：fmt、Log、IO、Strconv、Template等。<strong>可写demo。</strong></p>
+</li>
+<li>
+<p><strong>第四阶段 （常用框架）</strong></p>
+<p>熟练掌握常用的框架，如：Cobra（命令行）、Gin（Web框架）、Gorm（ORM框架）等。<strong>可写项目。</strong></p>
+</li>
+<li>
+<p><strong>第五阶段（阅读源码）</strong></p>
+<p>阅读开源项目源码，如：docker、Kubernetes等。<strong>可借助开源项目提升自我/项目。</strong></p>
 </li>
 </ul>
-<p><strong>学习目标：</strong></p>
-<p>帮助 <code>Go</code> 语言小白快速学习 <code>Go</code> 语言基础知识，从不了解到了解，到会写Go语言程序，到入门，直到精通，作为 <code>Go</code> 语言系列全教程。</p>
-<p><strong>专栏简介：</strong></p>
-<p><code>Go</code> 语言是 <code>Google</code> 公司开源的一门编程语言，它天生支持并发的特性吸引了越来越多的公司使用 <code>Go</code> 语言作为主开发语言。目前国内外 <code>Go</code> 语言的岗位需求持续增长，<code>Go</code> 语言的未来发展前景十分可观。</p>
-<p>本专栏是 <code>Go</code> 语言从入门到精通的教程，其中包含详细的语法介绍和丰富的练习示例，带你从0基础开始学习 <code>Go</code> 语言，提升 <code>Go</code> 语言能力。</p>
-<p><strong>废话不多说，奥力给！</strong></p>
+<p>学习过程中，也整理了一些相关学习资料：<a href="https://xcbeyond.cn/golang-handbook/">Go语言实践手册</a>。</p>
+<h2 id="8总结">8、总结</h2>
+<p>拥抱云原生，其本质就是拥抱云原生代表技术（容器、服务网格、微服务、不可变基础设施和声明式 API等），掌握这几门代表技术也算是踏进云原生的大门了。后续云原生之路，更多的在于实际的项目/产品中实践，并不断总结、理解。</p>
+<p>这就是我 2021 年的技术之路，为新产品的研发，不断向云原生前进，2022 年我将会持续深入学习、分享，将站在用户体验的角度、以技术驱动业务为价值目标，继续我的2022。</p>
+<hr>
+<p>参考资料：</p>
+<ol>
+<li>《云原生发展白皮书(2020年).pdf》</li>
+<li>《云原生2.0白皮书.pdf》</li>
+<li><a href="https://www.infoq.cn/article/Z24fthyOAJLi0Bp4T3sZ">解读云原生的 2021：抢占技术 C 位，迎来落地大爆发</a></li>
+</ol>
 
           </div>
           
@@ -314,7 +371,18 @@
   
   <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
     <h4 class="mb-4">目录</h4>
-    <nav id="TableOfContents"></nav>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1背景">1、背景</a></li>
+    <li><a href="#2云原生">2、云原生</a></li>
+    <li><a href="#3微服务">3、微服务</a></li>
+    <li><a href="#4容器">4、容器</a></li>
+    <li><a href="#5kubernetes">5、Kubernetes</a></li>
+    <li><a href="#6服务网格">6、服务网格</a></li>
+    <li><a href="#7go-语言">7、Go 语言</a></li>
+    <li><a href="#8总结">8、总结</a></li>
+  </ul>
+</nav>
   </div>
 </aside>
 <!-- /sidebar -->

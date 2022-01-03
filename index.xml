@@ -63,6 +63,17 @@
     </item>
     
     <item>
+      <title>盘点 2021 ｜ 云原生拥抱之路</title>
+      <link>https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/</link>
+      <pubDate>Fri, 31 Dec 2021 21:18:56 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/</guid>
+      <description>2021 即将结束，又到了一年一度的盘点时刻，今年该说点啥？
+回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。
+1、背景 之前一直专注于微服务体系架构的研发工作，以 Java 语言作为我的第一程序语言，并伴随了我很多年。随着 2020 年 8 月份工作的变动，全身投入到新架构体系产品的技术预研及研发中，从此开启了我的云原生之路。</description>
+    </item>
+    
+    <item>
       <title>利用 Github Pages 和 Hugo 快速搭建免费的个人网站</title>
       <link>https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/</link>
       <pubDate>Sat, 25 Dec 2021 22:24:57 +0800</pubDate>
