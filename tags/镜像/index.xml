@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>镜像 on xcbeyond</title>
+    <link>https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/</link>
+    <description>Recent content in 镜像 on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
+    <lastBuildDate>Sat, 22 Jan 2022 09:56:55 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>构建多架构镜像的最佳实践</title>
+      <link>https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/</link>
+      <pubDate>Sat, 22 Jan 2022 09:56:55 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/</guid>
+      <description>在云时代，容器化已经成为一种事实，把软件产品打包、构建成 Docker 镜像是最基本、最关键的一步。在信创的大背景下，云环境中会存在 x86、arm 等不同的架构，所以在构建镜像时需要构建出多种架构的镜像，以适配不同架构的服务器。
+在拉取 Docker 镜像时，会根据当前环境的架构自动拉取对应架构的镜像，如：在 x86 环境下拉取的镜像为 x86 架构的镜像，在 arm 环境下拉取的镜像为 arm 架构的镜像。（前提是，该镜像是多架构的镜像）</description>
+    </item>
+    
+  </channel>
+</rss>

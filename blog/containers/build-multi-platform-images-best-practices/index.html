@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>构建多架构镜像的最佳实践 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="如今，Docker 容器镜像可以支持多种架构/平台，多架构镜像的构建已经成为了必备技能。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">构建多架构镜像的最佳实践</li>
+        </ul>
+        <p class="text-lighten">如今，Docker 容器镜像可以支持多种架构/平台，多架构镜像的构建已经成为了必备技能。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/multi-platform-images.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2022-01-22 09:56:55 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/%e5%ae%b9%e5%99%a8"> 
+                  容器</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在云时代，容器化已经成为一种事实，把软件产品打包、构建成 Docker 镜像是最基本、最关键的一步。在信创的大背景下，云环境中会存在 x86、arm 等不同的架构，所以在构建镜像时需要构建出多种架构的镜像，以适配不同架构的服务器。</p>
+<p>在拉取 Docker 镜像时，会根据当前环境的架构自动拉取对应架构的镜像，如：在 x86 环境下拉取的镜像为 x86 架构的镜像，在 arm 环境下拉取的镜像为 arm 架构的镜像。（<strong>前提是，该镜像是多架构的镜像</strong>）</p>
+<p>本文将针对基于 Docker Buildx 来构建多架构的镜像展开说明（一次构建多架构的镜像）。</p>
+<h2 id="1buildx-安装">1、buildx 安装</h2>
+<p>Docker Buildx 是一个 CLI 插件，它扩展了 Docker 命令，完全支持 <a href="https://github.com/moby/buildkit">Moby BuildKit</a> 构建器工具包提供的功能。它提供与 <code>docker build</code> 相同的用户体验，具有许多新功能，例如创建作用域构建器实例和同时针对多个节点进行构建。</p>
+<ol>
+<li>
+<p>下载 buildx 二进制文件。</p>
+<p>在 <a href="https://github.com/docker/buildx/releases/latest">Github Release 页面</a>下载最新的 buildx 二进制文件。</p>
+<p>根据您的操作系统选择对应的二进制文件。</p>
+<p><img src="buildx-release-page.png" alt="buildx 下载页面"></p>
+</li>
+<li>
+<p>buildx 复制到 Docker 对应目录。</p>
+<p>重命名下载的 buildx 二进制文件，并将其复制到您操作系统对应的目录：</p>
+<table>
+<thead>
+<tr>
+<th>操作系统</th>
+<th>二进制名称</th>
+<th>目标文件夹</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux</td>
+<td>docker-buildx</td>
+<td><code>$HOME/.docker/cli-plugins</code></td>
+</tr>
+<tr>
+<td>MacOS</td>
+<td>docker-buildx</td>
+<td><code>$HOME/.docker/cli-plugins</code></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>docker-buildx.exe</td>
+<td><code>%USERPROFILE%\.docker\cli-plugins</code></td>
+</tr>
+</tbody>
+</table>
+<p>例如，我的 MacOS：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro ~ % mv ~/Downloads/buildx-v0.7.1.darwin-arm64 ~/.docker/cli-plugins/docker-buildx
+xcbeyond@xcbeyonddeMacBook-Pro ~ % chmod +x ~/.docker/cli-plugins/docker-buildx
+</code></pre></div><p><strong>注意：需对 buildx 二进制文件赋予权限，执行 <code>chmod +x</code>。</strong></p>
+</li>
+<li>
+<p>检查 buildx。</p>
+<p>执行 <code>docker buildx version</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro ~ % docker buildx version
+github.com/docker/buildx v0.7.1 05846896d149da05f3d6fd1e7770da187b52a247
+</code></pre></div></li>
+</ol>
+<h2 id="2开启-binfmt_misc-来运行非本地架构的-docker-镜像">2、开启 binfmt_misc 来运行非本地架构的 Docker 镜像</h2>
+<p>如果您使用的是 Mac 或者 Windows 版本 Docker 桌面版，则可以跳过这个步骤，因为 binfmt_misc 默认开启。</p>
+<p>如果使用的是其它平台，可使用 <a href="https://github.com/tonistiigi/binfmt">tonistiigi/binfmt</a> 镜像进行安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"> docker run --privileged --rm tonistiigi/binfmt --install all
+</code></pre></div><h2 id="3将默认-docker-构建器切换为多架构构建器">3、将默认 Docker 构建器切换为多架构构建器</h2>
+<p>默认情况下，Docker 会使用默认构建器，是不支持多架构构建。</p>
+<p>为了构建多架构的镜像，需要创建新的支持多架构的构建器，需执行 <code>docker buildx create --use</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro % docker buildx create --use --name mybuilder
+mybuilder
+</code></pre></div><p>查看新的多架构构建器是否生效，需执行 <code>docker buildx ls</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro % docker buildx ls
+NAME/NODE       DRIVER/ENDPOINT             STATUS   PLATFORMS
+mybuilder *     docker-container                     
+  mybuilder0    unix:///var/run/docker.sock inactive 
+desktop-linux   docker                               
+  desktop-linux desktop-linux               running  linux/arm64, linux/amd64, linux/riscv64, linux/ppc64le, linux/s390x, linux/386, linux/arm/v7, linux/arm/v6
+default         docker                               
+  default       default                     running  linux/arm64, linux/amd64, linux/riscv64, linux/ppc64le, linux/s390x, linux/386, linux/arm/v7, linux/arm/v6
+</code></pre></div><h2 id="4构建多架构镜像">4、构建多架构镜像</h2>
+<ol>
+<li>
+<p>编写测试程序。</p>
+<p>为方便测试，用 Golang 写了一个简单的<a href="multi-arch-test.go">程序</a>，并输出当前程序运行环境的架构信息：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> (
+   <span style="color:#e6db74">&#34;fmt&#34;</span>
+   <span style="color:#e6db74">&#34;runtime&#34;</span>
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+   <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;the current platform architecture is %s.\n&#34;</span>, <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">GOARCH</span>)
+}
+
+</code></pre></div></li>
+<li>
+<p>编写 Dockerfile。</p>
+<p>编写该程序的 <a href="Dockerfile">Dockerfile</a>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> xcbeyond/go-builder:1.16</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">LABEL</span> maintainer xcbeyond<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> multi-arch-test.go /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> go build -o multi-arch-test /app/multi-arch-test.go<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;./multi-arch-test&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div></li>
+<li>
+<p>构建多架构镜像。</p>
+<p>通过命令 <code>docker buildx build -t &lt;image-name&gt; --platform=linux/arm64,linux/amd64 . --push</code>，构建一个支持 arm64 和 amd64 架构的多架构镜像，并推送至 Docker Hub：</p>
+<p>（参数 <code>--push</code> 会自动将镜像推送到 Docker Hub，本地并不会保留该镜像。如果不想推送，则可去掉该参数。）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro build-multi-platform-images-best-practices % docker buildx build -t xcbeyond/multi-arch-test --platform<span style="color:#f92672">=</span>linux/arm64,linux/amd64 . --push
+<span style="color:#f92672">[</span>+<span style="color:#f92672">]</span> Building 3105.4s <span style="color:#f92672">(</span>19/19<span style="color:#f92672">)</span> FINISHED                                                                                                                                                                       
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>internal<span style="color:#f92672">]</span> load build definition from Dockerfile                                                                                                                                                   0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; transferring dockerfile: 222B                                                                                                                                                                   0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>internal<span style="color:#f92672">]</span> load .dockerignore                                                                                                                                                                      0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; transferring context: 2B                                                                                                                                                                        0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/amd64 internal<span style="color:#f92672">]</span> load metadata <span style="color:#66d9ef">for</span> docker.io/xcbeyond/go-builder:1.16                                                                                                                        5.2s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/arm64 internal<span style="color:#f92672">]</span> load metadata <span style="color:#66d9ef">for</span> docker.io/xcbeyond/go-builder:1.16                                                                                                                        4.9s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>auth<span style="color:#f92672">]</span> xcbeyond/go-builder:pull token <span style="color:#66d9ef">for</span> registry-1.docker.io                                                                                                                                     0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>internal<span style="color:#f92672">]</span> load build context                                                                                                                                                                      0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; transferring context: 40B                                                                                                                                                                       0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/amd64 1/4<span style="color:#f92672">]</span> FROM docker.io/xcbeyond/go-builder:1.16@sha256:ace56967e44e98b1a8c286ad97717c878650d0312ac3e69767234f766601d6fc                                                               2323.9s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; resolve docker.io/xcbeyond/go-builder:1.16@sha256:ace56967e44e98b1a8c286ad97717c878650d0312ac3e69767234f766601d6fc                                                                              0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:6e1d20a8313edd44a36cb9198f4d11ac5eedb41d1faf5e8a33c5a0a5a25d2b92 85.80MB / 85.80MB                                                                                                    2318.7s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:6494e4811622b31c027ccac322ca463937fd805f569a93e6f15c01aade718793 54.57MB / 54.57MB                                                                                                      27.3s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:5b59121a0c3517cfd68aba8a3955cbb40ca12dd56db3317e3a17cf56131ca915 129.08MB / 129.08MB                                                                                                    77.1s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:cb5b7ae361722f070eca53f35823ed21baa85d61d5d95cd5a95ab53d740cdd56 10.87MB / 10.87MB                                                                                                      96.5s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:9b829c73b52b92b97d5c07a54fb0f3e921995a296c714b53a32ae67d19231fcd 5.15MB / 5.15MB                                                                                                         5.2s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:0e29546d541cdbd309281d21a73a9d1db78665c1b95b74f32b009e0b77a6e1e3 54.92MB / 54.92MB                                                                                                      61.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:0e29546d541cdbd309281d21a73a9d1db78665c1b95b74f32b009e0b77a6e1e3                                                                                                              1.5s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:9b829c73b52b92b97d5c07a54fb0f3e921995a296c714b53a32ae67d19231fcd                                                                                                              0.1s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:cb5b7ae361722f070eca53f35823ed21baa85d61d5d95cd5a95ab53d740cdd56                                                                                                              0.3s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:6494e4811622b31c027ccac322ca463937fd805f569a93e6f15c01aade718793                                                                                                              1.6s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:6e1d20a8313edd44a36cb9198f4d11ac5eedb41d1faf5e8a33c5a0a5a25d2b92                                                                                                              1.9s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:5b59121a0c3517cfd68aba8a3955cbb40ca12dd56db3317e3a17cf56131ca915                                                                                                              3.3s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:2db41f0db9d9d9a1f49978ec31e8d187f491767e9b377f5ee121827c407e015e                                                                                                              0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/arm64 1/4<span style="color:#f92672">]</span> FROM docker.io/xcbeyond/go-builder:1.16@sha256:ace56967e44e98b1a8c286ad97717c878650d0312ac3e69767234f766601d6fc                                                               2187.3s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; resolve docker.io/xcbeyond/go-builder:1.16@sha256:ace56967e44e98b1a8c286ad97717c878650d0312ac3e69767234f766601d6fc                                                                              0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:221ff675cd357b3b345da24f781791fc9b91066d687f9e928993aab31618d13d 99.63MB / 99.63MB                                                                                                      54.3s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:627b3401fb617535edd16e96bd5941ecea7fe10ce6087bd47707602cfc396c2b 81.01MB / 81.01MB                                                                                                     472.1s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:841dd868500b6685b6cda93c97ea76e817b427d7a10bf73e9d03356fac199ffd 54.67MB / 54.67MB                                                                                                    2084.9s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:aa9c5b49b9db3dd2553e8ae6c2081b77274ec0a8b1f9903b0e5ac83900642098 10.66MB / 10.66MB                                                                                                       6.2s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:ac9d381bd1e98fa8759f80ff42db63c8fce4ac9407b2e7c8e0f031ed9f96432b 5.14MB / 5.14MB                                                                                                         6.8s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; sha256:94a23d3cb5be24659b25f17537307e7f568d665244f6a383c1c6e51e31080749 53.60MB / 53.60MB                                                                                                      22.7s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:94a23d3cb5be24659b25f17537307e7f568d665244f6a383c1c6e51e31080749                                                                                                              1.5s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:ac9d381bd1e98fa8759f80ff42db63c8fce4ac9407b2e7c8e0f031ed9f96432b                                                                                                              0.1s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:aa9c5b49b9db3dd2553e8ae6c2081b77274ec0a8b1f9903b0e5ac83900642098                                                                                                              0.2s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:841dd868500b6685b6cda93c97ea76e817b427d7a10bf73e9d03356fac199ffd                                                                                                              1.5s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:627b3401fb617535edd16e96bd5941ecea7fe10ce6087bd47707602cfc396c2b                                                                                                              1.7s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:221ff675cd357b3b345da24f781791fc9b91066d687f9e928993aab31618d13d                                                                                                              2.7s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; extracting sha256:10c716f05a00666c190fb40f99503dc83b2886de744ab9b3dc6c5d37d01f6e49                                                                                                              0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>auth<span style="color:#f92672">]</span> xcbeyond/go-builder:pull token <span style="color:#66d9ef">for</span> registry-1.docker.io                                                                                                                                     0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/arm64 2/4<span style="color:#f92672">]</span> WORKDIR /app                                                                                                                                                                     0.1s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/arm64 3/4<span style="color:#f92672">]</span> COPY multi-arch-test.go /app                                                                                                                                                     0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/arm64 4/4<span style="color:#f92672">]</span> RUN go build -o multi-arch-test /app/multi-arch-test.go                                                                                                                          0.3s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/amd64 2/4<span style="color:#f92672">]</span> WORKDIR /app                                                                                                                                                                     0.2s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/amd64 3/4<span style="color:#f92672">]</span> COPY multi-arch-test.go /app                                                                                                                                                     0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>linux/amd64 4/4<span style="color:#f92672">]</span> RUN go build -o multi-arch-test /app/multi-arch-test.go                                                                                                                          1.5s
+<span style="color:#f92672">=</span>&gt; exporting to image                                                                                                                                                                               774.4s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; exporting layers                                                                                                                                                                               10.5s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; exporting manifest sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2                                                                                                      0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; exporting config sha256:628f504898973d1d935ffd37993d1db5fdc4715c5d58467db2c6531d3d7d3181                                                                                                        0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; exporting manifest sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd                                                                                                      0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; exporting config sha256:47e7af533f821be5ba256919303e0de3b39990109a419a98dbfddc6c82086822                                                                                                        0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; exporting manifest list sha256:8417543ebc47e6040a67a392d6ee9de05735ed464e48b22fcc3bdf66ce22224b                                                                                                 0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; pushing layers                                                                                                                                                                                761.8s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">=</span>&gt; pushing manifest <span style="color:#66d9ef">for</span> docker.io/xcbeyond/multi-arch-test:latest@sha256:8417543ebc47e6040a67a392d6ee9de05735ed464e48b22fcc3bdf66ce22224b                                                          2.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>auth<span style="color:#f92672">]</span> xcbeyond/multi-arch-test:pull,push token <span style="color:#66d9ef">for</span> registry-1.docker.io                                                                                                                           0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>auth<span style="color:#f92672">]</span> xcbeyond/multi-arch-test:pull,push token <span style="color:#66d9ef">for</span> registry-1.docker.io                                                                                                                           0.0s
+<span style="color:#f92672">=</span>&gt; <span style="color:#f92672">[</span>auth<span style="color:#f92672">]</span> xcbeyond/multi-arch-test:pull,push token <span style="color:#66d9ef">for</span> registry-1.docker.io                                                                                                                           0.0s
+   
+</code></pre></div></li>
+</ol>
+<h2 id="5测试多架构镜像">5、测试多架构镜像</h2>
+<p>将构建的多架构镜像 <a href="https://hub.docker.com/repository/docker/xcbeyond/multi-arch-test">xcbeyond/multi-arch-test:latest</a> 进行测试，以确保能够正常运行，并使用对应架构镜像能够输出匹配的架构信息。</p>
+<ol>
+<li>
+<p>查看每个架构镜像的信息。</p>
+<p>执行命令 <code>docker manifest inspect</code>，可查看该镜像<a href="https://docs.docker.com/engine/reference/commandline/manifest/">清单</a>，并能得知该镜像对应架构的镜像 SHA 值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro build-multi-platform-images-best-practices % docker manifest inspect xcbeyond/multi-arch-test:latest
+<span style="color:#f92672">{</span>
+   <span style="color:#e6db74">&#34;schemaVersion&#34;</span>: 2,
+   <span style="color:#e6db74">&#34;mediaType&#34;</span>: <span style="color:#e6db74">&#34;application/vnd.docker.distribution.manifest.list.v2+json&#34;</span>,
+   <span style="color:#e6db74">&#34;manifests&#34;</span>: <span style="color:#f92672">[</span>
+      <span style="color:#f92672">{</span>
+         <span style="color:#e6db74">&#34;mediaType&#34;</span>: <span style="color:#e6db74">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span>,
+         <span style="color:#e6db74">&#34;size&#34;</span>: 2419,
+         <span style="color:#e6db74">&#34;digest&#34;</span>: <span style="color:#e6db74">&#34;sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2&#34;</span>,
+         <span style="color:#e6db74">&#34;platform&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;architecture&#34;</span>: <span style="color:#e6db74">&#34;arm64&#34;</span>,
+            <span style="color:#e6db74">&#34;os&#34;</span>: <span style="color:#e6db74">&#34;linux&#34;</span>
+         <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>,
+      <span style="color:#f92672">{</span>
+         <span style="color:#e6db74">&#34;mediaType&#34;</span>: <span style="color:#e6db74">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span>,
+         <span style="color:#e6db74">&#34;size&#34;</span>: 2420,
+         <span style="color:#e6db74">&#34;digest&#34;</span>: <span style="color:#e6db74">&#34;sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd&#34;</span>,
+         <span style="color:#e6db74">&#34;platform&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;architecture&#34;</span>: <span style="color:#e6db74">&#34;amd64&#34;</span>,
+            <span style="color:#e6db74">&#34;os&#34;</span>: <span style="color:#e6db74">&#34;linux&#34;</span>
+         <span style="color:#f92672">}</span>
+      <span style="color:#f92672">}</span>
+   <span style="color:#f92672">]</span>
+<span style="color:#f92672">}</span>
+
+</code></pre></div><p>也可以直接在 Docker Hub 上直接看到该镜像支持的多架构信息：</p>
+<p><img src="docker-hub-image.png" alt="镜像信息"></p>
+</li>
+<li>
+<p>根据不同架构镜像的 SHA 值，来逐一运行该镜像，并查看其输出结果。</p>
+<p>分别执行 <code>docker run --rm</code> 命令：</p>
+<p>arm 架构的镜像：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro build-multi-platform-images-best-practices % docker run --rm xcbeyond/multi-arch-test:latest@sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2
+Unable to find image <span style="color:#e6db74">&#39;xcbeyond/multi-arch-test:latest@sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2&#39;</span> locally
+docker.io/xcbeyond/multi-arch-test@sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2: Pulling from xcbeyond/multi-arch-test
+94a23d3cb5be: Pull complete 
+ac9d381bd1e9: Pull complete 
+aa9c5b49b9db: Pull complete 
+841dd868500b: Pull complete 
+627b3401fb61: Pull complete 
+221ff675cd35: Pull complete 
+10c716f05a00: Pull complete 
+15bae122089f: Pull complete 
+d764b5be0a55: Pull complete 
+34bfa57028a2: Pull complete 
+Digest: sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2
+Status: Downloaded newer image <span style="color:#66d9ef">for</span> xcbeyond/multi-arch-test@sha256:f38420339c9665b4f7d8b1e5edc66dc09e596ec7aa78113914b8a5b1b900e9e2
+the current platform architecture is arm64.
+</code></pre></div><p>x86 架构的镜像：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro build-multi-platform-images-best-practices % docker run --rm xcbeyond/multi-arch-test:latest@sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd
+Unable to find image <span style="color:#e6db74">&#39;xcbeyond/multi-arch-test:latest@sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd&#39;</span> locally
+docker.io/xcbeyond/multi-arch-test@sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd: Pulling from xcbeyond/multi-arch-test
+0e29546d541c: Pull complete 
+9b829c73b52b: Pull complete 
+cb5b7ae36172: Pull complete 
+6494e4811622: Pull complete 
+6e1d20a8313e: Pull complete 
+5b59121a0c35: Pull complete 
+2db41f0db9d9: Pull complete 
+f708bf6a9dc8: Pull complete 
+cb0d69b97354: Pull complete 
+a8f5aa83ecfb: Pull complete 
+Digest: sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd
+Status: Downloaded newer image <span style="color:#66d9ef">for</span> xcbeyond/multi-arch-test@sha256:a259302dca0d3f432d08f578e3243c5244bc50e54ea561c80dba03622897fcfd
+the current platform architecture is amd64.
+
+</code></pre></div><p>上面的输出结果，和我们的期望一致：多架构的镜像构建成功，并能在各自架构环境下运行。</p>
+</li>
+</ol>
+<h2 id="6总结">6、总结</h2>
+<p>多架构镜像是基于 Docker Buildx 构建的，目前 buildx 还需额外安装，未来 buildx 很可能成为 docker build 命令的一部分，无需额外安装，毕竟多架构镜像已在各种场景中应用广泛起来了。</p>
+<hr>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://docs.docker.com/buildx/working-with-buildx/">Docker Buildx</a></li>
+<li><a href="https://www.youtube.com/watch?v=hWSHtHasJUI">How to Build Multi-Architecture Docker Images with BuildX | Deploy containers to x86 and ARM!</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/multi-platform-images.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/">
+          <h5 class="mt-0">构建多架构镜像的最佳实践</h5>
+        </a>
+        2022-01-22 09:56:55
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cloudnative-01.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/">
+          <h5 class="mt-0">盘点 2021 ｜ 云原生拥抱之路</h5>
+        </a>
+        2021-12-31 21:18:56
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/github-pages-hugo.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/">
+          <h5 class="mt-0">利用 Github Pages 和 Hugo 快速搭建免费的个人网站</h5>
+        </a>
+        2021-12-25 22:24:57
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/service-mesh.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/">
+          <h5 class="mt-0">全方位解读服务网格（Service Mesh）的背景和概念</h5>
+        </a>
+        2021-09-11 21:34:31
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cobra.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/">
+          <h5 class="mt-0">Cobra 快速入门 - 专为命令行程序而生</h5>
+        </a>
+        2021-08-01 13:58:02
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/I-have-been-signed-up-by-InfoQ.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/i-have-been-signed-up-by-infoq/">
+          <h5 class="mt-0">我被InfoQ写作平台签约啦</h5>
+        </a>
+        2021-07-09 07:03:34
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1buildx-安装">1、buildx 安装</a></li>
+    <li><a href="#2开启-binfmt_misc-来运行非本地架构的-docker-镜像">2、开启 binfmt_misc 来运行非本地架构的 Docker 镜像</a></li>
+    <li><a href="#3将默认-docker-构建器切换为多架构构建器">3、将默认 Docker 构建器切换为多架构构建器</a></li>
+    <li><a href="#4构建多架构镜像">4、构建多架构镜像</a></li>
+    <li><a href="#5测试多架构镜像">5、测试多架构镜像</a></li>
+    <li><a href="#6总结">6、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>
