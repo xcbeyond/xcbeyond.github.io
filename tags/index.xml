@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Sat, 22 Jan 2022 09:56:55 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 26 Mar 2022 21:06:50 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DevOps</title>
+      <link>https://xcbeyond.cn/tags/devops/</link>
+      <pubDate>Sat, 26 Mar 2022 21:06:50 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/devops/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>云效</title>
+      <link>https://xcbeyond.cn/tags/%E4%BA%91%E6%95%88/</link>
+      <pubDate>Sat, 26 Mar 2022 21:06:50 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/%E4%BA%91%E6%95%88/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>docker</title>
       <link>https://xcbeyond.cn/tags/docker/</link>

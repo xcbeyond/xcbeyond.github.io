@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>谈阿里云云效 DevOps | DevOps 不再只是 Jenkins | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="从阿里云云效平台看 DevOps，云原生时代一站式 DevOps 助力创新创业和数字化转型企业快速实现研发敏捷和组织敏捷，打造“双敏”组织，实现多倍效能提升。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</li>
+        </ul>
+        <p class="text-lighten">从阿里云云效平台看 DevOps，云原生时代一站式 DevOps 助力创新创业和数字化转型企业快速实现研发敏捷和组织敏捷，打造“双敏”组织，实现多倍效能提升。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/aliyun-devops.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2022-03-26 21:06:50 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/%e8%af%84%e6%b5%8b"> 
+                  评测</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>提及 DevOps 这个词，大家都一定不会陌生。近些年一直被大家所追捧、讨论，频频出现在各大技术社区、产品实践之中，可谓备受瞩目。</p>
+<p>那么，DevOps 是什么呢？</p>
+<p><img src="devops.png" alt="DevOps能力环"></p>
+<p>有人说它是 Jenkins 的最佳实践，是一种工具，也有人说它是一种思想，更有人说它是一种方法论。</p>
+<p>今天，我们不具体谈论 DevOps 是什么？能干啥？相信大家对它都是有着自己的认知、理解，以及在各自领域中的最佳实践。今天，我们结合<a href="https://www.aliyun.com/product/yunxiao">阿里云云效</a>，站在云原生时代，一起解读不一样、一站式的 DevOps 平台，让我们彻底认清 DevOps 覆盖的范畴，如何高效打造全新的研发新模式，助力企业加速。</p>
+<p><img src="aliyun-devops.png" alt="阿里云效平台"></p>
+<h2 id="1云效">1、云效</h2>
+<p>云效，全称为“云效平台”，起于 2012 年，是阿里巴巴旗下一站式研发提效产品。通过项目流程管理和专项提效自动化工具，真正实现 24 小时持续集成持续交付。</p>
+<p>云效，<strong>云原生时代一站式 DevOps 平台</strong>，数十万企业都在用。支持公共云、专有云和混合云多种部署形态，通过云原生新技术和研发新模式，助力创新创业和数字化转型企业快速实现<strong>研发敏捷</strong>和<strong>组织敏捷</strong>，打造“双敏”组织，实现多倍效能提升。</p>
+<h3 id="11-产品优势">1.1 产品优势</h3>
+<p>相比开源自建，云效 DevOps 具备如下优势：</p>
+<p><img src="%E4%BA%91%E6%95%88-%E4%BA%A7%E5%93%81%E4%BC%98%E5%8A%BF.png" alt="产品优势"></p>
+<h3 id="12-绝不是-jenkinscicd这么单纯">1.2 绝不是 Jenkins、CI/CD这么单纯</h3>
+<p>看到 DevOps，最初的想法大都是停留在 Jenkins、CI/CD 这些层面，自己搭建，何必大动周折呢？ 我们都是这样搭建、使用，效果杠杠的。</p>
+<p>通过今天对云效学习，彻底打翻了我的认知，让我对此刮目相看，DevOps 绝不是 Jenkins、CI/CD这么单纯。云效为我们提供了一站式的解决方案，众多产品全覆盖了整个软件生命周期。</p>
+<p>云效产品矩阵如下：</p>
+<p><img src="%E4%BA%91%E6%95%88-%E4%BA%A7%E5%93%81%E7%9F%A9%E9%98%B5.png" alt="产品矩阵"></p>
+<h3 id="13-应用场景">1.3 应用场景</h3>
+<p><strong>一站式DevOps方案</strong>：</p>
+<p>云效提供了一站式 DevOps 方案，从“需求-&gt;开发-&gt;测试-&gt;发布-&gt;运维”端到端的协同服务和研发工具，支持多种部署形态。</p>
+<p><img src="https://img.alicdn.com/imgextra/i2/O1CN01SOAsBl1WEkdNfaMyH_!!6000000002757-2-tps-681-531.png" alt="企业级DevOps"></p>
+<ul>
+<li>
+<p>精益敏捷研发</p>
+<p>以需求为价值单元，拉通端到端的交付过程，以流动效率为核心，组织跨职能协同。</p>
+</li>
+<li>
+<p>自动化CI/CD流水线</p>
+<p>以代码变更为流动单元，基于发布流水线，拉通开发、测试、运维所有职能，持续、快速、高可靠地发布软件。</p>
+</li>
+</ul>
+<p><strong>持续交付解决方案</strong>：</p>
+<p>结合<a href="https://codeup.aliyun.com/">代码管理平台</a>和<a href="https://flow.aliyun.com/">持续交付流水线</a>，为小微企业实现随时集成，每日交付提供了很好的基础保障，真正实现持续快速交付有效价值。</p>
+<p><img src="https://img.alicdn.com/imgextra/i2/O1CN01FeZxvj1UntnVBKSTR_!!6000000002563-2-tps-681-531.png" alt="云效持续交付解决方案"></p>
+<ul>
+<li>
+<p>统一研发流程</p>
+<p>统一的代码托管和评审、一致的构建和运行环境、规范的自动化发布流程。</p>
+</li>
+<li>
+<p>每日交付</p>
+<p>开发随时可以集成、每日可以发布。</p>
+</li>
+</ul>
+<h2 id="2云效初体验">2、云效初体验</h2>
+<p>为了更好的体验、真正了解云效，只有真枪实弹上手实操一番，才能谈得上“了解”、“知道”。阿里云云效，非常贴心，为我们免费提供使用、体验（<a href="https://devops.aliyun.com/workbench">免费使用入口</a>），这一点非常的人性，好的产品要想被人熟知，免费体验环节比不可少。</p>
+<p>接下来，我将以初次使用者的视角来逐步探寻云效的世界。</p>
+<h3 id="21-工作台">2.1 工作台</h3>
+<p>工作台，作为一个复杂系统的个人首页，云效给人呈现出了日程计划、产品条目、工作事项、我的项目等板块：</p>
+<p><img src="workbench.png" alt="工作台"></p>
+<p>一目了然，不拖泥带水。无论你是该平台老手，还是初次使用者，绝对简单、容易上手，无需任何操作文档指引（虽然，云效也提供了完善的用户手册）。</p>
+<p>总共拥有如下板块：</p>
+<ul>
+<li>
+<p>日程计划</p>
+<p>以熟知的日历方式呈现在工作台的首要位置，可快速获取工作日程，方便提前安排工作，处理风险。</p>
+</li>
+<li>
+<p>切换产品空间</p>
+<p>考虑到云效平台提供的是 DevOps 一站式解决方案，众多产品选择、切换必定是进入系统的首要任务，各产品的快速入口必不可少。</p>
+</li>
+<li>
+<p>工作事项</p>
+<p>为提升工作效率，获取自己负责的工作项进度并且快速开展工作，可根据场景定制列表。</p>
+</li>
+<li>
+<p>我的项目</p>
+<p>个人项目快速访问入口，可通过收藏定制排期。</p>
+</li>
+<li>
+<p>项目进度</p>
+<p>查看重点项目进度，支持迭代及里程碑两种数据透出，可根据项目管理模式定制。</p>
+</li>
+<li>
+<p>代码库</p>
+<p>快速前往最近访问的代码仓库。</p>
+</li>
+<li>
+<p>合并请求</p>
+<p>极速查看待我评审与我创建的合并请求，及时跟进评审进度。</p>
+</li>
+</ul>
+<p>此外，我无意间发现了非常人性化，或者说是独特的操作体验：在【编辑工作台】卡片时，可根据用户角色来切换角色工作台，目前包括：通用工作台、研发工作台、PM工作台三种。（之所以说是独特，主要体现在灵活、便捷、人性化等方面，想用户所想。）</p>
+<p><img src="%E5%88%87%E6%8D%A2%E8%A7%92%E8%89%B2%E5%B7%A5%E4%BD%9C%E5%8F%B0.png" alt="切换角色工作台"></p>
+<h3 id="22-项目协作">2.2 项目协作</h3>
+<p>项目协作，是将项目管理纳入了云效的统一管理，比如：需求、任务、缺陷、里程碑等的管理，进行了统一化，提供了各种看板，能够清晰的呈现给项目管理者、开发者、测试者等不同的角色。</p>
+<p><img src="%E9%A1%B9%E7%9B%AE%E5%8D%8F%E4%BD%9C.png" alt="项目协作"></p>
+<p><strong>可视化的项目进展和协作</strong>：</p>
+<p>简洁优雅的「看板」呈现着项目的各个关键阶段，随时看见「谁」，在「何时」，要完成「什么」，团队成员不必再在协同工作进展上耗费时间。更棒的是，你可以打破部门边界，基于项目组合成员，跨部门协同也不再是难题。</p>
+<p><strong>井然有序的任务管理</strong>：</p>
+<p>如何让团队配合更默契？答案是：更明确的分工。将项目拆分为具体的可执行的任务，分工明确，井然有序。云效项目协作的「任务详情页」好像是一个容器，任务的执行过程和结果，都结构化地沉淀在这个容器里，帮助每个人准确掌握自己在任务中的职责，更好的做任务管理和展现，高效驱动每一项任务得到落实。</p>
+<p><strong>多云视角团队协作更佳</strong>：</p>
+<p>云效项目协作是连接团队的桥梁。打破部门边界，市场运营、产品经理和工程师可以共享同一个工作台。以「协作」的方式，多样化的工具整合，展现更紧密的跨部门协作，创造更多业务增长。多元视角赋能每一位成员，让企业、团队和个人以更高效的协作方式围绕目标 创造成果。</p>
+<p><strong>实践敏捷研发全流程</strong>：</p>
+<p>每一个市场都在赛跑， 使用云效项目协作打造一体化研发协作流程，借助专业工具，让团队表现更优异，产品更快响应需求变化。</p>
+<p>全面支持「看板」和「Scrum」敏捷方法，你可以围绕产品目标灵活规划每个迭代冲刺。实时数据反馈，让计划调整更及时，团队成员积极应对变化，持续交付价值。</p>
+<p>前台业务部门和后台研发团队不应该是割裂的，云效项目协作正是连接前后台的桥梁。打破部门边界，市场运营、产品经理和工程师可以共享同一个工作台。更紧密的跨部门协作，能够创造更多业务增长。</p>
+<h3 id="23-代码管理">2.3 代码管理</h3>
+<p>代码管理，就是整合的一个代码仓库，将各类代码仓库进行了统一入口化管理，避免代码管理时，跳转到其他平台。</p>
+<p><img src="%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86.png" alt="代码管理"></p>
+<p>此外，<strong>提供代码托管、代码评审、代码扫描、质量检测等功能，全方位保护企业代码资产，帮助企业实现安全、稳定、高效的研发管理。</strong></p>
+<p>整体功能如下：</p>
+<ul>
+<li>
+<p>基础代码托管：提供企业级代码托管服务，支持企业内部公开（企业内成员可访问）、私有代码库类型；</p>
+</li>
+<li>
+<p>权限管理：数据企业间完全隔离，提供企业、代码组、代码库多级精细化权限管控；</p>
+</li>
+<li>
+<p>代码评审：灵活可配置的代码评审场景支持与合并请求卡点设置；</p>
+</li>
+<li>
+<p>代码检测：开箱即用的代码规范、安全自动化检测；</p>
+</li>
+<li>
+<p>持续集成：无缝连接持续集成流水线，拓展代码检测、构建、部署场景；</p>
+</li>
+<li>
+<p>研发流程：结合需求、测试、构建、部署等产品模块，支持一站式研发流程管控；</p>
+</li>
+<li>
+<p>通知集成：支持通过钉钉、站内信、邮件等方式，通知告警及时触达；</p>
+</li>
+<li>
+<p>&hellip;</p>
+</li>
+</ul>
+<h3 id="24-流水线">2.4 流水线</h3>
+<p>流水线，又名 <code>Flow</code>，是一款企业级、自动化的研发交付流水线， 提供灵活易用的持续集成、持续验证、 持续发布功能，帮助企业高质量、高效率的交付业务。</p>
+<p>流水线是持续交付的载体，通过构建自动化、集成自动化、验证自动化、部署自动化，完成从开发到上线过程的持续交付。通过持续向团队提供及时反馈，让交付过程高效顺畅。</p>
+<p>看似是一套 Jenkins 的整合工具，但这远远不止这些。</p>
+<p><img src="%E6%B5%81%E6%B0%B4%E7%BA%BF.png" alt="流水线"></p>
+<p><strong>覆盖各种工具和技术栈</strong>：</p>
+<p>作为一款企业级的自动化交付流水线，全面覆盖研发场景中涉及的技术栈和工具链。</p>
+<p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/3457700461/p373536.png" alt="技术栈和工具链"></p>
+<p>支持流水线源、构建工具、自动化测试、部署等各种能力。</p>
+<p><strong>强大的研发分支管理能力</strong>：</p>
+<p>阿里巴巴在 DevOps 的最佳实践也体现在分支管理能力上，Flow 支持将常用的研发模式融入流水线，将企业 DevOps 的整个体系流程化。</p>
+<p><strong>丰富而灵活的模版</strong>：</p>
+<p>提供了数十种通用的流水线模版帮助你快速创建流水线，与此同时，支持企业定制自有模版来管理企业持续集成和持续交付流程。</p>
+<h3 id="25-应用交付">2.5 应用交付</h3>
+<p>应用交付，是一款开发者友好的、以应用为核心的云原生应用交付平台，提供<strong>应用编排、环境管理、部署运维、资源管理、应用发布等一站式能力</strong>，帮助企业建立应用持续交付整体解决方案，加速企业云原生与 DevOps 转型，提升团队研发效能。</p>
+<p><img src="%E5%BA%94%E7%94%A8%E4%BA%A4%E4%BB%98.png" alt="应用交付"></p>
+<p>主要功能：</p>
+<ul>
+<li>
+<p>应用管理</p>
+</li>
+<li>
+<p>应用编排</p>
+</li>
+<li>
+<p>环境管理</p>
+</li>
+<li>
+<p>部署运维</p>
+</li>
+<li>
+<p>变量管理</p>
+</li>
+<li>
+<p>发布流水线</p>
+</li>
+<li>
+<p>资源管理</p>
+</li>
+</ul>
+<h3 id="26-制品仓库">2.6 制品仓库</h3>
+<p>制品仓库，实际上是软件包管理仓库，此外还包括软件包的构建、测试、部署等。</p>
+<p><img src="%E5%88%B6%E5%93%81%E4%BB%93%E5%BA%93.png" alt="制品仓库"></p>
+<p>制品库在开发阶段为使用各种开发语言的微服务开发者提供依赖解析的唯一入口。在构建阶段为各种语言的构建工具提供唯一的依赖解析源和统一的各种语言制品管理库。进入测试阶段后，所有测试环境部署工具从制品库拉取满足测试条件的制品进行部署，测试结束后将测试结果数据反馈到制品库，并且与制品进行关联。部署阶段依据质量关卡检查制品是否满足部署条件，满足则由部署工具从制品库拉取制品(也可能是环境中的客户端拉取，如Docker)，对接环境进行部署。</p>
+<p><img src="https://help-static-aliyun-doc.aliyuncs.com/assets/img/zh-CN/2638555951/p96748.png" alt="制品仓库的全生命周期"></p>
+<p>致力于帮助开发者统一管理各种开发语言在开发、构建过程中的依赖，构建成果（二进制制品）以及交付过程关键信息的重要组件。制品库衔接持续集成和持续部署，是持续集成的成果管理仓库，也是持续部署的物料来源，同时也为研发的静态安全提供保障。</p>
+<h3 id="27-效能洞察">2.7 效能洞察</h3>
+<p>效能洞察，是一个专业的交付过程观测和研发效能度量、分析平台。</p>
+<p>从计划、执行、风险等 6 个方面度量交付过程、及时暴露风险，保障交付效率和质量。通过流动效率、资源效率、质量保障 3 个维度可视化团队效能状态，深入分析问题，精准指导效能改进。</p>
+<p>其数据来自开发者在<a href="#22-%E9%A1%B9%E7%9B%AE%E5%8D%8F%E4%BD%9C">项目协作</a>、<a href="#23-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86">代码管理</a>等云效的其他应用中的日常协作、研发行为，能够直观地反映企业的整体研发进展情况，最大化发挥团队作战优势。</p>
+<p><img src="%E6%95%88%E8%83%BD%E6%B4%9E%E5%AF%9F.png" alt="效能洞察"></p>
+<h3 id="28-云端开发">2.8 云端开发</h3>
+<p>云端开发，是一款云效推出的面向云原生的 WebIDE 产品，实际上是基于 Web 版本 VSCode 而来的开发 IDE。只需一个浏览器即可获得与本地 IDE 一致的开发体验。通过预置开发环境，使用智能编码能力，即可快速地编辑、调试、运行、部署云端代码。</p>
+<p><img src="%E4%BA%91%E7%AB%AF%E5%BC%80%E5%8F%91.png" alt="云端开发"></p>
+<h3 id="29-">2.9 ……</h3>
+<p>还有更多模块，值得大家继续探索。</p>
+<h2 id="3云效总结">3、云效总结</h2>
+<p>终于把云效相关模块全部了解了一番，总体感觉是 <strong>“全”</strong>，它包含从软件开发的整个全生命周期，提供了全方位的解决方案或者工具集，让企业可以完全基于云上开发、协作、管理以及交付等，颠覆了我对 DevOps 的认知：DevOps 不再只是 Jenkins。</p>
+<p>作为一家企业，可能大家都已经拥有了云效中部分功能，甚至全部功能，但在统一管理、使用上，可能还会存在各种问题，或者说是不够丝滑，至少在平台搭建时往往是费时费力。云效的出现，恰恰解决了这些问题，不愧是一站式的 DevOps 平台、DevOps 全家桶。</p>
+<p>从产品设计角度来看，它为用户所想，提供了全方位的功能。但在用户整体体验上，由于众多产品的原因，却不得不在不同产品间来回切换，这一点还希望云效平台，或者阿里云的其他产品能够在这一方面有更好的解决方法。</p>
+<p>最后，一起期待云效平台的更加完善，为用户提供更加全方位的云效体验。</p>
+<hr>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://help.aliyun.com/document_detail/153406.html">云效2020</a></li>
+<li><a href="https://devops.aliyun.com/workbench">云效平台</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/aliyun-devops.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/">
+          <h5 class="mt-0">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</h5>
+        </a>
+        2022-03-26 21:06:50
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/multi-platform-images.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/">
+          <h5 class="mt-0">构建多架构镜像的最佳实践</h5>
+        </a>
+        2022-01-22 09:56:55
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cloudnative-01.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/">
+          <h5 class="mt-0">盘点 2021 ｜ 云原生拥抱之路</h5>
+        </a>
+        2021-12-31 21:18:56
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/github-pages-hugo.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/">
+          <h5 class="mt-0">利用 Github Pages 和 Hugo 快速搭建免费的个人网站</h5>
+        </a>
+        2021-12-25 22:24:57
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/service-mesh.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/">
+          <h5 class="mt-0">全方位解读服务网格（Service Mesh）的背景和概念</h5>
+        </a>
+        2021-09-11 21:34:31
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cobra.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/cobra-quick-start/">
+          <h5 class="mt-0">Cobra 快速入门 - 专为命令行程序而生</h5>
+        </a>
+        2021-08-01 13:58:02
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1云效">1、云效</a>
+      <ul>
+        <li><a href="#11-产品优势">1.1 产品优势</a></li>
+        <li><a href="#12-绝不是-jenkinscicd这么单纯">1.2 绝不是 Jenkins、CI/CD这么单纯</a></li>
+        <li><a href="#13-应用场景">1.3 应用场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#2云效初体验">2、云效初体验</a>
+      <ul>
+        <li><a href="#21-工作台">2.1 工作台</a></li>
+        <li><a href="#22-项目协作">2.2 项目协作</a></li>
+        <li><a href="#23-代码管理">2.3 代码管理</a></li>
+        <li><a href="#24-流水线">2.4 流水线</a></li>
+        <li><a href="#25-应用交付">2.5 应用交付</a></li>
+        <li><a href="#26-制品仓库">2.6 制品仓库</a></li>
+        <li><a href="#27-效能洞察">2.7 效能洞察</a></li>
+        <li><a href="#28-云端开发">2.8 云端开发</a></li>
+        <li><a href="#29-">2.9 ……</a></li>
+      </ul>
+    </li>
+    <li><a href="#3云效总结">3、云效总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>
