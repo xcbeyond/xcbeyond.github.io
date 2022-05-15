@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？ | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="镜像的优劣全靠 Dockerfile 编写的是否合理、合规。本文将讲述编写 Dockerfile 的一些最佳实践和技巧，让我们的镜像更小、更优。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</li>
+        </ul>
+        <p class="text-lighten">镜像的优劣全靠 Dockerfile 编写的是否合理、合规。本文将讲述编写 Dockerfile 的一些最佳实践和技巧，让我们的镜像更小、更优。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/dockerfile-best-practices.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2022-05-14 21:40:14 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/%e5%ae%b9%e5%99%a8"> 
+                  容器</a> </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">阅读次数
+                  :</span><span id="busuanzi_value_page_pv"></span> </li>
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>随着应用的容器化、上云后，将伴随着 Docker 镜像的构建，构建 Docker 镜像成为了最基本的一步，其中 Dockerfile 便是用来构建镜像的一种文本文件，镜像的优劣全靠 Dockerfile 编写的是否合理、合规。本文将讲述编写 Dockerfile 的一些最佳实践和技巧，让我们的镜像更小、更优。</p>
+<h2 id="1docker-镜像是如何工作的">1、Docker 镜像是如何工作的</h2>
+<p>首先，我们一起回顾下 Docker 镜像的相关概念及工作流程吧。</p>
+<h3 id="11-镜像">1.1 镜像</h3>
+<p>镜像（image）是一堆只读层（read-only layer）的统一视角，也许这个定义有些难以理解，下面的这张图能够帮助您理解镜像的定义。</p>
+<p><img src="docker-image-layer.png" alt="镜像层结构"></p>
+<p>从左边我们看到了多个只读层，它们重叠在一起。除了最下面一层，其它层都会有一个指针指向下一层。这些层是 Docker 内部的实现细节，并且能够在主机的文件系统上访问到。统一文件系统技术能够将不同的层整合成一个文件系统，为这些层提供了一个统一的视角，这样就隐藏了多层的存在，在用户的角度看来，只存在一个文件系统。我们可以在图片的右边看到这个视角的形式。</p>
+<p>您可以在您的主机文件系统上找到有关这些层的文件。需要注意的是，在一个运行中的容器内部，这些层是不可见的。在我的主机上，我发现它们存在于 <code>/var/lib/docker/overlay2</code> 目录下。</p>
+<h3 id="12-镜像分层结构">1.2 镜像分层结构</h3>
+<p>为什么说是镜像分层结构，因为 Docker 镜像是以层来组织的，可以通过命令 <code>docker image inspect &lt;image&gt;</code> 或者 <code>docker inspect &lt;image&gt;</code> 来查看镜像包含哪些层。</p>
+<p>例如，镜像 busybox ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">xcbeyond@xcbeyonddeMacBook-Pro ~ % docker inspect busybox
+<span style="color:#f92672">[</span>
+    <span style="color:#f92672">{</span>
+        <span style="color:#e6db74">&#34;Id&#34;</span>: <span style="color:#e6db74">&#34;sha256:3c277069c6ae3f3572998e727b973ff7418c3962b9403de4b3a3f8624399b8fa&#34;</span>,
+        <span style="color:#e6db74">&#34;RepoTags&#34;</span>: <span style="color:#f92672">[</span>
+            <span style="color:#e6db74">&#34;busybox:latest&#34;</span>
+        <span style="color:#f92672">]</span>,
+        <span style="color:#e6db74">&#34;RepoDigests&#34;</span>: <span style="color:#f92672">[</span>
+            <span style="color:#e6db74">&#34;busybox@sha256:d2b53584f580310186df7a2055ce3ff83cc0df6caacf1e3489bff8cf5d0af5d8&#34;</span>
+        <span style="color:#f92672">]</span>,
+        <span style="color:#e6db74">&#34;Parent&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+        <span style="color:#e6db74">&#34;Comment&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+        <span style="color:#e6db74">&#34;Created&#34;</span>: <span style="color:#e6db74">&#34;2022-04-14T00:39:25.923517152Z&#34;</span>,
+        <span style="color:#e6db74">&#34;Container&#34;</span>: <span style="color:#e6db74">&#34;39aaf4eecc48824531078c316f5b16e97549417e07c8f90b26ae16053111ea57&#34;</span>,
+        <span style="color:#e6db74">&#34;ContainerConfig&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;39aaf4eecc48&#34;</span>,
+            <span style="color:#e6db74">&#34;Domainname&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;User&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;AttachStdin&#34;</span>: false,
+            <span style="color:#e6db74">&#34;AttachStdout&#34;</span>: false,
+            <span style="color:#e6db74">&#34;AttachStderr&#34;</span>: false,
+            <span style="color:#e6db74">&#34;Tty&#34;</span>: false,
+            <span style="color:#e6db74">&#34;OpenStdin&#34;</span>: false,
+            <span style="color:#e6db74">&#34;StdinOnce&#34;</span>: false,
+            <span style="color:#e6db74">&#34;Env&#34;</span>: <span style="color:#f92672">[</span>
+                <span style="color:#e6db74">&#34;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&#34;</span>
+            <span style="color:#f92672">]</span>,
+            <span style="color:#e6db74">&#34;Cmd&#34;</span>: <span style="color:#f92672">[</span>
+                <span style="color:#e6db74">&#34;/bin/sh&#34;</span>,
+                <span style="color:#e6db74">&#34;-c&#34;</span>,
+                <span style="color:#e6db74">&#34;#(nop) &#34;</span>,
+                <span style="color:#e6db74">&#34;CMD [\&#34;sh\&#34;]&#34;</span>
+            <span style="color:#f92672">]</span>,
+            <span style="color:#e6db74">&#34;Image&#34;</span>: <span style="color:#e6db74">&#34;sha256:3289bc85dc0eba79657979661460c7f6f97688ad8a4f93174e0cabdd6b09a365&#34;</span>,
+            <span style="color:#e6db74">&#34;Volumes&#34;</span>: null,
+            <span style="color:#e6db74">&#34;WorkingDir&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;Entrypoint&#34;</span>: null,
+            <span style="color:#e6db74">&#34;OnBuild&#34;</span>: null,
+            <span style="color:#e6db74">&#34;Labels&#34;</span>: <span style="color:#f92672">{}</span>
+        <span style="color:#f92672">}</span>,
+        <span style="color:#e6db74">&#34;DockerVersion&#34;</span>: <span style="color:#e6db74">&#34;20.10.12&#34;</span>,
+        <span style="color:#e6db74">&#34;Author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+        <span style="color:#e6db74">&#34;Config&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;Hostname&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;Domainname&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;User&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;AttachStdin&#34;</span>: false,
+            <span style="color:#e6db74">&#34;AttachStdout&#34;</span>: false,
+            <span style="color:#e6db74">&#34;AttachStderr&#34;</span>: false,
+            <span style="color:#e6db74">&#34;Tty&#34;</span>: false,
+            <span style="color:#e6db74">&#34;OpenStdin&#34;</span>: false,
+            <span style="color:#e6db74">&#34;StdinOnce&#34;</span>: false,
+            <span style="color:#e6db74">&#34;Env&#34;</span>: <span style="color:#f92672">[</span>
+                <span style="color:#e6db74">&#34;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&#34;</span>
+            <span style="color:#f92672">]</span>,
+            <span style="color:#e6db74">&#34;Cmd&#34;</span>: <span style="color:#f92672">[</span>
+                <span style="color:#e6db74">&#34;sh&#34;</span>
+            <span style="color:#f92672">]</span>,
+            <span style="color:#e6db74">&#34;Image&#34;</span>: <span style="color:#e6db74">&#34;sha256:3289bc85dc0eba79657979661460c7f6f97688ad8a4f93174e0cabdd6b09a365&#34;</span>,
+            <span style="color:#e6db74">&#34;Volumes&#34;</span>: null,
+            <span style="color:#e6db74">&#34;WorkingDir&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+            <span style="color:#e6db74">&#34;Entrypoint&#34;</span>: null,
+            <span style="color:#e6db74">&#34;OnBuild&#34;</span>: null,
+            <span style="color:#e6db74">&#34;Labels&#34;</span>: null
+        <span style="color:#f92672">}</span>,
+        <span style="color:#e6db74">&#34;Architecture&#34;</span>: <span style="color:#e6db74">&#34;arm64&#34;</span>,
+        <span style="color:#e6db74">&#34;Variant&#34;</span>: <span style="color:#e6db74">&#34;v8&#34;</span>,
+        <span style="color:#e6db74">&#34;Os&#34;</span>: <span style="color:#e6db74">&#34;linux&#34;</span>,
+        <span style="color:#e6db74">&#34;Size&#34;</span>: 1411540,
+        <span style="color:#e6db74">&#34;VirtualSize&#34;</span>: 1411540,
+        <span style="color:#e6db74">&#34;GraphDriver&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;Data&#34;</span>: <span style="color:#f92672">{</span>
+                <span style="color:#e6db74">&#34;MergedDir&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/overlay2/e89181e7cadd3a6ee49f66bae34fed369621a1a5cfbe0003ce4621d0eec020e6/merged&#34;</span>,
+                <span style="color:#e6db74">&#34;UpperDir&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/overlay2/e89181e7cadd3a6ee49f66bae34fed369621a1a5cfbe0003ce4621d0eec020e6/diff&#34;</span>,
+                <span style="color:#e6db74">&#34;WorkDir&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/overlay2/e89181e7cadd3a6ee49f66bae34fed369621a1a5cfbe0003ce4621d0eec020e6/work&#34;</span>
+            <span style="color:#f92672">}</span>,
+            <span style="color:#e6db74">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;overlay2&#34;</span>
+        <span style="color:#f92672">}</span>,
+        <span style="color:#e6db74">&#34;RootFS&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;Type&#34;</span>: <span style="color:#e6db74">&#34;layers&#34;</span>,
+            <span style="color:#e6db74">&#34;Layers&#34;</span>: <span style="color:#f92672">[</span>
+                <span style="color:#e6db74">&#34;sha256:31a5597e16d3c5adaaf5826162216e256126d2fbf1beaa2b6c45c1822a2b9ca3&#34;</span>
+            <span style="color:#f92672">]</span>
+        <span style="color:#f92672">}</span>,
+        <span style="color:#e6db74">&#34;Metadata&#34;</span>: <span style="color:#f92672">{</span>
+            <span style="color:#e6db74">&#34;LastTagTime&#34;</span>: <span style="color:#e6db74">&#34;0001-01-01T00:00:00Z&#34;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">]</span>
+</code></pre></div><p>其中，RootFS 就是镜像 busybox:latest 的镜像层，只有一层，这层数据是存储在宿主机哪里的呢？动手实践的同学会在上面的输出中看到一个叫做 GraphDriver 的字段内容如下:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#e6db74">&#34;GraphDriver&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+            <span style="color:#f92672">&#34;Data&#34;</span>: {
+                <span style="color:#f92672">&#34;MergedDir&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/overlay2/e89181e7cadd3a6ee49f66bae34fed369621a1a5cfbe0003ce4621d0eec020e6/merged&#34;</span>,
+                <span style="color:#f92672">&#34;UpperDir&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/overlay2/e89181e7cadd3a6ee49f66bae34fed369621a1a5cfbe0003ce4621d0eec020e6/diff&#34;</span>,
+                <span style="color:#f92672">&#34;WorkDir&#34;</span>: <span style="color:#e6db74">&#34;/var/lib/docker/overlay2/e89181e7cadd3a6ee49f66bae34fed369621a1a5cfbe0003ce4621d0eec020e6/work&#34;</span>
+            },
+            <span style="color:#f92672">&#34;Name&#34;</span>: <span style="color:#e6db74">&#34;overlay2&#34;</span>
+        }
+</code></pre></div><p>GraphDriver 负责镜像本地的管理和存储以及运行中的容器生成镜像等工作，可以将 GraphDriver 理解成镜像管理引擎，我们这里的例子对应的引擎名字是 overlay2（overlay 的优化版本）。除了 overlay 之外，Docker 的 GraphDriver 还支持 btrfs、aufs、devicemapper、vfs 等。</p>
+<p>我们可以看到其中的 Data 包含了多个部分，这个对应 OverlayFS 的镜像组织形式，虽然我们上面的例子中的 busybox 镜像只有一层，但是正常情况下很多镜像都是由多层组成的。</p>
+<h3 id="13-dockerfile镜像容器间的关系">1.3 Dockerfile、镜像、容器间的关系</h3>
+<p>Dockerfile 是软件的原材料，Docker 镜像是软件的交付品，而 Docker 容器则可以认为是软件的运行态。从应用软件的角度来看，Dockerfile、Docker 镜像与 Docker 容器分别代表软件的三个不同阶段，Dockerfile 面向开发，Docker 镜像成为交付标准，Docker 容器则涉及部署与运维，三者缺一不可，合力充当 Docker 体系的基石。</p>
+<p>简单来讲，Dockerfile 构建出 Docker镜像，通过 Docker 镜像运行Docker容器。</p>
+<p>我们可以从 Docker 容器的角度，来反推三者的关系，如下图：</p>
+<p><img src="docker-image-structure.jpeg" alt="Docker 镜像结构"></p>
+<h2 id="2dockerfile">2、Dockerfile</h2>
+<p>Dockerfile 是一个用来构建镜像的文本文件，文本内容包含了一条条构建镜像所需的指令和说明，它是构建镜像的关键。</p>
+<p>一个 Docker 镜像包含了很多只读层，每一层都由一个 Dockerfile 指令构成，这些层堆叠在一起，每一层都是前一层变化的增量。例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> ubuntu:18.04</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> make /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> python /app/app.py<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>每条指令都会创建一层：</p>
+<ul>
+<li>FROM：从 ubuntu:18.04 Docker 镜像创建了一层，也作为基础镜像层。</li>
+<li>COPY：从 Docker 客户端的当前目录添加文件。</li>
+<li>RUN： 执行 make 命令.</li>
+<li>CMD：指定要在容器中运行的命令。</li>
+</ul>
+<p>上述就是一个简单的 Dockerfile 文件，再通过 <code>docker build -t</code> 命令便可直接构建出镜像。</p>
+<p>在这里就不过多介绍 Dockerfile 的各个指令的用法，更多更详细的可参考：<a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a></p>
+<h2 id="3dockerfile-的最佳实践">3、Dockerfile 的最佳实践</h2>
+<p>本节将列举出一些最佳实践技巧，来帮助我们更好的写好 Dockerfile。</p>
+<h3 id="31-尽可能使用官方镜像作为基础镜像">3.1 尽可能使用官方镜像作为基础镜像</h3>
+<p>Docker 镜像是基于基础镜像构建而来，因此选择的基础镜像越恰当，我们要做的底层工作就越少。比如，如果构建一个 Java 应用镜像，选择一个 openjdk 镜像作为基础比选择一个 alpine 镜像更简单。</p>
+<p>尽可能使用当前的官方镜像作为基础镜像，无论是从镜像大小，还是安全性来讲，都是比较可靠的。</p>
+<p>下面的一些镜像，可根据使用场景来选择合适的基础镜像：</p>
+<table>
+<thead>
+<tr>
+<th>镜像名称</th>
+<th>大小</th>
+<th>说明和使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://hub.docker.com/_/busybox">busybox</a></td>
+<td>754.7 KB</td>
+<td>一个超级简化版嵌入式 Linux 系统。临时测试用。</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/_/alpine">alpine</a></td>
+<td>2.68 MB</td>
+<td>一个面向安全的、轻量级的Linux系统，基于musl libc 和 busybox。主要用于测试，也可用于生产环境。</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/_/centos">centos</a></td>
+<td>79.65 MB</td>
+<td>主要用于生产环境，支持CentOS/Red Hat，常用于追求稳定性的企业应用。</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/_/ubuntu">ubuntu</a></td>
+<td>29.01 MB</td>
+<td>主要用于生产环境，常用于人工智能计算和企业应用。</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/_/debian">debian</a></td>
+<td>52.4 MB</td>
+<td>主要用于生产环境。</td>
+</tr>
+<tr>
+<td><a href="https://hub.docker.com/_/openjdk">openjdk</a></td>
+<td>161.02 MB</td>
+<td>主要用于  Java 应用。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-减少-dockerfile-指令的行数">3.2 减少 Dockerfile 指令的行数</h3>
+<p>Dockerfile 中每一行指令都代表了一层，多一层都可能带来镜像大小变大。</p>
+<p>因此，在实际编写 Dockerfile 时，可以将同类操作放在一起来避免多行指令，更有助于促进层缓存。比如将多条 RUN 操作进行合并，并用 <code>;\</code> 或者 <code>&amp;&amp;</code> 连接在一起。</p>
+<p>（减少指令行数，并不意味着越少越好，需要从改动频繁程度来决定是否合并为一条指令。）</p>
+<p>例如下面的 Dockerfile，会执行多条命令，通过 <code>;\</code> 连接将其用一条 RUN 指令来完成。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> node:6.14</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">LABEL</span> MAINTAINER xcbeyond<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> npm install gitbook-cli -g;<span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>   gitbook -V; <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>   npm install svgexport -g --unsafe-perm<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;/bin/sh&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><h3 id="33-改动不频繁的内容往前放">3.3 改动不频繁的内容往前放</h3>
+<p>对于 Docker 镜像而言，每一层都代表了 Dockerfile 中的一行指令，每一层都是前一层变化的增量。例如一个 Docker 镜像有ABCD 四层，B 层修改了，那么 BCD 都会变化。</p>
+<p>因此，在编写 Dockerfile 时，尽量将改动不频繁的内容往前放，即：将系统依赖往前写，因为像 apt, yum 这些安装的东西，是很少修改的。然后写应用的库依赖，比如 pip install，最后 copy 应用,编译应用。</p>
+<p>例如下面这个 Dockerfile，就会在每次代码改变的时候都重新 Build 大部分层，即使只改了一个页面的标题。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> python:3.7-buster</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># copy source</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir -p /opt/app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> myapp /opt/app/myapp/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /opt/app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># install dependencies nginx</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install nginx<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> pip install -r requirements.txt<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> chown -R www-data:www-data /opt/app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># start server</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8020</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">STOPSIGNAL</span><span style="color:#e6db74"> SIGTERM</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;/opt/app/start-server.sh&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>我们可以改成，先安装 Nginx，再单独 copy requirements.txt，然后安装 pip 依赖，最后 copy 应用代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> python:3.7-buster</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># install dependencies nginx</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apt-get update <span style="color:#f92672">&amp;&amp;</span> apt-get install nginx<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> myapp/requirements.txt /opt/app/myapp/requirements.txt<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> pip install -r requirements.txt<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># copy source</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> mkdir -p /opt/app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> myapp /opt/app/myapp/<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /opt/app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> chown -R www-data:www-data /opt/app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span> <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># start server</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8020</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">STOPSIGNAL</span><span style="color:#e6db74"> SIGTERM</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;/opt/app/start-server.sh&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><h3 id="34-编译和运行需分离">3.4 编译和运行需分离</h3>
+<p>我们在编译应用时很多时候会用到很多编译工具、编译环境，例如：node、Golang 等，但是编译后，运行时却不再需要。这样的编译环境往往占用很大，使得镜像额外变大。</p>
+<p>因此，可以将应用事先在某个固定编译环境编译完成，得到编译后的二进制文件，再将其 COPY 到镜像中即可，这样镜像中只包含应用的运行二进制文件。</p>
+<p>例如下面这个 Dockerfile，将 Golang 程序编译好的二进制文件 app,构建到镜像中：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:latest</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">LABEL</span> maintainer xcbeyond<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> app /app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;/app/app&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><h3 id="35-删除不需要的依赖项">3.5 删除不需要的依赖项</h3>
+<p>Docker 镜像应该尽可能小。在编写 Dockerfile 时仅包含基本内容，不要引入无关内容，从而使得镜像大小更小、构建速度更快，并且减少受攻击的可能面。</p>
+<p>镜像更小，也更利于存放到镜像仓库，减少网络带宽开销。</p>
+<p>不要安装应用程序实际不使用的任何包、库。</p>
+<h3 id="36-避免凭证构建到镜像">3.6 避免凭证构建到镜像</h3>
+<p>这是最常见和最危险的 Dockerfile 问题之一。在构建镜像过程中，复制配置文件可能很诱人，但你切记可能会引入很大的安全隐患。</p>
+<p>在 Dockerfile 中通过 COPY 指令将任何配置文件内容都复制到你的镜像，并且任何可以访问它的人都可以访问它。如果这个配置文件中，无意间包含了数据库密码配置，那么你就彻底将这些密码暴露给了所有使用该镜像的所有人。</p>
+<p>为了避免这类问题，必须将配置密钥、敏感数据只能提供给具体的容器，而不是提供给构建它们的镜像。可使用环境变量、挂载卷等方式在容器启动时注入数据。这样就避免了意外的信息暴露，并确保你的镜像可跨环境重复使用。</p>
+<hr>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://blog.csdn.net/nklinsirui/article/details/80967677">如何选择Docker基础镜像</a></li>
+<li><a href="https://sysdig.com/blog/dockerfile-best-practices/">Top 20 Dockerfile best practices</a></li>
+<li><a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">Best practices for writing Dockerfiles</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/dockerfile-best-practices.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/">
+          <h5 class="mt-0">Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</h5>
+        </a>
+        2022-05-14 21:40:14
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/aliyun-devops.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/">
+          <h5 class="mt-0">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</h5>
+        </a>
+        2022-03-26 21:06:50
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/multi-platform-images.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/">
+          <h5 class="mt-0">构建多架构镜像的最佳实践</h5>
+        </a>
+        2022-01-22 09:56:55
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cloudnative-01.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/">
+          <h5 class="mt-0">盘点 2021 ｜ 云原生拥抱之路</h5>
+        </a>
+        2021-12-31 21:18:56
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/github-pages-hugo.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/">
+          <h5 class="mt-0">利用 Github Pages 和 Hugo 快速搭建免费的个人网站</h5>
+        </a>
+        2021-12-25 22:24:57
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/service-mesh.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/">
+          <h5 class="mt-0">全方位解读服务网格（Service Mesh）的背景和概念</h5>
+        </a>
+        2021-09-11 21:34:31
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1docker-镜像是如何工作的">1、Docker 镜像是如何工作的</a>
+      <ul>
+        <li><a href="#11-镜像">1.1 镜像</a></li>
+        <li><a href="#12-镜像分层结构">1.2 镜像分层结构</a></li>
+        <li><a href="#13-dockerfile镜像容器间的关系">1.3 Dockerfile、镜像、容器间的关系</a></li>
+      </ul>
+    </li>
+    <li><a href="#2dockerfile">2、Dockerfile</a></li>
+    <li><a href="#3dockerfile-的最佳实践">3、Dockerfile 的最佳实践</a>
+      <ul>
+        <li><a href="#31-尽可能使用官方镜像作为基础镜像">3.1 尽可能使用官方镜像作为基础镜像</a></li>
+        <li><a href="#32-减少-dockerfile-指令的行数">3.2 减少 Dockerfile 指令的行数</a></li>
+        <li><a href="#33-改动不频繁的内容往前放">3.3 改动不频繁的内容往前放</a></li>
+        <li><a href="#34-编译和运行需分离">3.4 编译和运行需分离</a></li>
+        <li><a href="#35-删除不需要的依赖项">3.5 删除不需要的依赖项</a></li>
+        <li><a href="#36-避免凭证构建到镜像">3.6 避免凭证构建到镜像</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021 xcbeyond all rights reserved.
+            访问量: <span id="busuanzi_value_site_pv"></span>
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script></body>
+
+</html>

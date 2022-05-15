@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021 xcbeyond all rights reserved.</copyright>
-    <lastBuildDate>Sat, 22 Jan 2022 09:56:55 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E5%AE%B9%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 14 May 2022 21:40:14 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E5%AE%B9%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</title>
+      <link>https://xcbeyond.cn/blog/containers/dockerfile-best-practices/</link>
+      <pubDate>Sat, 14 May 2022 21:40:14 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/containers/dockerfile-best-practices/</guid>
+      <description>随着应用的容器化、上云后，将伴随着 Docker 镜像的构建，构建 Docker 镜像成为了最基本的一步，其中 Dockerfile 便是用来构建镜像的一种文本文件，镜像的优劣全靠 Dockerfile 编写的是否合理、合规。本文将讲述编写 Dockerfile 的一些最佳实践和技巧，让我们的镜像更小、更优。</description>
+    </item>
+    
     <item>
       <title>构建多架构镜像的最佳实践</title>
       <link>https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/</link>

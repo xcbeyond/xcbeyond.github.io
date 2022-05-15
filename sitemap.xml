@@ -27,18 +27,30 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2022-03-26T21:06:50+08:00</lastmod>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/dockerfile/</loc>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/containers/dockerfile-best-practices/</loc>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/</loc>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/%E5%AE%B9%E5%99%A8/</loc>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/</loc>
+    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/devops/</loc>
     <lastmod>2022-03-26T21:06:50+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2022-03-26T21:06:50+08:00</lastmod>
-  </url><url>
     <loc>https://xcbeyond.cn/tags/%E4%BA%91%E6%95%88/</loc>
-    <lastmod>2022-03-26T21:06:50+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/blog/</loc>
     <lastmod>2022-03-26T21:06:50+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/%E8%AF%84%E6%B5%8B/</loc>
@@ -50,13 +62,7 @@
     <loc>https://xcbeyond.cn/tags/docker/</loc>
     <lastmod>2022-01-22T09:56:55+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/categories/%E5%AE%B9%E5%99%A8/</loc>
-    <lastmod>2022-01-22T09:56:55+08:00</lastmod>
-  </url><url>
     <loc>https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/</loc>
-    <lastmod>2022-01-22T09:56:55+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/</loc>
     <lastmod>2022-01-22T09:56:55+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/</loc>

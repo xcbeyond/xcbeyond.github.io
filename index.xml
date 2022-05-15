@@ -63,6 +63,15 @@
     </item>
     
     <item>
+      <title>Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</title>
+      <link>https://xcbeyond.cn/blog/containers/dockerfile-best-practices/</link>
+      <pubDate>Sat, 14 May 2022 21:40:14 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/containers/dockerfile-best-practices/</guid>
+      <description>随着应用的容器化、上云后，将伴随着 Docker 镜像的构建，构建 Docker 镜像成为了最基本的一步，其中 Dockerfile 便是用来构建镜像的一种文本文件，镜像的优劣全靠 Dockerfile 编写的是否合理、合规。本文将讲述编写 Dockerfile 的一些最佳实践和技巧，让我们的镜像更小、更优。</description>
+    </item>
+    
+    <item>
       <title>谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</title>
       <link>https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/</link>
       <pubDate>Sat, 26 Mar 2022 21:06:50 +0800</pubDate>
