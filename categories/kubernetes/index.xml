@@ -7,9 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2022 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Sun, 15 Nov 2020 20:51:34 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Apr 2023 22:49:19 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Kubernetes安装篇（下）：基于Kubeadm方式的集群部署</title>
+      <title>Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/</link>
+      <pubDate>Sat, 01 Apr 2023 22:49:19 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/</guid>
+      <description>涉足于 Kubernetes 之初时，必然少不了环境的搭建，你是否因为集群搭建步骤繁琐、个人电脑配置不高、运行集群多个节点有些力不从心。
+VMware Fusion 12.0 发布，将 Kind 带入了我们的视野，这是 Google 官方的一个工具，是在单机运行 Kubernetes 群集的最佳方案。笔者在个人电脑上运行 Kind，并基于 Kind 搭建了多套 Kubernetes 集群环境，通过集群切换可以完成不同场景的测试，基本满足所有需求。</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes安装篇（二）：基于Kubeadm方式的集群部署</title>
       <link>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part2-deploy-cluster-environment-based-on-kubeadm/</link>
       <pubDate>Sun, 15 Nov 2020 20:51:34 +0800</pubDate>
       
@@ -19,7 +29,7 @@
     </item>
     
     <item>
-      <title>Kubernetes安装篇（上）：基于Minikube方式部署本地环境</title>
+      <title>Kubernetes安装篇（一）：基于Minikube方式部署本地环境</title>
       <link>https://xcbeyond.cn/blog/kubernetes/installation-chapter-part1-deploy-local-environment-based-on-minikube/</link>
       <pubDate>Sat, 07 Nov 2020 20:23:01 +0800</pubDate>
       

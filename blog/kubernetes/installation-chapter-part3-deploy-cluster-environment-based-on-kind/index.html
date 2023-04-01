@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="一种更加简洁、方便的 kubernetes 集群部署方式，支持本地快速搭建多套 Kubernetes 集群环境，通过集群切换可以完成不同场景的测试，基本满足所有需求。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群</li>
+        </ul>
+        <p class="text-lighten">一种更加简洁、方便的 kubernetes 集群部署方式，支持本地快速搭建多套 Kubernetes 集群环境，通过集群切换可以完成不同场景的测试，基本满足所有需求。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/kind.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2023-04-01 22:49:19 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/kubernetes"> 
+                  Kubernetes</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>涉足于 Kubernetes 之初时，必然少不了环境的搭建，你是否因为<strong>集群搭建步骤繁琐</strong>、<strong>个人电脑配置不高</strong>、<strong>运行集群多个节点</strong>有些力不从心。</p>
+<p>VMware Fusion 12.0 发布，将 Kind 带入了我们的视野，这是 Google 官方的一个工具，是在单机运行 Kubernetes 群集的最佳方案。笔者在个人电脑上运行 Kind，并基于 Kind 搭建了多套 Kubernetes 集群环境，通过集群切换可以完成不同场景的测试，基本满足所有需求。</p>
+<h2 id="1简介">1、简介</h2>
+<p>kind 是 Kubernetes in Docker 的简写，是一个使用 Docker 容器作为 Nodes 节点，在本地创建和运行 Kubernetes 集群的工具。适用于在本机/单机环境下快速创建 Kubernetes 集群环境进行开发和测试。</p>
+<p>官网：<a href="https://kind.sigs.k8s.io/">https://kind.sigs.k8s.io/</a></p>
+<p>优势如下：</p>
+<ul>
+<li>支持多节点（包括HA）集群。</li>
+<li>支持从源代码构建Kubernetes发布版本。</li>
+<li>支持Linux、macOS和Windows。</li>
+<li>是一个经过CNCF认证的符合Kubernetes的安装程序。</li>
+</ul>
+<p>包含以下组件：</p>
+<ul>
+<li>实现集群创建、镜像构建等功能的 Golang 包。</li>
+<li>基于这些 Golang 包的命令行接口kind。</li>
+<li>提供运行在 systemd、kubernetes等环境的Docker镜像。</li>
+</ul>
+<h2 id="2kind-架构">2、Kind 架构</h2>
+<p>kind 官方架构图如下，它将 docker 容器作为 kubernetes 的 “node”，并在该 “node” 中安装 kubernetes 组件，包括一个或者多个 Control Plane 和 一个或者多个 Work nodes。因此，解决了在本机运行多个 node 的问题，而不需要虚拟化。</p>
+<p><img src="kind-arch.png" alt="Kind 架构图"></p>
+<h2 id="3kind-安装">3、Kind 安装</h2>
+<ol>
+<li>
+<p>Docker环境</p>
+<p>参考官网：<a href="https://docs.docker.com/engine/install/">Install Docker Engine</a></p>
+</li>
+<li>
+<p>安装 kubectl</p>
+<blockquote>
+<p>kind 不需要 kubectl，但如果没有它，你将无法执行 kubernetes 的测试。</p>
+</blockquote>
+<p>MacOS:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl -Lo ./kubectl https://storage.googleapis.com/kubernetes-release/release/<span style="color:#66d9ef">$(</span>curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt<span style="color:#66d9ef">)</span>/bin/darwin/amd64/kubectl
+</code></pre></div><p>Windows 中使用 PowerShel:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl.exe -Lo kubectl.exe https://storage.googleapis.com/kubernetes-release/release/<span style="color:#66d9ef">$(</span>curl.exe -s https://storage.googleapis.com/kubernetes-release/release/stable.txt<span style="color:#66d9ef">)</span>/bin/windows/amd64/kubectl.exe
+</code></pre></div><p>Linux:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl -Lo ./kubectl https://storage.googleapis.com/kubernetes-release/release/<span style="color:#66d9ef">$(</span>curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt<span style="color:#66d9ef">)</span>/bin/linux/amd64/kubectl
+</code></pre></div></li>
+<li>
+<p>安装 Kind</p>
+<p>MacOS:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">brew install kind
+</code></pre></div><p>或者</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># for Intel Macs</span>
+<span style="color:#f92672">[</span> <span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span> <span style="color:#f92672">=</span> x86_64 <span style="color:#f92672">]&amp;&amp;</span> curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-darwin-amd64
+<span style="color:#75715e"># for M1 / ARM Macs</span>
+<span style="color:#f92672">[</span> <span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span> <span style="color:#f92672">=</span> arm64 <span style="color:#f92672">]</span> <span style="color:#f92672">&amp;&amp;</span> curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-darwin-arm64
+chmod +x ./kind ./kubectl
+</code></pre></div><p>Windows 中使用 PowerShel:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.18.0/kind-windows-amd64
+Move-Item .<span style="color:#ae81ff">\k</span>ind-windows-amd64.exe c:<span style="color:#ae81ff">\s</span>ome-dir-in-your-PATH<span style="color:#ae81ff">\k</span>ind.exe
+</code></pre></div><p>Linux:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+</code></pre></div></li>
+</ol>
+<h2 id="4快速上手">4、快速上手</h2>
+<p>为创建不同配置的多套集群，建议通过定义不同集群配置文件，来完成集群的创建。</p>
+<ol>
+<li>
+<p>创建 kind 集群配置文件 cluster.conf</p>
+<p>例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># cluster.conf</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Cluster</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kind.x-k8s.io/v1alpha4</span>
+<span style="color:#f92672">nodes</span>:
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+<span style="color:#f92672">extraPortMappings</span>:
+- <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">80</span>
+   <span style="color:#f92672">hostPort</span>: <span style="color:#ae81ff">80</span>
+   <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+- <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">443</span>
+   <span style="color:#f92672">hostPort</span>: <span style="color:#ae81ff">443</span>
+   <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+</code></pre></div></li>
+<li>
+<p>创建集群</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kind create cluster --name &lt;kind-name&gt; --config<span style="color:#f92672">=</span>cluster.conf --image kindest/node:v1.21.14
+</code></pre></div><p>参数说明：</p>
+<ul>
+<li>&ndash;config: 用于指定集群配置文件。不指定，则为默认配置。</li>
+<li>&ndash;image：指定安装的 Kubernetes 版本。不指定，则为最新版本。</li>
+</ul>
+</li>
+<li>
+<p>开始使用</p>
+<p>此时，kubernetes 已成功搭建，可完成所有 Kubernetes功能验证。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 笔者是创建了一个单节点的K8S集群。K8S集群配置，可通过集群配置文件 cluster.conf 来完成不同集群需求。</span>
+$ kubectl get nodes
+   NAME                  STATUS   ROLES                  AGE   VERSION
+   istio-control-plane   Ready    control-plane,master   10s   v1.21.14
+</code></pre></div><p>如果有多个集群，可通过以下命令快速切换：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">kubectl config use-context &lt;kind-name&gt;
+</code></pre></div></li>
+</ol>
+<h2 id="5kind-命令">5、Kind 命令</h2>
+<table>
+<thead>
+<tr>
+<th>子命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>build base-image</td>
+<td>构建节点Base镜像<!-- raw HTML omitted --> &ndash;image string 制作出的镜像name:tag，默认kindest/base:latest<!-- raw HTML omitted --> &ndash;source string  镜像源码路径，默认自动检测</td>
+</tr>
+<tr>
+<td>build node-image</td>
+<td>构建节点镜像<!-- raw HTML omitted --> &ndash;base-image 使用什么作为Base镜像<!-- raw HTML omitted --> &ndash;image string 制作出的镜像name:tag，默认kindest/node:latest<!-- raw HTML omitted --> &ndash;kube-root string Kubernetes项目的源码目录路径，默认自动检测<!-- raw HTML omitted --> &ndash;type string 构建方式，docker或bazel，默认docker</td>
+</tr>
+<tr>
+<td>completion bash</td>
+<td>Bash自动完成</td>
+</tr>
+<tr>
+<td>create cluster</td>
+<td>创建一个基于Docker容器“节点”的K8S集群<!-- raw HTML omitted --> &ndash;image string 用于启动集群的节点镜像<!-- raw HTML omitted --> &ndash;name string 集群上下文名称，默认kind<!-- raw HTML omitted --> &ndash;retain 如果集群创建失败，保留节点用于诊断<!-- raw HTML omitted --> &ndash;wait duration 等待控制平面节点可用，默认0s<!-- raw HTML omitted --> &ndash;config path 指定配置文件</td>
+</tr>
+<tr>
+<td>delete cluster</td>
+<td>删除一个集群<!-- raw HTML omitted --> &ndash;name string 集群名称，默认kind</td>
+</tr>
+<tr>
+<td>export logs</td>
+<td>导出日志到指定目录，默认导出到临时目录： kind export logs ~/Downloads<!-- raw HTML omitted --> &ndash;name string 集群名称，默认kind</td>
+</tr>
+<tr>
+<td>get clusters</td>
+<td>列出已经创建的kind集群列表</td>
+</tr>
+<tr>
+<td>get kubeconfig</td>
+<td>打印某个集群的Kubeconfig<!-- raw HTML omitted --> &ndash;name string 集群名称，默认kind</td>
+</tr>
+<tr>
+<td>get kubeconfig-path</td>
+<td>打印某个集群的Kubeconfig的默认路径</td>
+</tr>
+<tr>
+<td>load docker-image</td>
+<td>从宿主机加载镜像到节点： kind load docker-image name:tag <!-- raw HTML omitted --> &ndash;name string 集群上下文名称，默认kind<!-- raw HTML omitted --> &ndash;nodes strings 目标节点列表，逗号分隔</td>
+</tr>
+<tr>
+<td>load image-archive</td>
+<td>从归档文件加载镜像到节点：<!-- raw HTML omitted -->&ndash;name string 集群上下文名称，默认kind<!-- raw HTML omitted --> &ndash;nodes strings 目标节点列表，逗号分隔</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6个性化集群">6、个性化集群</h2>
+<p>为了满足不同需求，建议创建多个集群，方便不同场景的测试。</p>
+<p>创建集群时，只需指定一个配置文件（<code>kind create cluster --name &lt;kind-name&gt; --config=cluster.conf</code>），并通过 <code>kubectl config use-context &lt;kind-name&gt;</code> 完成集群的切换。</p>
+<p>下面列举几个常用的集群配置。</p>
+<h3 id="61-多节点集群">6.1 多节点集群</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Cluster</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kind.sigs.k8s.io/v1alpha4</span>
+<span style="color:#f92672">nodes</span>:
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+</code></pre></div><h3 id="62-高可用控制平面">6.2 高可用控制平面</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Cluster</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kind.sigs.k8s.io/v1alpha4</span>
+<span style="color:#f92672">nodes</span>:
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+</code></pre></div><h3 id="63-端口映射">6.3 端口映射</h3>
+<p>可以将容器端口映射到宿主机端口，以支持NodePort类型的服务。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Cluster</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kind.sigs.k8s.io/v1alpha4</span>
+<span style="color:#f92672">nodes</span>:
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+  <span style="color:#f92672">extraPortMappings</span>:
+  - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">80</span>
+    <span style="color:#f92672">hostPort</span>: <span style="color:#ae81ff">80</span>
+    <span style="color:#75715e"># 默认0.0.0.0</span>
+    <span style="color:#f92672">listenAddress</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>
+    <span style="color:#75715e"># 默认tcp</span>
+    <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">udp</span>
+</code></pre></div><h3 id="64-指定-kubernetes-版本">6.4 指定 kubernetes 版本</h3>
+<p>可以通过设置 node 的容器镜像版本运行指定版本的 kubernetes 群集。可以在<a href="https://github.com/kubernetes-sigs/kind/releases">官方Release页面</a>中中查找需要镜像 tag，带上 sha256 shasum（非必须），例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Cluster</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">kind.x-k8s.io/v1alpha4</span>
+<span style="color:#f92672">nodes</span>:
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">control-plane</span>
+  <span style="color:#f92672">image</span>: <span style="color:#ae81ff">kindest/node:v1.18.15@sha256:5c1b980c4d0e0e8e7eb9f36f7df525d079a96169c8a8f20d8bd108c0d0889cc4</span>
+- <span style="color:#f92672">role</span>: <span style="color:#ae81ff">worker</span>
+  <span style="color:#f92672">image</span>: <span style="color:#ae81ff">kindest/node:v1.18.15@sha256:5c1b980c4d0e0e8e7eb9f36f7df525d079a96169c8a8f20d8bd108c0d0889cc4</span>
+
+</code></pre></div><p>更多个性化配置，参考官网：<a href="https://kind.sigs.k8s.io/docs/user/configuration/">Configuration</a></p>
+<hr>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://kind.sigs.k8s.io/">https://kind.sigs.k8s.io</a></li>
+<li><a href="https://www.cnblogs.com/charlieroro/p/13711589.html">利用kind搭建本地K8S集群</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kind.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/">
+          <h5 class="mt-0">Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群</h5>
+        </a>
+        2023-04-01 22:49:19
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/dockerfile-best-practices.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/">
+          <h5 class="mt-0">Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</h5>
+        </a>
+        2022-05-14 21:40:14
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/aliyun-devops.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/">
+          <h5 class="mt-0">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</h5>
+        </a>
+        2022-03-26 21:06:50
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/multi-platform-images.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/">
+          <h5 class="mt-0">构建多架构镜像的最佳实践</h5>
+        </a>
+        2022-01-22 09:56:55
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cloudnative-01.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/">
+          <h5 class="mt-0">盘点 2021 ｜ 云原生拥抱之路</h5>
+        </a>
+        2021-12-31 21:18:56
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/github-pages-hugo.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/program-life/use-github-pages-and-hugo-to-quickly-build-a-free-personal-website/">
+          <h5 class="mt-0">利用 Github Pages 和 Hugo 快速搭建免费的个人网站</h5>
+        </a>
+        2021-12-25 22:24:57
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1简介">1、简介</a></li>
+    <li><a href="#2kind-架构">2、Kind 架构</a></li>
+    <li><a href="#3kind-安装">3、Kind 安装</a></li>
+    <li><a href="#4快速上手">4、快速上手</a></li>
+    <li><a href="#5kind-命令">5、Kind 命令</a></li>
+    <li><a href="#6个性化集群">6、个性化集群</a>
+      <ul>
+        <li><a href="#61-多节点集群">6.1 多节点集群</a></li>
+        <li><a href="#62-高可用控制平面">6.2 高可用控制平面</a></li>
+        <li><a href="#63-端口映射">6.3 端口映射</a></li>
+        <li><a href="#64-指定-kubernetes-版本">6.4 指定 kubernetes 版本</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2022 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>
