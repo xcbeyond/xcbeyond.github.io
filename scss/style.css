@@ -561,14 +561,14 @@ link:focus,
     background: transparent; }
 
 .hero-section {
-  padding: 250px 0 290px; }
+  padding: 80px 0 80px; }
 
 .hero-slider .prevArrow,
 .hero-slider .nextArrow {
   position: absolute;
   bottom: -123px;
   z-index: 9;
-  padding: 15px;
+  padding: 60px;
   color: rgba(255, 255, 255, 0.5);
   border: 0;
   font-size: 30px;
@@ -590,7 +590,7 @@ link:focus,
 .hero-slider .slick-dots {
   position: absolute;
   left: 0;
-  bottom: -100px;
+  bottom: -60px;
   padding-left: 0; }
   .hero-slider .slick-dots li {
     display: inline-block;
