@@ -150,7 +150,7 @@
           <div class="col-12 mb-5 content">
             <p>在 kubernetes 或 istio 应用中，一般都是通过 kubernetes ingress 或者 istio ingressgateway 来暴露 HTTP/HTTPS 的服务。但是在实际应用中，还是有不少应用是TCP长连接的，这个是否也是可以通过 ingress 来暴露呢？</p>
 <p>本文将讲述如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务。</p>
-<h2 id="部署示例服务">部署示例服务</h2>
+<h2 id="1部署示例服务">1、部署示例服务</h2>
 <ol>
 <li>
 <p>部署一个 tcp-echo 服务, 用于验证通过 kubernetes ingress 或 istio ingressgateway 来访问 tcp 服务。</p>
@@ -259,11 +259,11 @@ xcbeyond
 hello xcbeyond
 </code></pre></div></li>
 </ol>
-<h2 id="kubernetes-ingress-tcp">kubernetes ingress tcp</h2>
-<h3 id="原理">原理</h3>
+<h2 id="2kubernetes-ingress-tcp">2、kubernetes ingress tcp</h2>
+<h3 id="21-原理">2.1 原理</h3>
 <p>Kubernetes Ingress Controller 在启动时会去watch两个configmap(一个tcp，一个 udp)，里面记录了后面需要反向代理的TCP的服务以及暴露的端口。如果里面的key-value发生变换，Ingress controller 会去更改 Nginx 的配置，增加对应的 TCP 的 listen 的 server 以及对应的后端的 upstream。</p>
 <p><img src="k8s-ingress-expose-tcp.png" alt="kubernetes ingress tcp"></p>
-<h3 id="最佳实践">最佳实践</h3>
+<h3 id="22-最佳实践">2.2 最佳实践</h3>
 <p>前提条件：</p>
 <ul>
 <li>
@@ -319,7 +319,7 @@ hello xcbeyond
 </blockquote>
 </li>
 </ol>
-<h2 id="istio-ingressgateway-tcp">istio ingressgateway tcp</h2>
+<h2 id="3istio-ingressgateway-tcp">3、istio ingressgateway tcp</h2>
 <p>前提条件：</p>
 <ul>
 <li>tcp-echo 服务已注入边车。</li>
@@ -538,14 +538,14 @@ hello xcbeyond
     <h4 class="mb-4">目录</h4>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#部署示例服务">部署示例服务</a></li>
-    <li><a href="#kubernetes-ingress-tcp">kubernetes ingress tcp</a>
+    <li><a href="#1部署示例服务">1、部署示例服务</a></li>
+    <li><a href="#2kubernetes-ingress-tcp">2、kubernetes ingress tcp</a>
       <ul>
-        <li><a href="#原理">原理</a></li>
-        <li><a href="#最佳实践">最佳实践</a></li>
+        <li><a href="#21-原理">2.1 原理</a></li>
+        <li><a href="#22-最佳实践">2.2 最佳实践</a></li>
       </ul>
     </li>
-    <li><a href="#istio-ingressgateway-tcp">istio ingressgateway tcp</a></li>
+    <li><a href="#3istio-ingressgateway-tcp">3、istio ingressgateway tcp</a></li>
   </ul>
 </nav>
   </div>
