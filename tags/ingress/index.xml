@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ingress on xcbeyond</title>
+    <link>https://xcbeyond.cn/tags/ingress/</link>
+    <description>Recent content in ingress on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
+    <lastBuildDate>Wed, 05 Apr 2023 00:13:10 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/ingress/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</title>
+      <link>https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/</link>
+      <pubDate>Wed, 05 Apr 2023 00:13:10 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/</guid>
+      <description>在 kubernetes 或 istio 应用中，一般都是通过 kubernetes ingress 或者 istio ingressgateway 来暴露 HTTP/HTTPS 的服务。但是在实际应用中，还是有不少应用是TCP长连接的，这个是否也是可以通过 ingress 来暴露呢？</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -7,7 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Sat, 01 Apr 2023 22:49:19 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 05 Apr 2023 00:13:10 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>gateway</title>
+      <link>https://xcbeyond.cn/tags/gateway/</link>
+      <pubDate>Wed, 05 Apr 2023 00:13:10 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/gateway/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ingress</title>
+      <link>https://xcbeyond.cn/tags/ingress/</link>
+      <pubDate>Wed, 05 Apr 2023 00:13:10 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/ingress/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tcp</title>
+      <link>https://xcbeyond.cn/tags/tcp/</link>
+      <pubDate>Wed, 05 Apr 2023 00:13:10 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/tcp/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Kubernetes从入门到精通</title>
       <link>https://xcbeyond.cn/tags/kubernetes%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/</link>

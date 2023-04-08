@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="在实际应用中，不少应用是TCP长连接的，如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务呢">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</li>
+        </ul>
+        <p class="text-lighten">在实际应用中，不少应用是TCP长连接的，如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务呢</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/transfer.jpeg" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2023-04-05 00:13:10 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/kubernetes"> 
+                  Kubernetes</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在 kubernetes 或 istio 应用中，一般都是通过 kubernetes ingress 或者 istio ingressgateway 来暴露 HTTP/HTTPS 的服务。但是在实际应用中，还是有不少应用是TCP长连接的，这个是否也是可以通过 ingress 来暴露呢？</p>
+<p>本文将讲述如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务。</p>
+<h2 id="部署示例服务">部署示例服务</h2>
+<ol>
+<li>
+<p>部署一个 tcp-echo 服务, 用于验证通过 kubernetes ingress 或 istio ingressgateway 来访问 tcp 服务。</p>
+<p>执行命令 <code>kubectl apply -f tcp-echo.yaml</code> 部署 tcp-echo 服务:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># tcp-echo.yaml</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+<span style="color:#f92672">metadata</span>:
+   <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-echo</span>
+   <span style="color:#f92672">labels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">tcp-echo</span>
+      <span style="color:#f92672">service</span>: <span style="color:#ae81ff">tcp-echo</span>
+<span style="color:#f92672">spec</span>:
+   <span style="color:#f92672">ports</span>:
+   - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp</span>
+     <span style="color:#f92672">port</span>: <span style="color:#ae81ff">9000</span>
+   - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-other</span>
+     <span style="color:#f92672">port</span>: <span style="color:#ae81ff">9001</span>
+   <span style="color:#75715e"># Port 9002 is omitted intentionally for testing the pass through filter chain.</span>
+   <span style="color:#f92672">selector</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">tcp-echo</span>
+---
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-echo</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#f92672">selector</span>:
+     <span style="color:#f92672">matchLabels</span>:
+       <span style="color:#f92672">app</span>: <span style="color:#ae81ff">tcp-echo</span>
+       <span style="color:#f92672">version</span>: <span style="color:#ae81ff">v1</span>
+   <span style="color:#f92672">template</span>:
+     <span style="color:#f92672">metadata</span>:
+       <span style="color:#f92672">labels</span>:
+         <span style="color:#f92672">app</span>: <span style="color:#ae81ff">tcp-echo</span>
+         <span style="color:#f92672">version</span>: <span style="color:#ae81ff">v1</span>
+     <span style="color:#f92672">spec</span>:
+       <span style="color:#f92672">containers</span>:
+       - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-echo</span>
+         <span style="color:#f92672">image</span>: <span style="color:#ae81ff">docker.io/istio/tcp-echo-server:1.2</span>
+         <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">IfNotPresent</span>
+         <span style="color:#f92672">args</span>: [ <span style="color:#e6db74">&#34;9000,9001,9002&#34;</span>, <span style="color:#e6db74">&#34;hello&#34;</span> ]
+         <span style="color:#f92672">ports</span>:
+         - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">9000</span>
+         - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">9001</span>
+</code></pre></div></li>
+<li>
+<p>部署一个 sleep 服务，作为发送请求的测试客户端。</p>
+<p>执行命令 <code>kubectl apply -f sleep.yaml</code> 部署 sleep 服务:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># sleep.yaml</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Service</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sleep</span>
+  <span style="color:#f92672">labels</span>:
+    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">sleep</span>
+    <span style="color:#f92672">service</span>: <span style="color:#ae81ff">sleep</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">ports</span>:
+  - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">80</span>
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">http</span>
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">app</span>: <span style="color:#ae81ff">sleep</span>
+---
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sleep</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">sleep</span>
+  <span style="color:#f92672">template</span>:
+    <span style="color:#f92672">metadata</span>:
+      <span style="color:#f92672">labels</span>:
+        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">sleep</span>
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">terminationGracePeriodSeconds</span>: <span style="color:#ae81ff">0</span>
+      <span style="color:#f92672">containers</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sleep</span>
+        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">curlimages/curl</span>
+        <span style="color:#f92672">command</span>: [<span style="color:#e6db74">&#34;/bin/sleep&#34;</span>, <span style="color:#e6db74">&#34;3650d&#34;</span>]
+        <span style="color:#f92672">imagePullPolicy</span>: <span style="color:#ae81ff">IfNotPresent</span>
+        <span style="color:#f92672">volumeMounts</span>:
+        - <span style="color:#f92672">mountPath</span>: <span style="color:#ae81ff">/etc/sleep/tls</span>
+          <span style="color:#f92672">name</span>: <span style="color:#ae81ff">secret-volume</span>
+      <span style="color:#f92672">volumes</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">secret-volume</span>
+      <span style="color:#f92672">secret</span>:
+        <span style="color:#f92672">secretName</span>: <span style="color:#ae81ff">sleep-secret</span>
+        <span style="color:#f92672">optional</span>: <span style="color:#66d9ef">true</span>
+</code></pre></div></li>
+<li>
+<p>部署成功后，发送一些TCP流量来确认 tcp-echo 服务已启动且正在运行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># 获取 sleep 的 pod名称</span>
+$ kubectl get pods -l app<span style="color:#f92672">=</span>sleep
+   NAME                     READY   STATUS    RESTARTS   AGE
+   sleep-557747455f-gwt2j   2/2     Running   <span style="color:#ae81ff">4</span>          2d4h
+<span style="color:#75715e"># 进入 sleep 容器内，使用 nc 命令向 tcp-echo 服务发送tcp请求</span>
+$ kubectl exec -it sleep-557747455f-gwt2j -c sleep sh
+/ $ nc -v tcp-echo <span style="color:#ae81ff">9000</span>
+tcp-echo <span style="color:#f92672">(</span>10.96.141.51:9000<span style="color:#f92672">)</span> open
+xcbeyond
+hello xcbeyond
+</code></pre></div></li>
+</ol>
+<h2 id="kubernetes-ingress-tcp">kubernetes ingress tcp</h2>
+<h3 id="原理">原理</h3>
+<p>Kubernetes Ingress Controller 在启动时会去watch两个configmap(一个tcp，一个 udp)，里面记录了后面需要反向代理的TCP的服务以及暴露的端口。如果里面的key-value发生变换，Ingress controller 会去更改 Nginx 的配置，增加对应的 TCP 的 listen 的 server 以及对应的后端的 upstream。</p>
+<p><img src="k8s-ingress-expose-tcp.png" alt="kubernetes ingress tcp"></p>
+<h3 id="最佳实践">最佳实践</h3>
+<p>前提条件：</p>
+<ul>
+<li>
+<p>已安装 ingress controller。</p>
+<p>如果未安装，可以参考执行命令 <code>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.7.0/deploy/static/provider/cloud/deploy.yaml</code>，完成安装。</p>
+</li>
+</ul>
+<ol>
+<li>
+<p>kubernetes ingress controller 中增加需要 watch 的 configmap。</p>
+<p>通过命令 <code>kubectl edit -n ingress-nginx deployment ingress-nginx-controller</code>，在 ingress-nginx-controller 中新增参数 tcp-services-configmap、udp-services-configmap，如下图所示：</p>
+<p><img src="ingress-nginx-controller-edit.png" alt="修改ingress-nginx-controller"></p>
+</li>
+<li>
+<p>创建对应的 configmap。</p>
+<blockquote>
+<p><strong>暂时不需要配置服务。</strong> 对于已经默认创建好了对应的configmap: tcp-services, udp-services，无需再创建。</p>
+</blockquote>
+<p>1）执行命令 <code>kubectl apply -f tcp-services-cm.yaml</code>，tcp-services-cm.yaml 文件内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># tcp-services-cm.yaml</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ConfigMap</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-services</span>
+  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">ingress-nginx</span>
+</code></pre></div><p>2）执行命令 <code>kubectl apply -f udp-services-cm.yaml</code>，udp-services-cm.yaml 文件内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># udp-services-cm.yaml</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ConfigMap</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">udp-services</span>
+  <span style="color:#f92672">namespace</span>: <span style="color:#ae81ff">ingress-nginx</span>
+</code></pre></div></li>
+<li>
+<p>tcp-services configmap 中配置 TCP 服务的端口。</p>
+<p>执行命令 <code>kubectl edit -n ingress-nginx cm tcp-services</code>, 在 data 部分新增暴露的TCP端口，格式为 <code>&lt;Nginx port&gt;: &lt;namespace/service name&gt;:&lt;service port&gt;:[PROXY]:[PROXY]</code>，如下图所示：</p>
+<p><img src="tcp-service-configmap-edit.png" alt="暴露TCP端口"></p>
+<blockquote>
+<p>图例中，是将 <code>default/tcp-echo:9000</code> 服务暴露到 nginx ingress 的 9000 端口。</p>
+</blockquote>
+</li>
+<li>
+<p>Ingress Controller service 对外暴露 TCP 端口。</p>
+<p>因为 TCP 服务是需要通过端口来区分服务的，所以每个服务都需要增加一个独立端口，因此，需要给 Ingress Controller 增加新的端口来映射后端的TCP服务。</p>
+<p>执行命令 <code>kubectl edit -n ingress-nginx svc ingress-nginx-controller</code>，如下图所示：</p>
+<p><img src="ingress-nginx-controller-svc-edit.png" alt="Ingress Controller service 暴露 TCP 端口"></p>
+</li>
+<li>
+<p>通过 kubernetes ingress 访问 TCP 服务。</p>
+<p>直接通过 Ingress Controller service 暴露的 TCP 端口（nodePort）进行访问即可。</p>
+<blockquote>
+<p>借助命令 <code>nc -v &lt;ip&gt; &lt;port&gt;</code> 完成验证。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="istio-ingressgateway-tcp">istio ingressgateway tcp</h2>
+<p>前提条件：</p>
+<ul>
+<li>tcp-echo 服务已注入边车。</li>
+<li>istio 中已部署 isito-ingressgateway 服务。</li>
+</ul>
+<blockquote>
+<p>本示例中，借助 isito-ingressgateway 中默认已开启的 31400 tcp 端口，完成验证。在实际业务功能中，可单独向 isito-ingressgateway 新增多组 tcp 端口（即：在 isito-ingressgateway 的 service 中，新增 tcp 协议端口）。</p>
+</blockquote>
+<p><img src="istio-gateway-expose-tcp.png" alt="istio ingressgateway tcp"></p>
+<ol>
+<li>
+<p>定义 istio gateway。</p>
+<p>执行命令 <code>kubectl apply -f tcp-echo-gateway.yaml</code> 创建服务 tcp-echo 的 gateway：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># tcp-echo-gateway.yaml</span>
+<span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.istio.io/v1alpha3</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Gateway</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-echo-gateway</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">istio</span>: <span style="color:#ae81ff">ingressgateway</span> <span style="color:#75715e"># use istio default controller</span>
+  <span style="color:#f92672">servers</span>:
+  - <span style="color:#f92672">port</span>:
+    <span style="color:#f92672">number</span>: <span style="color:#ae81ff">31400</span>  <span style="color:#75715e"># istio-ingressgateway tcp port</span>
+    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp</span>
+    <span style="color:#f92672">protocol</span>: <span style="color:#ae81ff">TCP</span>
+  <span style="color:#f92672">hosts</span>:
+  - <span style="color:#e6db74">&#34;*&#34;</span>
+</code></pre></div></li>
+<li>
+<p>定义 virtualService。</p>
+<p>执行命令 <code>kubectl apply -f tcp-echo-vs.yaml</code> 创建服务 tcp-echo 的 virtualService:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.istio.io/v1alpha3</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">VirtualService</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tcp-echo-vs</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">hosts</span>:
+  - <span style="color:#e6db74">&#34;*&#34;</span>
+  <span style="color:#f92672">gateways</span>:
+  - <span style="color:#ae81ff">tcp-echo-gateway</span>
+  <span style="color:#f92672">tcp</span>:
+  - <span style="color:#f92672">match</span>:
+    - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">31400</span> <span style="color:#75715e"># istio-ingressgateway tcp port</span>
+   <span style="color:#f92672">route</span>:
+   - <span style="color:#f92672">destination</span>:
+     <span style="color:#f92672">host</span>: <span style="color:#ae81ff">tcp-echo </span> <span style="color:#75715e"># tcp-echo service</span>
+     <span style="color:#f92672">port</span>:
+       <span style="color:#f92672">number</span>: <span style="color:#ae81ff">9000</span>
+</code></pre></div></li>
+<li>
+<p>通过 istio ingressgateway 访问 TCP 服务。</p>
+<p>直接通过 istio-ingressgateway service 暴露的 TCP 端口（nodePort）进行访问即可。</p>
+</li>
+</ol>
+<blockquote>
+<p>借助命令 <code>nc -v &lt;ip&gt; &lt;port&gt;</code> 完成验证。</p>
+</blockquote>
+<hr>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/">Exposing TCP and UDP services</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/transfer.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/">
+          <h5 class="mt-0">如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</h5>
+        </a>
+        2023-04-05 00:13:10
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kind.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/">
+          <h5 class="mt-0">Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群</h5>
+        </a>
+        2023-04-01 22:49:19
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/dockerfile-best-practices.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/">
+          <h5 class="mt-0">Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</h5>
+        </a>
+        2022-05-14 21:40:14
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/aliyun-devops.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/">
+          <h5 class="mt-0">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</h5>
+        </a>
+        2022-03-26 21:06:50
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/multi-platform-images.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/">
+          <h5 class="mt-0">构建多架构镜像的最佳实践</h5>
+        </a>
+        2022-01-22 09:56:55
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/cloudnative-01.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/cloudnative-embrace-road/">
+          <h5 class="mt-0">盘点 2021 ｜ 云原生拥抱之路</h5>
+        </a>
+        2021-12-31 21:18:56
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#部署示例服务">部署示例服务</a></li>
+    <li><a href="#kubernetes-ingress-tcp">kubernetes ingress tcp</a>
+      <ul>
+        <li><a href="#原理">原理</a></li>
+        <li><a href="#最佳实践">最佳实践</a></li>
+      </ul>
+    </li>
+    <li><a href="#istio-ingressgateway-tcp">istio ingressgateway tcp</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2023 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>
