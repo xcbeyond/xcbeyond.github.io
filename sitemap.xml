@@ -27,7 +27,22 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2023-04-05T00:13:10+08:00</lastmod>
+    <lastmod>2023-08-12T22:06:36+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/go/</loc>
+    <lastmod>2023-08-12T22:06:36+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/</loc>
+    <lastmod>2023-08-12T22:06:36+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/pkg/</loc>
+    <lastmod>2023-08-12T22:06:36+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/</loc>
+    <lastmod>2023-08-12T22:06:36+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2023-08-12T22:06:36+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/gateway/</loc>
     <lastmod>2023-04-05T00:13:10+08:00</lastmod>
@@ -38,13 +53,7 @@
     <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
     <lastmod>2023-04-05T00:13:10+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2023-04-05T00:13:10+08:00</lastmod>
-  </url><url>
     <loc>https://xcbeyond.cn/tags/tcp/</loc>
-    <lastmod>2023-04-05T00:13:10+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/blog/</loc>
     <lastmod>2023-04-05T00:13:10+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/</loc>
@@ -126,9 +135,6 @@
     <lastmod>2021-08-01T13:58:02+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/golang/cobra-quick-start/</loc>
-    <lastmod>2021-08-01T13:58:02+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/categories/go/</loc>
     <lastmod>2021-08-01T13:58:02+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/infoq/</loc>

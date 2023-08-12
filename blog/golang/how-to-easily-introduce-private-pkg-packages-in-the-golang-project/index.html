@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Golang项目中如何轻松实现私有仓库pkg包的引入 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="在企业内部创建一个公共的Golang模块工程可以帮助提高代码复用性和开发效率。本文将从如何创建一个公共的Golang工程开始，指导你一步步创建它、并引入到你的工程中。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Golang项目中如何轻松实现私有仓库pkg包的引入</li>
+        </ul>
+        <p class="text-lighten">在企业内部创建一个公共的Golang模块工程可以帮助提高代码复用性和开发效率。本文将从如何创建一个公共的Golang工程开始，指导你一步步创建它、并引入到你的工程中。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/golang-pkg-cmd.jpg" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2023-08-12 22:06:36 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/go"> 
+                  Go</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在企业内部创建一个公共的Golang模块工程可以帮助提高代码复用性和开发效率。本文将从如何创建一个公共的Golang工程开始，指导你一步步创建它、并引入到你的工程中。</p>
+<h2 id="1公共模块规范">1、公共模块规范</h2>
+<p>下面是一个简单的步骤指南来创建这样一个公共模块项目。</p>
+<p>创建版本控制仓库：使用版本控制工具（如Git）创建一个新的代码仓库，用于管理该公共模块工程的代码。</p>
+<p>项目结构：定义好项目的结构，使其易于理解和使用。一个常见的Golang项目结构如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">my-module/
+   |- README.md        <span style="color:#75715e"># 项目文档和说明</span>
+   |- go.mod           <span style="color:#75715e"># Go模块定义文件</span>
+   |- go.sum           <span style="color:#75715e"># Go模块的依赖版本文件</span>
+   |- cmd/             <span style="color:#75715e"># 命令行应用程序目录（如果有的话）</span>
+   |- pkg/             <span style="color:#75715e"># 项目的库代码目录</span>
+   |- internal/        <span style="color:#75715e"># 内部库代码目录，不对外公开</span>
+   |- examples/        <span style="color:#75715e"># 示例代码目录</span>
+   |- tests/           <span style="color:#75715e"># 单元测试和集成测试目录</span>
+
+</code></pre></div><ol>
+<li>
+<p>Go模块初始化：进入项目根目录，运行 <code>go mod init &lt;module-name&gt;</code> 来初始化 Go 模块。模块名称应该是该模块工程的唯一标识符。</p>
+</li>
+<li>
+<p>编写代码：在 <code>pkg/</code> 目录下编写公共的Golang库代码。这些代码应该是可复用的，不与具体应用逻辑绑定。</p>
+</li>
+<li>
+<p>文档和注释：对于公共模块，清晰的文档和注释是非常重要的。确保每个公共函数和类型都有良好的注释，方便其他开发人员理解和使用。</p>
+</li>
+<li>
+<p>示例代码：在 <code>examples/</code> 目录下提供一些简单的示例代码，展示如何使用这个公共模块。</p>
+</li>
+<li>
+<p>单元测试：编写完整的单元测试和集成测试，保证模块的正确性和稳定性。测试代码放在 <code>tests/</code> 目录下。</p>
+</li>
+<li>
+<p>版本管理：在Go中，版本管理使用Go Modules。当你的模块准备发布新版本时，确保适当地更新go.mod文件，并通过 <code>go get &lt;module-name&gt;@&lt;version&gt;</code> 或 <code>go mod tidy</code> 来更新依赖关系。</p>
+</li>
+<li>
+<p>持续集成：将公共模块纳入到企业的持续集成流程中，确保每次修改都通过了测试，并符合质量标准。</p>
+</li>
+<li>
+<p>发布和文档：根据企业内部的发布流程，发布新的版本，并及时更新项目文档，方便其他开发人员使用。</p>
+</li>
+</ol>
+<p>以上是一个基本的指南来创建企业内部的Golang公共模块工程，可根据实现项目灵活调整。记得在开发过程中关注代码质量和安全性，并积极倾听来自其他开发人员的反馈，不断改进和优化模块。</p>
+<h2 id="2如何引入公共模块">2、如何引入公共模块</h2>
+<p>在Go中引入私有Git仓库的包可以通过在 <code>go.mod</code> 文件中添加 <code>replace</code> 或 <code>require</code> 语句来实现，具体取决于你的使用场景。以下是引入私有Git仓库包的三种常见方法。</p>
+<p>在下述前两种方法中，你需要将 <code>github.com/yourusername/yourprivatepkg</code> 替换为你私有Git仓库的实际路径，然后根据需要设置路径或版本号。</p>
+<p>完成后，运行 <code>go mod tidy</code> 命令来更新依赖。Go会自动下载和管理你的私有Git仓库包。</p>
+<h3 id="21-私有项目的路径替换">2.1 私有项目的路径替换</h3>
+<p>使用 <code>replace</code> 语句实现。</p>
+<p>如果你希望在开发过程中使用本地路径或其他方式替代私有Git仓库，可以使用 <code>replace</code> 语句。这样可以方便地在不同环境中进行开发和测试。</p>
+<p>如果私有项目 A 依赖另一个私有项目 B，且通过 <code>go get</code> 无法获取权限，可以采用 <code>replace</code> 方式。</p>
+<p>在你的项目的 <code>go.mod</code> 文件中添加类似如下的 <code>replace</code> 语句，将私有Git仓库的路径替换为本地路径或其他路径：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">replace</span> <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">yourusername</span><span style="color:#f92672">/</span><span style="color:#a6e22e">yourprivatepkg</span> =&gt; <span style="color:#f92672">/</span><span style="color:#a6e22e">path</span><span style="color:#f92672">/</span><span style="color:#a6e22e">to</span><span style="color:#f92672">/</span><span style="color:#a6e22e">local</span><span style="color:#f92672">/</span><span style="color:#a6e22e">repo</span>
+</code></pre></div><p>或者，你可以使用相对路径：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">replace</span> <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">yourusername</span><span style="color:#f92672">/</span><span style="color:#a6e22e">yourprivatepkg</span> =&gt; ..<span style="color:#f92672">/</span><span style="color:#a6e22e">path</span><span style="color:#f92672">/</span><span style="color:#a6e22e">to</span><span style="color:#f92672">/</span><span style="color:#a6e22e">local</span><span style="color:#f92672">/</span><span style="color:#a6e22e">repo</span>
+</code></pre></div><h3 id="22-go-mod-私有项目的访问">2.2 go mod 私有项目的访问</h3>
+<p>使用 <code>require</code> 语句实现。</p>
+<p>如果你想直接从私有Git仓库获取包并将其添加到项目依赖中，可以使用 <code>require</code> 语句。</p>
+<p>在你的项目的 <code>go.mod</code> 文件中添加类似如下的 <code>require</code> 语句，将私有Git仓库的路径和版本号添加到依赖中：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">require</span> <span style="color:#a6e22e">github</span>.<span style="color:#a6e22e">com</span><span style="color:#f92672">/</span><span style="color:#a6e22e">yourusername</span><span style="color:#f92672">/</span><span style="color:#a6e22e">yourprivatepkg</span> <span style="color:#a6e22e">v1</span><span style="color:#ae81ff">.0.0</span>
+</code></pre></div><p>要实现上述方式，需要额外的配置，确保能够正常 <code>go get</code> 私有Git仓库的工程。</p>
+<ol>
+<li>
+<p>设置 Go GOPRIVATE 变量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 配置多个私有项目地址</span>
+go env -w GOPRIVATE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gitlab.example.com&#34;</span>
+<span style="color:#75715e"># 其中gitee.com/user 是你的个人账户所在地址</span>
+</code></pre></div><ul>
+<li>
+<p>默认情况下，如果设置GOPRIVATE，会自动设置GONOPROXY和GONOSUMDB配置；</p>
+</li>
+<li>
+<p>Golang项目非代理NOPROXY配置
+如果设置GONOPROXY和GONOSUMDB均为none，意味着所有module，不管是公共的还是私有的，都要经过proxy下载，经过sumdb验证。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>私有仓库的请求认证</p>
+<p>方法一：在请求URL中嵌入认证信息</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git config --global url.<span style="color:#e6db74">&#34;https://</span><span style="color:#e6db74">${</span>user<span style="color:#e6db74">}</span><span style="color:#e6db74">:</span><span style="color:#e6db74">${</span>password<span style="color:#e6db74">}</span><span style="color:#e6db74">@gitlab.example.com&#34;</span>.insteadOf <span style="color:#e6db74">&#34;https://gitlab.example.com&#34;</span>
+</code></pre></div><p>Git全局配置查看和删除:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#查看git全局配置</span>
+git config --global -l
+<span style="color:#75715e"># 删除url路径替换, 或是修改${GitProject}/.git/config文件中对应url</span>
+git config --global --unset url.<span style="color:#e6db74">&#34;git@gitlab.example.com&#34;</span>.insteadOf
+</code></pre></div><p>方法二：使用SSH替换HTTPS进行认证</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">git config --global url.<span style="color:#e6db74">&#34;git@gitlab.example.com&#34;</span>.insteadOf <span style="color:#e6db74">&#34;https://gitlab.example.com&#34;</span>
+</code></pre></div></li>
+<li>
+<p>Golang私有项目的http访问</p>
+<p>如果私有库不支持https协议，会报如下的错误。这是因为Go更新依赖时，会强制校验CA证书来确保依赖库的安全性。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">go: gitee.com/modules/project@v0.0.0-20200320063051-28c4ad7fe2ea: unrecognized import path <span style="color:#e6db74">&#34;gitee.com/modules/project&#34;</span>: https fetch: Get <span style="color:#e6db74">&#34;https://gitee.com/modules/project?go-get=1&#34;</span>: dial tcp 123.123.123:443: connect: connection refused
+</code></pre></div><p>如果私有库不支持https协议，还需要go配置参数或环境变量，使其使用http方式访问。</p>
+<p>方法一：go get -insecure</p>
+<p>使用 <code>go get -insecure</code>，这种方式不推荐，原因如下：</p>
+<ul>
+<li>
+<p>添加 `-insecure`` 参数，即表示更新依赖时可以不去校验CA证书，但是这会带来一个问题：范围无法界定(overkill)，所有与要更新依赖相关联的依赖，均不会去做校验，可能会意外更新到不安全的依赖。</p>
+</li>
+<li>
+<p><code>-insecure</code> 仅支持 go get 命令，不支持 go mod 命令，因此使用 go mod 命令时是无法更新不支持https协议的私有库的。</p>
+</li>
+</ul>
+<p>方法二：GOINSECURE</p>
+<p>添加 <code>GOINSECURE</code> 参数，<strong>推荐这种方式</strong>。</p>
+<ul>
+<li>
+<p>在Go 1.14 中增加了新的环境变量，用于指定哪些域名下的仓库不去校验 CA 证书。</p>
+</li>
+<li>
+<p>使用方式同 <code>GOINSECURE</code> 类似 <code>go env -w GOINSECURE=gitlab.example.com</code>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="23-git-子模块推荐">2.3 git 子模块（推荐）</h3>
+<p>在 Go 中，你可以使用 Git 子模块的方式引用私有的公共模块工程，以便在你的项目中使用。</p>
+<ol>
+<li>
+<p>创建 Git 子模块</p>
+<p>在你的项目中，使用以下命令添加 Git 子模块，将私有的公共模块工程作为子模块引入：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git submodule add &lt;repository-url&gt; path/to/submodule
+</code></pre></div><p>其中 <code>&lt;repository-url&gt;</code> 是你私有模块工程的 Git 仓库 URL，<code>path/to/submodule</code> 是子模块在你的项目中的路径。</p>
+</li>
+<li>
+<p>配置认证</p>
+<p>如果你的私有模块工程需要身份验证，你可能需要在执行 <code>go get</code> 或 <code>go mod</code> 时提供适当的认证凭证。这可能包括用户名、密码、Personal Access Token（如果使用 GitLab）等。</p>
+</li>
+<li>
+<p>使用子模块的包</p>
+<p>在你的项目中，可以通过 <code>import</code> 语句引入子模块的包，然后在代码中使用这些包。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">import</span> (
+    <span style="color:#e6db74">&#34;your/repo/path/to/submodule/package&#34;</span>
+)
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#75715e">// 使用子模块的包
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">submodulepackage</span>.<span style="color:#a6e22e">DoSomething</span>()
+}
+</code></pre></div></li>
+<li>
+<p>使用 Go Modules 进行版本管理</p>
+<p>确保你的项目启用了 Go Modules，并在 <code>go.mod</code> 文件中添加了子模块的引用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">go mod edit -replace<span style="color:#f92672">=</span>example.com/submodule<span style="color:#f92672">=</span>path/to/submodule
+</code></pre></div></li>
+<li>
+<p>更新子模块</p>
+<p>如果子模块的工程代码发生变化，你可以进入子模块目录，使用 <code>git pull</code> 更新子模块的代码。然后在你的项目根目录使用 <code>go mod tidy</code> 更新模块依赖。</p>
+</li>
+</ol>
+<h2 id="3总结">3、总结</h2>
+<p>条条道路通罗马，技术更是如此。</p>
+<p>具体选择那种取决于你的实际环境、实际场景，这里只提供一个思路、方向供大家参考。</p>
+<hr>
+<p>参考文章：</p>
+<ol>
+<li><a href="https://turbock79.cn/?p=3570">Go Mod引用私有库</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1871793">怎么让Go Modules使用私有依赖模块</a></li>
+<li><a href="https://iphysresearch.github.io/blog/post/programing/git/git_submodule/">Git: submodule 子模块简明教程</a></li>
+</ol>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-pkg-cmd.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/">
+          <h5 class="mt-0">Golang项目中如何轻松实现私有仓库pkg包的引入</h5>
+        </a>
+        2023-08-12 22:06:36
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/transfer.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/">
+          <h5 class="mt-0">如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</h5>
+        </a>
+        2023-04-05 00:13:10
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kind.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/">
+          <h5 class="mt-0">Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群</h5>
+        </a>
+        2023-04-01 22:49:19
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/dockerfile-best-practices.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/">
+          <h5 class="mt-0">Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</h5>
+        </a>
+        2022-05-14 21:40:14
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/aliyun-devops.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/">
+          <h5 class="mt-0">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</h5>
+        </a>
+        2022-03-26 21:06:50
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/multi-platform-images.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/build-multi-platform-images-best-practices/">
+          <h5 class="mt-0">构建多架构镜像的最佳实践</h5>
+        </a>
+        2022-01-22 09:56:55
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1公共模块规范">1、公共模块规范</a></li>
+    <li><a href="#2如何引入公共模块">2、如何引入公共模块</a>
+      <ul>
+        <li><a href="#21-私有项目的路径替换">2.1 私有项目的路径替换</a></li>
+        <li><a href="#22-go-mod-私有项目的访问">2.2 go mod 私有项目的访问</a></li>
+        <li><a href="#23-git-子模块推荐">2.3 git 子模块（推荐）</a></li>
+      </ul>
+    </li>
+    <li><a href="#3总结">3、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2023 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Wed, 05 Apr 2023 00:13:10 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Aug 2023 22:06:36 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go</title>
+      <link>https://xcbeyond.cn/categories/go/</link>
+      <pubDate>Sat, 12 Aug 2023 22:06:36 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/categories/go/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>kubernetes</title>
       <link>https://xcbeyond.cn/categories/kubernetes/</link>
@@ -59,15 +68,6 @@
       <pubDate>Sat, 11 Sep 2021 21:34:31 +0800</pubDate>
       
       <guid>https://xcbeyond.cn/categories/service-mesh/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Go</title>
-      <link>https://xcbeyond.cn/categories/go/</link>
-      <pubDate>Sun, 01 Aug 2021 13:58:02 +0800</pubDate>
-      
-      <guid>https://xcbeyond.cn/categories/go/</guid>
       <description></description>
     </item>
     

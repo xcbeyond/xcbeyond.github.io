@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Sun, 01 Aug 2021 13:58:02 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 12 Aug 2023 22:06:36 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Golang项目中如何轻松实现私有仓库pkg包的引入</title>
+      <link>https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/</link>
+      <pubDate>Sat, 12 Aug 2023 22:06:36 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/</guid>
+      <description>在企业内部创建一个公共的Golang模块工程可以帮助提高代码复用性和开发效率。本文将从如何创建一个公共的Golang工程开始，指导你一步步创建它、并引入到你的工程中。
+1、公共模块规范 下面是一个简单的步骤指南来创建这样一个公共模块项目。
+创建版本控制仓库：使用版本控制工具（如Git）创建一个新的代码仓库，用于管理该公共模块工程的代码。
+项目结构：定义好项目的结构，使其易于理解和使用。一个常见的Golang项目结构如下：
+my-module/ |- README.md # 项目文档和说明 |- go.</description>
+    </item>
+    
     <item>
       <title>Cobra 快速入门 - 专为命令行程序而生</title>
       <link>https://xcbeyond.cn/blog/golang/cobra-quick-start/</link>
