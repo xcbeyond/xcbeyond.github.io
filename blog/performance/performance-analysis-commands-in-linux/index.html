@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Linux系统下的性能分析命令 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="在Linux系统下，有很多命令，其中不少命令能够收集、查看应用程序的性能指标，为应用程序的性能优化起到关键性的作用。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Linux系统下的性能分析命令</li>
+        </ul>
+        <p class="text-lighten">在Linux系统下，有很多命令，其中不少命令能够收集、查看应用程序的性能指标，为应用程序的性能优化起到关键性的作用。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/linux-performance-observability-tools.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2023-08-13 21:48:06 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96"> 
+                  性能优化</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在 Linux 系统下，有许多用于性能分析和调试的命令和工具，可以帮助您识别系统瓶颈、优化性能以及调查问题。本文将介绍在性能分析过程中，可能使用到的一些命令。</p>
+<p>以下是一些常用的性能分析命令和工具汇总：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能简述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>top</code></td>
+<td>用于实时监视系统中运行的进程和系统性能指标，如CPU使用率、内存使用率等。</td>
+</tr>
+<tr>
+<td><code>nmon</code></td>
+<td>一个性能监控工具，提供实时的系统性能数据，包括CPU、内存、磁盘、网络等信息。</td>
+</tr>
+<tr>
+<td><code>lsof</code></td>
+<td>用于列出打开的文件和网络连接，可以用于查找资源泄漏和不正常的连接。</td>
+</tr>
+<tr>
+<td><code>pidstat</code></td>
+<td>用于监视进程级别的CPU、内存、IO等性能数据。</td>
+</tr>
+<tr>
+<td><code>vmstat</code></td>
+<td>用于显示系统的虚拟内存、进程、CPU活动和IO统计信息。</td>
+</tr>
+<tr>
+<td><code>iostat</code></td>
+<td>用于监视系统磁盘和IO性能，提供关于磁盘活动的信息。</td>
+</tr>
+<tr>
+<td><code>tcpdump</code></td>
+<td>用于抓取网络数据包，对于网络性能分析和故障排除非常有用。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1top">1、top</h2>
+<p><code>top</code> 命令是 Linux 系统下常用的性能分析工具，能够实时显示系统中各个进程的资源占用情况，如：CPU 使用率、内存使用率等。</p>
+<h3 id="11-语法">1.1 语法</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">top <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span>
+</code></pre></div><p>常用选项：</p>
+<ul>
+<li>
+<p><code>-d</code> 或 <code>--delay</code>: 指定刷新间隔，即 top 每隔多少秒更新一次，默认为 3 秒。</p>
+</li>
+<li>
+<p><code>-n</code> 或 <code>--iterations</code>: 指定刷新次数，即 top 更新数据的次数。</p>
+</li>
+<li>
+<p><code>-u</code> 或 <code>--user</code>: 仅显示指定用户的进程。</p>
+</li>
+<li>
+<p><code>-p</code> 或 <code>--pid</code>: 仅显示指定进程 ID 的信息。</p>
+</li>
+<li>
+<p><code>-H</code>：显示进程的层次关系，即显示线程。</p>
+</li>
+</ul>
+<h3 id="12-示例">1.2 示例</h3>
+<p>以下是一个 <code>top</code> 命令的示例输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">top - 16:30:45 up <span style="color:#ae81ff">2</span> days,  5:37,  <span style="color:#ae81ff">2</span> users,  load average: 0.15, 0.18, 0.20
+Tasks: <span style="color:#ae81ff">186</span> total,   <span style="color:#ae81ff">1</span> running, <span style="color:#ae81ff">185</span> sleeping,   <span style="color:#ae81ff">0</span> stopped,   <span style="color:#ae81ff">0</span> zombie
+%Cpu<span style="color:#f92672">(</span>s<span style="color:#f92672">)</span>:  1.5 us,  0.5 sy,  0.0 ni, 97.9 id,  0.0 wa,  0.0 hi,  0.1 si,  0.0 st
+KiB Mem : <span style="color:#ae81ff">16327936</span> total,  <span style="color:#ae81ff">9359124</span> free,  <span style="color:#ae81ff">2368572</span> used,  <span style="color:#ae81ff">4600256</span> buff/cache
+KiB Swap:  <span style="color:#ae81ff">2097148</span> total,  <span style="color:#ae81ff">2097148</span> free,        <span style="color:#ae81ff">0</span> used. <span style="color:#ae81ff">13755352</span> avail Mem 
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+  <span style="color:#ae81ff">2191</span> alice     <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">169168</span>  <span style="color:#ae81ff">14164</span>  <span style="color:#ae81ff">10964</span> S   3.0  0.1   0:07.83 gnome-terminal-
+  <span style="color:#ae81ff">2811</span> bob       <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">2067296</span> <span style="color:#ae81ff">301100</span>  <span style="color:#ae81ff">78964</span> S   2.0  1.8  30:02.45 firefox
+    <span style="color:#ae81ff">1</span> root      <span style="color:#ae81ff">20</span>   <span style="color:#ae81ff">0</span>  <span style="color:#ae81ff">191064</span>   <span style="color:#ae81ff">7780</span>   <span style="color:#ae81ff">4744</span> S   0.0  0.0   0:06.07 systemd
+    ...
+
+</code></pre></div><p>在上述示例中，每行输出信息分别为：</p>
+<ul>
+<li>
+<p>第一行：提供了系统的一般性信息。分别是系统当前时间、系统运行时间、当前登录用户数和负载平均值（<code>load average</code>，即：任务队列的平均长度，3个值分别表示1分钟、5分钟、15分钟到现在的平均值）。</p>
+</li>
+<li>
+<p>第二行：任务（Tasks）信息。分别是总任务数，显示了正在运行（<code>running</code>）、睡眠（<code>sleeping</code>）、停止（<code>stopped</code>）和僵尸（``zombie）状态的进程数量。</p>
+</li>
+<li>
+<p>第三行：CPU 统计信息。<code>us</code> 表示用户空间 CPU 占有率、<code>sy</code> 表示内核空间 CPU 占用率、<code>ni</code> 表示用户进程空间改变过优先级的进程 CPU 占有率、<code>id</code> 表示空闲 CPU 占用率、<code>wa</code> 表示等待输入输出的 CPU 时间百分比、<code>hi</code> 表示硬件中断请求、<code>si</code> 表示软件中断请求。</p>
+</li>
+<li>
+<p>第四行：内存信息。分别为物理内存总量、已使用的物理内存、空闲物理内存、内核缓冲使用量。</p>
+</li>
+<li>
+<p>第五行：交换区信息。分别为交换区总量、空闲交换区大小、缓冲交换区大小。</p>
+</li>
+<li>
+<p>&hellip;：进程列表。每一行表示一个进程的信息，包括进程 ID、用户、CPU 使用率、内存使用率、进程状态等。</p>
+</li>
+</ul>
+<p>请注意，<code>top</code> 命令的输出会实时更新，您可以使用交互式命令来切换排序方式、改变显示内容等。例如，按下 <code>M</code> 可以按内存使用率排序进程，按下 <code>P</code> 可以按 CPU 使用率排序进程。要退出 top，您可以按下 <code>q</code> 键。</p>
+<h2 id="2nmon">2、nmon</h2>
+<p><code>nmon</code> 是一个用于实时监视系统性能的命令行工具，最初由 IBM 的 Nigel Griffiths 开发。它提供了一种简洁的方式来查看系统的CPU、内存、磁盘、网络等性能指标，以及进程级别的信息。</p>
+<p><code>nmon</code> 具有交互式界面，可以显示实时的性能数据，方便管理员和开发人员进行系统性能分析。</p>
+<p>以下是 <code>nmon</code> 命令的一些常见用法和示例：</p>
+<ol>
+<li>
+<p><strong>基本使用</strong>：</p>
+<p>使用以下命令启动 <code>nmon</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">nmon
+</code></pre></div><p>这将启动 <code>nmon</code> 交互式界面，显示各种性能指标的实时数据。</p>
+</li>
+<li>
+<p><strong>指定刷新频率</strong>：</p>
+<p>您可以使用 <code>-s</code> 参数来指定刷新间隔，单位为秒。例如，以下命令将每隔2秒刷新一次数据：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">nmon -s <span style="color:#ae81ff">2</span>
+</code></pre></div></li>
+<li>
+<p><strong>保存数据到文件</strong>：</p>
+<p>您可以使用 <code>-f</code> 参数将 <code>nmon</code> 的输出保存到文件中，以便后续分析。例如，以下命令将数据保存到名为 <code>nmon_output.nmon</code> 的文件中：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">nmon -f -c <span style="color:#ae81ff">10</span> -s <span style="color:#ae81ff">2</span> -T -m /path/to/nmon_output.nmon
+</code></pre></div><p>在这个示例中，<code>-c 10</code> 表示 <code>nmon</code> 运行10个循环后自动退出，<code>-T</code> 表示在输出中包含时间戳。</p>
+</li>
+<li>
+<p><strong>只显示特定项目</strong>：</p>
+<p>如果您只对特定性能指标感兴趣，可以使用 <code>-d</code> 参数来指定要显示的项目。例如，以下命令只显示CPU和内存相关数据：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">nmon -d cpu,mem
+</code></pre></div></li>
+<li>
+<p><strong>远程监视</strong>：</p>
+<p>您可以通过SSH在远程系统上运行 <code>nmon</code>，然后将性能数据传输到本地进行分析。例如，以下命令在远程系统上运行 <code>nmon</code> 并将数据传输到本地：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">ssh user@remote_host <span style="color:#e6db74">&#34;nmon -f -s 5 -c 10&#34;</span> &gt; nmon_output.nmon
+</code></pre></div></li>
+</ol>
+<p>这些示例只是 <code>nmon</code> 的一小部分用法。<code>nmon</code> 还提供了许多其他选项和功能，可以根据您的需求进行调整和使用。要详细了解 <code>nmon</code> 的所有选项和功能，请查阅官方文档或运行 <code>nmon</code> 命令时使用 <code>-h</code> 参数查看帮助信息。</p>
+<h2 id="3lsof">3、lsof</h2>
+<p><code>lsof</code>（&ldquo;List Open Files&rdquo;）是一个用于列出在 Linux 系统上被进程打开的文件和网络连接的命令。它可以帮助您查看哪些进程正在访问哪些文件，以及网络连接的相关信息。</p>
+<p><code>lsof</code> 可以用于排查资源泄漏、寻找进程占用文件等问题。</p>
+<h3 id="31-语法">3.1 语法</h3>
+<p>以下是一些常用的 <code>lsof</code> 命令选项及其说明：</p>
+<ul>
+<li>
+<p><code>-i</code>: 列出网络连接。</p>
+</li>
+<li>
+<p><code>-n</code>: 不解析主机名和端口号。</p>
+</li>
+<li>
+<p><code>-c &lt;进程名&gt;</code>: 仅列出特定进程的信息。</p>
+</li>
+<li>
+<p><code>-p &lt;进程ID&gt;</code>: 列出指定进程的信息。</p>
+</li>
+<li>
+<p><code>-u &lt;用户名&gt;</code>: 列出属于特定用户的信息。</p>
+</li>
+<li>
+<p><code>-t</code>: 仅显示进程ID。</p>
+</li>
+<li>
+<p><code>-F &lt;格式&gt;</code>: 使用指定的格式输出。</p>
+</li>
+</ul>
+<h3 id="32-示例">3.2 示例</h3>
+<p>以下是一些示例，演示了如何使用 <code>lsof</code> 命令：</p>
+<ol>
+<li>
+<p><strong>列出所有打开的文件和网络连接</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof
+</code></pre></div></li>
+<li>
+<p><strong>列出特定文件的打开者</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof /path/to/file
+</code></pre></div></li>
+<li>
+<p><strong>列出特定端口的网络连接</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof -i :&lt;port&gt;
+</code></pre></div></li>
+<li>
+<p><strong>列出某个用户打开的文件</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof -u &lt;username&gt;
+</code></pre></div></li>
+<li>
+<p><strong>列出特定进程的打开文件</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof -p &lt;pid&gt;
+</code></pre></div></li>
+<li>
+<p><strong>列出特定类型的文件（例如，TCP连接）</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof -i tcp
+</code></pre></div></li>
+<li>
+<p><strong>列出所有网络连接，但不解析主机名和端口号</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof -ni
+</code></pre></div></li>
+<li>
+<p><strong>以机器可读的格式输出信息</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof -F json
+</code></pre></div></li>
+<li>
+<p><strong>列出所有正在使用某个设备的进程</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">lsof /dev/sda1
+</code></pre></div></li>
+</ol>
+<p>请注意，<code>lsof</code> 命令提供了丰富的信息，包括文件描述符、文件类型、文件位置、打开方式、进程ID、用户等等。您可以根据需要使用不同的选项来过滤和查看所需的信息。使用 <code>man lsof</code> 命令可以查看完整的命令文档和详细说明。</p>
+<h2 id="4pidstat">4、pidstat</h2>
+<p><code>pidstat</code> 是一个用于监视进程级别性能统计的命令行工具，它可以提供有关CPU使用率、内存使用率、IO活动等信息。它是 <code>sysstat</code> 套件的一部分，需要安装才能使用。</p>
+<h3 id="41-语法">4.1 语法</h3>
+<p>以下是 <code>pidstat</code> 命令的常用选项：</p>
+<ul>
+<li>
+<p><code>-u</code>: 显示CPU使用率和统计信息。</p>
+</li>
+<li>
+<p><code>-r</code>: 显示内存使用率和统计信息。</p>
+</li>
+<li>
+<p><code>-d</code>: 显示磁盘IO统计信息。</p>
+</li>
+<li>
+<p><code>-t</code>: 显示进程启动时间。</p>
+</li>
+<li>
+<p><code>-p &lt;PID&gt;</code>: 指定要监视的特定进程ID。</p>
+</li>
+<li>
+<p><code>-h</code>: 显示帮助信息。</p>
+</li>
+</ul>
+<h3 id="42-示例">4.2 示例</h3>
+<p>下面列举了一些示例。</p>
+<ol>
+<li>
+<p><strong>显示进程的CPU使用率和统计信息</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pidstat -u <span style="color:#ae81ff">1</span>
+</code></pre></div><p>这将每秒显示一次CPU使用率和统计信息，默认显示所有进程的数据。可以通过添加 <code>-p &lt;PID&gt;</code> 选项指定特定的进程。</p>
+</li>
+<li>
+<p><strong>显示进程的内存使用率和统计信息</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pidstat -r <span style="color:#ae81ff">1</span>
+</code></pre></div><p>类似于上面的示例，这将每秒显示一次内存使用率和统计信息。</p>
+</li>
+<li>
+<p><strong>显示进程的磁盘IO统计信息</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pidstat -d <span style="color:#ae81ff">1</span>
+</code></pre></div><p>这将每秒显示一次磁盘IO统计信息，包括读写速率、读写次数等。</p>
+</li>
+<li>
+<p><strong>显示特定进程的CPU使用率和统计信息</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pidstat -u -p &lt;PID&gt; <span style="color:#ae81ff">1</span>
+</code></pre></div><p>这将每秒显示指定进程的CPU使用率和统计信息，其中 <code>&lt;PID&gt;</code> 是目标进程的进程ID。</p>
+</li>
+<li>
+<p><strong>显示进程的启动时间</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">pidstat -t
+</code></pre></div><p>这将显示所有进程的启动时间。</p>
+</li>
+</ol>
+<p><code>pidstat</code> 可以帮助您深入了解特定进程的性能行为，从而进行性能调优、问题排查等工作。请注意，具体选项和输出格式可能会因系统版本而异，您可以通过 <code>man pidstat</code> 查看完整的命令手册以获取更多信息。</p>
+<h2 id="5vmstat">5、vmstat</h2>
+<p><code>vmstat</code>（Virtual Memory Statistics）是一个在 Linux 系统中常用的性能分析工具，它提供了关于系统虚拟内存、进程、CPU活动和IO的详细统计信息。通过使用 <code>vmstat</code>，您可以实时监控系统的性能，并且可以快速识别出潜在的瓶颈和问题。</p>
+<h3 id="51-语法">5.1 语法</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">vmstat <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>delay <span style="color:#f92672">[</span>count<span style="color:#f92672">]]</span>
+</code></pre></div><ul>
+<li>
+<p><code>options</code>: 用于指定一些特定的输出选项。</p>
+</li>
+<li>
+<p><code>delay</code>: 两次输出之间的时间间隔（以秒为单位）。</p>
+</li>
+<li>
+<p><code>count</code>: 输出次数限制。</p>
+</li>
+</ul>
+<h3 id="52-示例">5.2 示例</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">vmstat <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">3</span>
+</code></pre></div><p>这个示例命令会每隔5秒输出一次统计数据，一共输出3次。</p>
+<p>输出示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plaintext" data-lang="plaintext">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs  us sy id wa st
+ 1  0      0 244304  67420 802252    0    0     0     4    3    4   1  1 97  1  0
+ 0  0      0 243968  67420 802256    0    0     0     0 1159 2292   1  1 98  0  0
+ 0  0      0 243636  67420 802256    0    0     0     0 1173 2261   1  1 98  0  0
+</code></pre></div><p>在这个示例中，输出的各个列给出了不同的统计信息，包括进程状态、内存使用、交换空间使用、IO活动、系统活动以及CPU使用率等。通过观察这些数据，您可以了解系统的性能情况并识别潜在的问题。</p>
+<p><code>vmstat</code> 输出的列含义：</p>
+<ol>
+<li>
+<p><code>procs</code>: 进程相关统计。 <code>r</code>: 正在运行的进程数、<code>b</code>: 等待运行的进程数。</p>
+</li>
+<li>
+<p><code>memory</code>: 内存相关统计。<code>swpd</code>: 虚拟内存使用量（以KB为单位）、<code>free</code>: 空闲内存（以KB为单位）、<code>buff</code>: 用作缓冲的内存（以KB为单位）、<code>cache</code>: 用作缓存的内存（以KB为单位）。</p>
+</li>
+<li>
+<p><code>swap</code>: 交换空间相关统计。<code>si</code>: 从磁盘读入交换区的数据量（以KB为单位）、<code>so</code>: 向磁盘写入交换区的数据量（以KB为单位）。</p>
+</li>
+<li>
+<p><code>io</code>: IO相关统计。<code>bi</code>: 每秒从块设备读入的块数量（如硬盘）（以块为单位）、<code>bo</code>: 每秒写入块设备的块数量（以块为单位）。</p>
+</li>
+<li>
+<p><code>system</code>: 系统相关统计。<code>in</code>: 每秒的中断数、<code>cs</code>: 每秒上下文切换数。</p>
+</li>
+<li>
+<p><code>cpu</code>: CPU使用情况统计。<code>%us</code>: 用户空间CPU使用率、<code>%sy</code>: 系统CPU使用率、<code>%id</code>: 空闲CPU百分比、<code>%wa</code>: 等待IO的CPU百分比、<code>%st</code>: 用于虚拟化的CPU时间百分比。</p>
+</li>
+</ol>
+<h2 id="6iostat">6、iostat</h2>
+<p><code>iostat</code> 是一个在 Linux 系统中常用的命令，用于监视系统的磁盘和IO性能。它能够提供关于磁盘活动、IO延迟和吞吐量等信息，对于识别磁盘性能瓶颈和调优非常有帮助。</p>
+<p>请注意，<code>iostat</code> 命令需要安装 <code>sysstat</code> 包才能使用。在大多数Linux发行版中，您可以使用包管理器来安装 <code>sysstat</code> 包。</p>
+<h3 id="61-语法">6.1 语法</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">iostat <span style="color:#f92672">[</span>options<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>interval<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>count<span style="color:#f92672">]</span>
+</code></pre></div><p><strong>选项解释：</strong></p>
+<ul>
+<li>
+<p><code>-c</code>：显示CPU统计信息。</p>
+</li>
+<li>
+<p><code>-d</code>：显示磁盘统计信息。</p>
+</li>
+<li>
+<p><code>-k</code>：以千字节为单位显示数据。</p>
+</li>
+<li>
+<p><code>-m</code>：以兆字节为单位显示数据。</p>
+</li>
+<li>
+<p><code>-x</code>：显示扩展统计信息，包括更多的磁盘和分区信息。</p>
+</li>
+</ul>
+<h3 id="62-示例">6.2 示例</h3>
+<p><code>iostat</code> 命令的输出包含了各个磁盘和分区的统计数据，以及系统的平均负载、CPU利用率、上下文切换等信息。以下是示例输出的一部分：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">Linux 5.4.0-81-generic <span style="color:#f92672">(</span>hostname<span style="color:#f92672">)</span>   08/13/2023  _x86_64_    <span style="color:#f92672">(</span><span style="color:#ae81ff">8</span> CPU<span style="color:#f92672">)</span>
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           7.13    0.00    1.45    0.46    0.00   90.96
+
+Device             tps    kB_read/s    kB_wrtn/s    kB_read    kB_wrtn
+sda               2.14        18.60        19.84     <span style="color:#ae81ff">123759</span>     <span style="color:#ae81ff">132016</span>
+sdb               0.06         0.28         0.00       <span style="color:#ae81ff">1863</span>          <span style="color:#ae81ff">0</span>
+</code></pre></div><p>在这个示例中，<code>avg-cpu</code> 部分显示了 CPU 利用率的统计信息，<code>Device</code> 部分显示了每个磁盘设备的统计数据，包括传输速率和总的读写字节数。您可以根据输出来评估系统的磁盘性能和负载情况。</p>
+<ol>
+<li>
+<p><strong>显示平均IO统计信息，每秒更新一次，共更新5次</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">iostat
+</code></pre></div></li>
+<li>
+<p><strong>显示详细的磁盘IO统计信息，每秒更新一次，共更新3次</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">iostat -d <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">3</span>
+</code></pre></div></li>
+<li>
+<p><strong>以千字节为单位显示数据，显示CPU和磁盘统计信息，每秒更新一次，共更新4次</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">iostat -k -c -d <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">4</span>
+</code></pre></div></li>
+<li>
+<p><strong>显示扩展的磁盘IO统计信息，每秒更新一次，共更新5次</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">iostat -x <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">5</span>
+</code></pre></div></li>
+</ol>
+<h2 id="7tcpdump">7、tcpdump</h2>
+<p><code>tcpdump</code> 是一个在 Unix 系统上常用的网络抓包工具，用于捕获和分析网络数据包。它能够监听网络接口，捕获经过该接口的数据包，并以可读的格式显示数据包的内容。</p>
+<p><code>tcpdump</code> 支持多种过滤选项，以便只捕获感兴趣的数据包。</p>
+<p>以下是一些常用的 <code>tcpdump</code> 命令选项以及示例说明：</p>
+<ol>
+<li>
+<p><strong>基本使用</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump
+</code></pre></div><p>这将在默认网络接口上捕获所有的数据包。但是，通常情况下，您会希望使用其他选项来限制抓包的范围。</p>
+</li>
+<li>
+<p><strong>指定网络接口</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump -i eth0
+</code></pre></div><p>通过 <code>-i</code> 选项指定要捕获的网络接口，这里是 <code>eth0</code>。</p>
+</li>
+<li>
+<p><strong>指定数据包数量</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump -c <span style="color:#ae81ff">10</span>
+</code></pre></div><p>使用 <code>-c</code> 选项可以指定捕获的数据包数量，这里捕获前 10 个数据包。</p>
+</li>
+<li>
+<p><strong>捕获特定主机的数据包</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump host 192.168.1.100
+</code></pre></div><p>使用 <code>host</code> 关键字可以捕获特定主机的所有数据包。</p>
+</li>
+<li>
+<p><strong>捕获特定端口的数据包</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump port <span style="color:#ae81ff">80</span>
+</code></pre></div><p>使用 <code>port</code> 关键字可以捕获特定端口的数据包，这里是端口 80（HTTP）的数据包。</p>
+</li>
+<li>
+<p><strong>组合多个过滤条件</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump host 192.168.1.100 and port <span style="color:#ae81ff">22</span>
+</code></pre></div><p>可以使用逻辑运算符 <code>and</code> 来组合多个过滤条件，这里捕获主机 192.168.1.100 上的端口 22（SSH）数据包。</p>
+</li>
+<li>
+<p><strong>保存抓包结果到文件</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump -w capture.pcap
+</code></pre></div><p>使用 <code>-w</code> 选项可以将抓包结果保存到文件中，文件格式为 pcap。</p>
+</li>
+<li>
+<p><strong>读取保存的抓包文件</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump -r capture.pcap
+</code></pre></div><p>使用 <code>-r</code> 选项可以读取保存的抓包文件并显示其内容。</p>
+</li>
+<li>
+<p><strong>显示详细数据包信息</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump -v
+</code></pre></div><p>使用 <code>-v</code> 选项可以显示详细的数据包信息。</p>
+</li>
+<li>
+<p><strong>显示更详细的数据包信息</strong>：</p>
+</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">tcpdump -vv
+</code></pre></div><p>使用 <code>-vv</code> 选项可以显示更详细的数据包信息，包括解析的协议头。</p>
+<p>这只是 <code>tcpdump</code> 的一些基本用法示例，该工具还支持许多其他选项和过滤条件，以满足各种网络抓包和分析的需求。请注意，由于抓包涉及到访问网络数据，通常需要以 root 或者具有适当权限的用户身份运行 <code>tcpdump</code>。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/linux">Linux</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%91%bd%e4%bb%a4">命令</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/performance/performance-analysis-commands-in-linux/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/linux-performance-observability-tools.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/performance/performance-analysis-commands-in-linux/">
+          <h5 class="mt-0">Linux系统下的性能分析命令</h5>
+        </a>
+        2023-08-13 21:48:06
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-pkg-cmd.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/">
+          <h5 class="mt-0">Golang项目中如何轻松实现私有仓库pkg包的引入</h5>
+        </a>
+        2023-08-12 22:06:36
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/transfer.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/">
+          <h5 class="mt-0">如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</h5>
+        </a>
+        2023-04-05 00:13:10
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kind.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/installation-chapter-part3-deploy-cluster-environment-based-on-kind/">
+          <h5 class="mt-0">Kubernetes安装篇（三）：基于kind快速部署本地多套K8S集群</h5>
+        </a>
+        2023-04-01 22:49:19
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/dockerfile-best-practices.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/containers/dockerfile-best-practices/">
+          <h5 class="mt-0">Dockerfile 的最佳实践 ｜ Dockerfile 你写的都对么？</h5>
+        </a>
+        2022-05-14 21:40:14
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/aliyun-devops.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/devops-is-no-longer-just-jenkins/">
+          <h5 class="mt-0">谈阿里云云效 DevOps | DevOps 不再只是 Jenkins</h5>
+        </a>
+        2022-03-26 21:06:50
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1top">1、top</a>
+      <ul>
+        <li><a href="#11-语法">1.1 语法</a></li>
+        <li><a href="#12-示例">1.2 示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#2nmon">2、nmon</a></li>
+    <li><a href="#3lsof">3、lsof</a>
+      <ul>
+        <li><a href="#31-语法">3.1 语法</a></li>
+        <li><a href="#32-示例">3.2 示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#4pidstat">4、pidstat</a>
+      <ul>
+        <li><a href="#41-语法">4.1 语法</a></li>
+        <li><a href="#42-示例">4.2 示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#5vmstat">5、vmstat</a>
+      <ul>
+        <li><a href="#51-语法">5.1 语法</a></li>
+        <li><a href="#52-示例">5.2 示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#6iostat">6、iostat</a>
+      <ul>
+        <li><a href="#61-语法">6.1 语法</a></li>
+        <li><a href="#62-示例">6.2 示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#7tcpdump">7、tcpdump</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2023 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>
