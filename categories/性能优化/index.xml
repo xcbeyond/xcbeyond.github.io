@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Sun, 13 Aug 2023 21:48:06 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 19 Aug 2023 21:21:08 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java性能分析中常用命令和工具</title>
+      <link>https://xcbeyond.cn/blog/performance/common-commands-for-java-performance-analysis/</link>
+      <pubDate>Sat, 19 Aug 2023 21:21:08 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/performance/common-commands-for-java-performance-analysis/</guid>
+      <description>当涉及到 Java 性能分析时，有一系列强大的命令和工具可以帮助开发人员分析应用程序的性能瓶颈、内存使用情况和线程问题。以下是一些常用的 Java 性能分析命令和工具，以及它们的详细说明和示例。
+以下是一些常用的性能分析命令和工具汇总：
+   命令 功能简述     jps 用于查看正在运行的 Java 进程的状态信息。   jinfo 用于查看和修改正在运行的 Java 进程的 Java 虚拟机（JVM）参数和系统属性。   jstack 用于生成 Java 进程的线程转储信息。   jmap 用于生成 Java 进程的内存映射信息。   jconsole 是 Java 自带的监控和管理控制台，它提供了一个图形化界面，允许您监视和管理正在运行的 Java 应用程序的性能和资源使用情况。   jvisualvm 是一款功能强大的多合一故障诊断和性能监控的图形化工具。    1、jps jps （JVM Process Status Tool）命令用于查看正在运行的 Java 进程的状态信息，包括进程 ID 和主类名。这对于迅速了解系统上正在运行的 Java 应用程序很有帮助。</description>
+    </item>
+    
     <item>
       <title>Linux系统下的性能分析命令</title>
       <link>https://xcbeyond.cn/blog/performance/performance-analysis-commands-in-linux/</link>

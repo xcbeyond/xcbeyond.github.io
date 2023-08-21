@@ -7,22 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Sun, 13 Aug 2023 21:48:06 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 19 Aug 2023 21:21:08 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Linux</title>
-      <link>https://xcbeyond.cn/tags/linux/</link>
-      <pubDate>Sun, 13 Aug 2023 21:48:06 +0800</pubDate>
+      <title>Java</title>
+      <link>https://xcbeyond.cn/tags/java/</link>
+      <pubDate>Sat, 19 Aug 2023 21:21:08 +0800</pubDate>
       
-      <guid>https://xcbeyond.cn/tags/linux/</guid>
+      <guid>https://xcbeyond.cn/tags/java/</guid>
       <description></description>
     </item>
     
     <item>
       <title>命令</title>
       <link>https://xcbeyond.cn/tags/%E5%91%BD%E4%BB%A4/</link>
-      <pubDate>Sun, 13 Aug 2023 21:48:06 +0800</pubDate>
+      <pubDate>Sat, 19 Aug 2023 21:21:08 +0800</pubDate>
       
       <guid>https://xcbeyond.cn/tags/%E5%91%BD%E4%BB%A4/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://xcbeyond.cn/tags/linux/</link>
+      <pubDate>Sun, 13 Aug 2023 21:48:06 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/linux/</guid>
       <description></description>
     </item>
     
