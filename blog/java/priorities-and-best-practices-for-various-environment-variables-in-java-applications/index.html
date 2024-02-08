@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Java应用中各类环境变量的优先级及最佳实践 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="深入理解这些环境变量的优先级关系，将使得Java应用程序更加灵活和易于维护。本文将详细介绍这些环境变量的优先级，结合实际场景提供最佳实践，以帮助开发人员更好地配置和管理Java应用程序。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Java应用中各类环境变量的优先级及最佳实践</li>
+        </ul>
+        <p class="text-lighten">深入理解这些环境变量的优先级关系，将使得Java应用程序更加灵活和易于维护。本文将详细介绍这些环境变量的优先级，结合实际场景提供最佳实践，以帮助开发人员更好地配置和管理Java应用程序。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/post-4.jpg" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2024-02-08 14:53:42 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/java"> 
+                  Java</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <h2 id="1引言">1.引言</h2>
+<p>Java应用程序的开发和部署过程中，合理利用各类环境变量是关键之一。不同类型的环境变量，如系统环境变量、进程级环境变量、Java启动参数设置的系统属性以及Spring Boot配置文件中的环境变量，它们之间存在优先级差异。</p>
+<p>深入理解这些环境变量的优先级关系，将使得Java应用程序更加灵活和易于维护。本文将详细介绍这些环境变量的优先级，结合实际场景提供最佳实践，以帮助开发人员更好地配置和管理Java应用程序。</p>
+<h2 id="2-环境变量">2. 环境变量</h2>
+<h3 id="21-系统环境变量">2.1 系统环境变量</h3>
+<p>系统环境变量是操作系统层面的配置项，全局可见。Java应用程序会继承这些系统环境变量，但不会直接使用。这一层级的环境变量通常用于设置操作系统的全局配置，而不是针对某个具体的Java应用。</p>
+<p><strong>示例</strong>：
+假设在操作系统中设置了一个名为 <code>JAVA_HOME</code> 的系统环境变量，指向Java的安装目录。尽管Java应用程序继承了这个变量，但它并不直接用于应用程序的特定配置。</p>
+<h3 id="22-进程级环境变量">2.2 进程级环境变量</h3>
+<p>进程级环境变量是在Java进程启动时设置的，可在启动脚本或命令行中指定。这一层级的环境变量会覆盖系统环境变量，但只在Java进程的生命周期内有效。进程级环境变量的优势在于可以根据应用程序的不同运行环境进行定制化配置。</p>
+<p><strong>示例</strong>：</p>
+<p>通过启动脚本或命令行参数 <code>-D</code> 设置Java进程的环境变量，例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">java -Dspring.profiles.active<span style="color:#f92672">=</span>dev -jar myapp.jar
+</code></pre></div><p>这里的 <code>spring.profiles.active</code> 是一个进程级环境变量，用于指定Spring应用程序的激活配置文件。</p>
+<h3 id="23-java启动参数--d参数">2.3 Java启动参数 (-D参数)</h3>
+<p>通过 <code>-D</code> 参数可以在启动Java进程时设置Java系统属性。这些属性可以通过 <code>System.getProperty()</code> 方法在Java应用程序中获取。Java启动参数设置的系统属性优先级较高，通常用于指定应用程序的一些关键配置。</p>
+<p><strong>示例</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">java -Dserver.port<span style="color:#f92672">=</span><span style="color:#ae81ff">8080</span> -jar myapp.jar
+</code></pre></div><p>在这个例子中，<code>server.port</code> 是一个Java系统属性，它会覆盖进程级环境变量和系统环境变量中的同名属性。</p>
+<h3 id="24-spring-boot配置文件中的环境变量">2.4 Spring Boot配置文件中的环境变量</h3>
+<p>在Spring Boot应用程序的配置文件中，可以使用 <code>${}</code> 语法引用环境变量。这样的环境变量可以是系统环境变量、进程级环境变量，甚至是Java启动参数设置的系统属性。Spring Boot配置文件中的环境变量通常用于配置应用程序的各种属性，如数据库连接、端口号等。</p>
+<p><strong>示例</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">server</span>:
+  <span style="color:#f92672">port</span>: <span style="color:#ae81ff">${SERVER_PORT:8080}</span>
+</code></pre></div><p>在这个例子中，如果环境变量 <code>SERVER_PORT</code> 存在，则使用该值，否则默认使用 <code>8080</code>。</p>
+<h2 id="3-优先级总结">3. 优先级总结</h2>
+<p>Java应用中各类环境变量的优先级总结如下：</p>
+<ol>
+<li>Java启动参数设置的系统属性（-D参数）：优先级最高。</li>
+<li>进程级环境变量：次高优先级。</li>
+<li>系统环境变量：优先级最低。</li>
+<li>Spring Boot配置文件中的环境变量：介于进程级环境变量和系统环境变量之间，可通过动态设置或默认值实现更灵活的配置。</li>
+</ol>
+<h2 id="4-最佳实践">4. 最佳实践</h2>
+<ol>
+<li>
+<p><strong>动态切换配置文件</strong>：通过Java启动参数设置系统属性，可以实现在不同环境中动态切换配置文件，提高灵活性。</p>
+</li>
+<li>
+<p><strong>保护敏感信息</strong>：避免将敏感信息硬编码在代码中，通过环境变量传递，可以在不同环境中轻松更改这些信息。</p>
+</li>
+<li>
+<p><strong>日志级别控制</strong>：使用Java启动参数设置系统属性，可以在运行时动态调整日志级别，有助于排查问题。</p>
+</li>
+<li>
+<p><strong>多环境配置</strong>：利用Spring Boot配置文件中的环境变量，可以为不同环境提供特定的配置，如数据库连接信息、服务端口等。</p>
+</li>
+</ol>
+<h2 id="5-结论">5. 结论</h2>
+<p>理解Java应用中各类环境变量的优先级关系，以及在实际应用中的最佳实践，对于配置管理和系统优化至关重要。通过合理利用这些环境变量，开发人员可以实现Java应用程序的灵活配置，提高可维护性和性能。在实际项目中，应根据具体需求选择合适的配置方式，并在开发和部署过程中灵活运用不同的环境变量类型。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/java" class="d-block pb-3 mt-3">Java</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/ansible">Ansible</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/java">Java</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/linux">Linux</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%91%bd%e4%bb%a4">命令</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">环境变量</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/post-4.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/">
+          <h5 class="mt-0">Java应用中各类环境变量的优先级及最佳实践</h5>
+        </a>
+        2024-02-08 14:53:42
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/learn-more-about-ansible-the-power-to-fully-automate-your-it-environment/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/ansible.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/learn-more-about-ansible-the-power-to-fully-automate-your-it-environment/">
+          <h5 class="mt-0">深入了解 Ansible：全面掌握自动化 IT 环境的利器</h5>
+        </a>
+        2024-02-07 16:49:37
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/performance/common-commands-for-java-performance-analysis/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/java.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/performance/common-commands-for-java-performance-analysis/">
+          <h5 class="mt-0">Java性能分析中常用命令和工具</h5>
+        </a>
+        2023-08-19 21:21:08
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/performance/performance-analysis-commands-in-linux/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/linux-performance-observability-tools.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/performance/performance-analysis-commands-in-linux/">
+          <h5 class="mt-0">Linux系统下的性能分析命令</h5>
+        </a>
+        2023-08-13 21:48:06
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-pkg-cmd.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/how-to-easily-introduce-private-pkg-packages-in-the-golang-project/">
+          <h5 class="mt-0">Golang项目中如何轻松实现私有仓库pkg包的引入</h5>
+        </a>
+        2023-08-12 22:06:36
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/transfer.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/exposing-tcp-services/">
+          <h5 class="mt-0">如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</h5>
+        </a>
+        2023-04-05 00:13:10
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1引言">1.引言</a></li>
+    <li><a href="#2-环境变量">2. 环境变量</a>
+      <ul>
+        <li><a href="#21-系统环境变量">2.1 系统环境变量</a></li>
+        <li><a href="#22-进程级环境变量">2.2 进程级环境变量</a></li>
+        <li><a href="#23-java启动参数--d参数">2.3 Java启动参数 (-D参数)</a></li>
+        <li><a href="#24-spring-boot配置文件中的环境变量">2.4 Spring Boot配置文件中的环境变量</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-优先级总结">3. 优先级总结</a></li>
+    <li><a href="#4-最佳实践">4. 最佳实践</a></li>
+    <li><a href="#5-结论">5. 结论</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2023 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>

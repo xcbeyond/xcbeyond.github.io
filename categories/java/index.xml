@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java on xcbeyond</title>
+    <link>https://xcbeyond.cn/categories/java/</link>
+    <description>Recent content in java on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
+    <lastBuildDate>Thu, 08 Feb 2024 14:53:42 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java应用中各类环境变量的优先级及最佳实践</title>
+      <link>https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/</link>
+      <pubDate>Thu, 08 Feb 2024 14:53:42 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/</guid>
+      <description>1.引言 Java应用程序的开发和部署过程中，合理利用各类环境变量是关键之一。不同类型的环境变量，如系统环境变量、进程级环境变量、Java启动参数设置的系统属性以及Spring Boot配置文件中的环境变量，它们之间存在优先级差异。
+深入理解这些环境变量的优先级关系，将使得Java应用程序更加灵活和易于维护。本文将详细介绍这些环境变量的优先级，结合实际场景提供最佳实践，以帮助开发人员更好地配置和管理Java应用程序。
+2. 环境变量 2.1 系统环境变量 系统环境变量是操作系统层面的配置项，全局可见。Java应用程序会继承这些系统环境变量，但不会直接使用。这一层级的环境变量通常用于设置操作系统的全局配置，而不是针对某个具体的Java应用。
+示例： 假设在操作系统中设置了一个名为 JAVA_HOME 的系统环境变量，指向Java的安装目录。尽管Java应用程序继承了这个变量，但它并不直接用于应用程序的特定配置。</description>
+    </item>
+    
+  </channel>
+</rss>
