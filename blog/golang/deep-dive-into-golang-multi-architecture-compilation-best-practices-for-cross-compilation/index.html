@@ -2,13 +2,13 @@
 <html lang="zh-cn"><head>
   <meta charset="utf-8">
   
-  <title>盘点 2021 ｜ 云原生拥抱之路 | xcbeyond</title>
+  <title>深入了解 Golang 多架构编译：交叉编译最佳实践 | xcbeyond</title>
   
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description"
-    content="回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。">
+    content="Golang 作为一种现代化的编程语言，具有出色的跨平台支持，通过其强大的多架构编译功能，可以轻松实现在各种操作系统和硬件架构上的部署。本文将深入探讨 Golang 多架构编译的原理、方法以及示例。">
   
   <meta name="author" content="xcbeyond">
   <meta name="generator" content="Hugo 0.81.0" />
@@ -120,9 +120,9 @@
       <div class="col-md-12">
         <ul class="list-inline custom-breadcrumb">
           
-          <li class="list-inline-item text-white h3 font-secondary">盘点 2021 ｜ 云原生拥抱之路</li>
+          <li class="list-inline-item text-white h3 font-secondary">深入了解 Golang 多架构编译：交叉编译最佳实践</li>
         </ul>
-        <p class="text-lighten">回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。</p>
+        <p class="text-lighten">Golang 作为一种现代化的编程语言，具有出色的跨平台支持，通过其强大的多架构编译功能，可以轻松实现在各种操作系统和硬件架构上的部署。本文将深入探讨 Golang 多架构编译的原理、方法以及示例。</p>
       </div>
     </div>
   </div>
@@ -136,7 +136,7 @@
       <div class="col-lg-8 order-2 order-lg-1">
         <div class="row">
           <div class="col-12 mb-4">
-            <img src="/images/blog/cloudnative-01.jpeg" alt="blog-thumb" class="img-fluid w-100">
+            <img src="/images/blog/golang-build.png" alt="blog-thumb" class="img-fluid w-100">
           </div>
           <div class="col-12">
             <ul class="list-inline">
@@ -145,14 +145,12 @@
                   href="/author/xcbeyond">Xcbeyond</a></li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
-                  :</span>2021-12-31 21:18:56 </li>
+                  :</span>2024-05-29 20:28:42 </li>
 
               <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
                   :</span><a
-                  href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f"> 
-                  云原生</a> <a
-                  href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f"> , 
-                  程序人生</a> </li>
+                  href="/categories/go"> 
+                  Go</a> </li>
 
               
 
@@ -164,84 +162,145 @@
           </div>
           
           <div class="col-12 mb-5 content">
-            <p>2021 即将结束，又到了一年一度的盘点时刻，今年该说点啥？</p>
-<p>回顾这一年，还是从盘点技术说起，聊一聊我的云原生拥抱之路，在云原生之路上我都从哪些方面入手，学到了什么。</p>
-<h2 id="1背景">1、背景</h2>
-<p>之前一直专注于微服务体系架构的研发工作，以 Java 语言作为我的第一程序语言，并伴随了我很多年。随着 2020 年 8 月份工作的变动，全身投入到新架构体系产品的技术预研及研发中，从此开启了我的云原生之路。</p>
-<p>IT技术的演进，行业的竞争，促使了软件产品的迭代更新。传统微服务架构产品在当下显得力不从心，为寻求市场竞争力，只有向前迈出新的一步，紧跟时代步伐，才有可能立足于市场。</p>
-<p>今天，我将站在云原生的代表技术出发，通过这些技术来阐述我的云原生之路。</p>
-<h2 id="2云原生">2、云原生</h2>
-<p>先来回顾、重温一下云原生的概念吧！</p>
-<p>云原生是近几年云计算领域炙手可热的话题，云原生技术更是成为驱动业务增长的重要引擎。提及云原生我们不得不提及 <a href="https://www.cncf.io/">CNCF</a>（CNCF：Cloud Native Computing Foundation，云原生计算基金会），CNCF 的成立标志着云原生从技术理念转化为开源实现，并给出了目前被广泛接受的定义：</p>
-<p>云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括<strong>容器、服务网格、微服务、不可变基础设施和声明式 API</strong>。</p>
-<p><img src="cloudnative-technology.png" alt="云原生技术"></p>
-<h2 id="3微服务">3、微服务</h2>
-<p>微服务不用多说，在 2022 年来临之际应该没有人不了解微服务吧。</p>
-<p>微服务是服务架构演进的产物，在历经单体架构、垂直架构、面向服务的架构（SOA）之后，微服务架构（MSA）可视为 SOA 架构的分布式实现方式。随着业务发展与需求不断增加，单体应用功能愈发复杂，应用迭代效率由于集中式研发、测试、发布、沟通模式而显著下滑。</p>
-<p><img src="../../cloudnative/%E8%A7%A3%E8%AF%BB%E4%BA%91%E5%8E%9F%E7%94%9F%E6%8A%80%E6%9C%AF/%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84%E3%80%81%E5%9E%82%E7%9B%B4%E6%9E%B6%E6%9E%84%E3%80%81SOA%E3%80%81%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E5%AF%B9%E6%AF%94.png" alt="单体架构、垂直架构、SOA、微服务架构对比"></p>
-<p><strong>微服务架构本质上是通过承受更高的运维复杂度来换取更好的敏捷性，其优势在于小而治之、去中心化，但也导致基础架构的需求、成本和复杂性激增。</strong></p>
-<h2 id="4容器">4、容器</h2>
-<p>早在 2018 年就开始接触容器，开启了我的容器之路，其中 Docker 作为容器化的一种典型方案或者技术，入门比较简单。</p>
-<p><strong>一次构建，多次交付</strong>成为当时吸引我的主要原因，在软件部署层面，传统模式和 Docker 模式存在着如下差异：</p>
-<p><img src="deployment-compare-for-docker.png" alt="传统模式和Docker模式在软件部署上的比较"></p>
-<p>容器是将进程有效的划分一个独立空间，以便在独立的空间之间平衡资源使用冲突的技术。本质上，容器是一种特殊的进程，其核心功能是通过约束和修改进程的动态表现创造出一个“边界”，此外，其资源限制能力、以及基于镜像功能表现出的“强一致性”，都使得容器技术成为云原生最关键的底层技术之一。</p>
-<p>2021 年可以称得上是容器大规模应用的一年。基于 Kubernetes 来屏蔽异构环境的差异，搭建分布式云架构已经成为企业和云厂商的共识。</p>
-<p>对于容器而言，在此给初学者一些建议：掌握/理解容器相关概念、基本操作即可，如容器技术的特征、Docker部署、Docker镜像制作等，其他内容可结合后续 Kubernetes 的学习、项目实际应用中加强。</p>
-<h2 id="5kubernetes">5、Kubernetes</h2>
-<p>Kubernetes 是我 2020 年底开始接触的东西，作为容器编排的优秀作品，被广为使用。在学习的过程中也输出了部分文章：</p>
-<ul>
-<li><a href="https://xcbeyond.cn/blog/kubernetes/introduction-chapter-what-is-kubernetes/">Kubernetes介绍篇：是什么？为什么要用？</a></li>
-<li><a href="https://xcbeyond.cn/blog/kubernetes/concept-chapter-kubernetes-baisc-concept/">Kubernetes概念篇：基本概念和术语</a></li>
-<li>……</li>
-</ul>
-<p>更多内容可持续关注：<a href="https://xcbeyond.cn/categories/kubernetes/">kubernetes分类</a> 或 <a href="https://xcbeyond.cn/kubernetes-handbook/">kubernetes实践手册</a></p>
-<p>如今，Kubernetes 项目不仅是容器技术的事实标准，更成为整个云原生体系发展的基石，重新定义了基础设施领域对应用编排与管理的各种可能。</p>
-<p>在整个云原生生态中，Kubernetes 项目起到了承上启下的作用。对上，Kubernetes 暴露出基础设施能力的格式化数据抽象，如 Service、Ingress、Pod、Deployment，都是 Kubernetes 本身原生 API 为用户暴露出来的能力。而对下，Kubernetes 提供了基础设施能力接入的标准接口，如 CNI、CSI、DevicePlugin、CRD，让云能够作为能力提供商，通过标准化的方式把能力接入到 Kubernetes 的体系中。</p>
-<p>伴随着微服务、DevOps 等技术理念的发展，基于 Kubernetes 可扩展能力的开放应用平台将取代 PaaS 成为主流，而云的价值会回归应用本身，越来越多的开源项目会以云原生理念去开发、部署和运维，最后直接演进成为一种云服务。</p>
-<h2 id="6服务网格">6、服务网格</h2>
-<p>服务网格，是今年新接触的内容之一，更是开启我云原生技术栈的核心，截止目前为止算是入门吧，更多扩展、进阶内容还需后续深入学习。</p>
-<p>想进一步了解服务网格的背景和概念可参考之前写的一篇文章：<a href="https://xcbeyond.cn/blog/servicemesh/what-is-servie-mesh/">全方位解读服务网格（Service Mesh）的背景和概念</a></p>
-<p><img src="../../servicemesh/what-is-servie-mesh/service-mesh-architecture.png" alt="服务网格"></p>
-<p>服务网格中的典型代表框架为 Istio，学习服务网格的重点也就放在了对 Istio 的学习。目前市场上对于 Istio 的资料非常少，主要借助于 <a href="https://istio.io/">istio官网</a>。</p>
-<p>在学习过程中，已输出一本精简版的PDF版学习资料（暂未公开），其中一部分已发布在：<a href="https://xcbeyond.cn/istio-handbook/">Istio 实践手册</a>。</p>
-<h2 id="7go-语言">7、Go 语言</h2>
-<p>Go 语言被称为云时代的语言，在云原生技术栈中 Go 语言占据很大的比例。</p>
-<p><img src="cloudnative-technology-stack-language.png" alt="云原生技术栈语言组成分布"></p>
-<p>比如，Docker、Kubernetes 等众多云原生领域的优秀技术或框架都是基于 Go 语言开发的，所以掌握 Go 语言比不可少。今年，我也是从零开始全身投入到 Go 的语言学习当中，将 Go 语言作为我的第二大开发语言，利用 Go 语言开发公司新产品的研发。</p>
-<p>在经过一年时间的学习及产品实践，总结了一套 Go 语言的快速学习路线供大家参考：</p>
-<ul>
-<li>
-<p><strong>第一阶段（基础语法）</strong></p>
-<p>快速了解基本语法，如：数据类型、条件、循环等，熟悉Go的编程习惯。<strong>可写代码片段。</strong></p>
-</li>
-<li>
-<p><strong>第二阶段 （高级语法）</strong></p>
-<p>逐步了解更高级的特性，如：channel、并发、接口等。</p>
-</li>
-<li>
-<p><strong>第三阶段 （常用代码库）</strong></p>
-<p>熟练掌握常用的代码库，如：fmt、Log、IO、Strconv、Template等。<strong>可写demo。</strong></p>
-</li>
-<li>
-<p><strong>第四阶段 （常用框架）</strong></p>
-<p>熟练掌握常用的框架，如：Cobra（命令行）、Gin（Web框架）、Gorm（ORM框架）等。<strong>可写项目。</strong></p>
-</li>
-<li>
-<p><strong>第五阶段（阅读源码）</strong></p>
-<p>阅读开源项目源码，如：docker、Kubernetes等。<strong>可借助开源项目提升自我/项目。</strong></p>
-</li>
-</ul>
-<p>学习过程中，也整理了一些相关学习资料：<a href="https://xcbeyond.cn/golang-handbook/">Go语言实践手册</a>。</p>
-<h2 id="8总结">8、总结</h2>
-<p>拥抱云原生，其本质就是拥抱云原生代表技术（容器、服务网格、微服务、不可变基础设施和声明式 API等），掌握这几门代表技术也算是踏进云原生的大门了。后续云原生之路，更多的在于实际的项目/产品中实践，并不断总结、理解。</p>
-<p>这就是我 2021 年的技术之路，为新产品的研发，不断向云原生前进，2022 年我将会持续深入学习、分享，将站在用户体验的角度、以技术驱动业务为价值目标，继续我的2022。</p>
-<hr>
-<p>参考资料：</p>
+            <p>随着软件开发领域的不断发展，我们面临着越来越多的挑战，其中之一是如何在不同的平台和架构上部署我们的应用程序。Golang（Go）作为一种现代化的编程语言，具有出色的跨平台支持，通过其强大的多架构编译功能，可以轻松实现在各种操作系统和硬件架构上的部署。本文将深入探讨 Golang 多架构编译的原理、方法以及示例。</p>
+<h2 id="1-golang-多架构编译的原理">1. Golang 多架构编译的原理</h2>
+<p>Golang 的多架构编译功能依赖于两个关键的环境变量：<code>GOOS</code> 和 <code>GOARCH</code>。其中，<code>GOOS</code> 表示目标操作系统，而 <code>GOARCH</code> 表示目标架构。通过设置这两个环境变量，我们可以告诉 Go 编译器在编译过程中要生成的目标平台。</p>
+<h2 id="2-如何进行-golang-多架构编译">2. 如何进行 Golang 多架构编译</h2>
 <ol>
-<li>《云原生发展白皮书(2020年).pdf》</li>
-<li>《云原生2.0白皮书.pdf》</li>
-<li><a href="https://www.infoq.cn/article/Z24fthyOAJLi0Bp4T3sZ">解读云原生的 2021：抢占技术 C 位，迎来落地大爆发</a></li>
+<li>
+<p><strong>设置环境变量</strong>：在开始编译之前，首先需要设置 <code>GOOS</code> 和 <code>GOARCH</code> 环境变量。例如，要为 Linux 64 位编译，可以使用命令 <code>export GOOS=linux</code> 和 <code>export GOARCH=amd64</code>。</p>
+</li>
+<li>
+<p><strong>编写代码</strong>：准备好你的 Go 代码，例如一个简单的 <code>main.go</code> 文件，其中包含了你的应用程序逻辑。</p>
+</li>
+<li>
+<p><strong>进行编译</strong>：使用 <code>go build</code> 命令进行编译，同时指定目标操作系统和架构。例如，要在 CentOS amd64 上为 Linux 64 位编译，可以使用命令 <code>GOOS=linux GOARCH=amd64 go build -o hello-linux-amd64 main.go</code>。</p>
+</li>
+<li>
+<p><strong>验证编译结果</strong>：编译完成后，可以验证生成的可执行文件是否能够在目标平台上正常运行。</p>
+</li>
 </ol>
+<h2 id="3-最佳实践">3. 最佳实践</h2>
+<h3 id="31-多架构编译">3.1 多架构编译</h3>
+<p>以下是一个示例，你可以使用环境变量 GOOS 和 GOARCH 来为不同的平台编译你的程序，并生成适用于不同操作系统和架构的可执行文件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+
+<span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;fmt&#34;</span>
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;Hello, World!&#34;</span>)
+}
+</code></pre></div><p>使用以下命令，我们可以将这个简单的 Go 程序编译为多个目标平台的可执行文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 编译为 Linux 64 位可执行文件</span>
+GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -o hello-linux-amd64 main.go
+
+<span style="color:#75715e"># 编译为 Windows 64 位可执行文件</span>
+GOOS<span style="color:#f92672">=</span>windows GOARCH<span style="color:#f92672">=</span>amd64 go build -o hello-windows-amd64.exe main.go
+
+<span style="color:#75715e"># 编译为 ARM 64 位可执行文件</span>
+GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>arm64 go build -o hello-linux-arm64 main.go
+
+<span style="color:#75715e"># 编译为 macOS 64 位可执行文件</span>
+GOOS<span style="color:#f92672">=</span>darwin GOARCH<span style="color:#f92672">=</span>amd64 go build -o hello-darwin-amd64 main.go
+</code></pre></div><p>通过以上命令，我们可以在不同的操作系统和架构上编译出相应的可执行文件，使得我们的应用程序能够在各种环境中运行。</p>
+<h3 id="32-编写多架构编译脚本">3.2 编写多架构编译脚本</h3>
+<p>为了方便编译多个架构，可以编写一个脚本来自动编译多个目标平台。</p>
+<p>创建 <code>build.sh</code> 脚本：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>
+OUTPUT_DIR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;build&#34;</span>
+PLATFORMS<span style="color:#f92672">=(</span><span style="color:#e6db74">&#34;linux/amd64&#34;</span> <span style="color:#e6db74">&#34;linux/arm64&#34;</span> <span style="color:#e6db74">&#34;windows/amd64&#34;</span> <span style="color:#e6db74">&#34;darwin/amd64&#34;</span><span style="color:#f92672">)</span>
+
+mkdir -p $OUTPUT_DIR
+
+<span style="color:#66d9ef">for</span> PLATFORM in <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>PLATFORMS[@]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>; <span style="color:#66d9ef">do</span>
+    OS<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>echo $PLATFORM | cut -d<span style="color:#e6db74">&#39;/&#39;</span> -f1<span style="color:#66d9ef">)</span>
+    ARCH<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>echo $PLATFORM | cut -d<span style="color:#e6db74">&#39;/&#39;</span> -f2<span style="color:#66d9ef">)</span>
+    OUTPUT_NAME<span style="color:#f92672">=</span>$OUTPUT_DIR/hello-$OS-$ARCH
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $OS <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;windows&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+        OUTPUT_NAME<span style="color:#f92672">+=</span><span style="color:#e6db74">&#39;.exe&#39;</span>
+    <span style="color:#66d9ef">fi</span>
+
+    echo <span style="color:#e6db74">&#34;Building for </span>$OS<span style="color:#e6db74">/</span>$ARCH<span style="color:#e6db74">...&#34;</span>
+    GOOS<span style="color:#f92672">=</span>$OS GOARCH<span style="color:#f92672">=</span>$ARCH go build -o $OUTPUT_NAME main.go
+<span style="color:#66d9ef">done</span>
+</code></pre></div><p>使脚本可执行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">chmod +x build.sh
+</code></pre></div><p>运行脚本：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">./build.sh
+</code></pre></div><p>这个脚本会在 <code>build</code> 目录中生成多个目标平台的可执行文件。</p>
+<h3 id="33-安装和使用交叉编译工具链">3.3 安装和使用交叉编译工具链</h3>
+<p>对于一些架构，例如 ARM，你可能需要安装特定的交叉编译工具链。例如：在 CentOS X86 架构的环境上，编译 ARM 架构的应用。</p>
+<p>目前，CentOS 官方仓库不直接提供 gcc-arm-linux-gnu 和 gcc-aarch64-linux-gnu 包。因此，我们可以从开发者网站（如 ARM 官方或 Linaro）下载预编译的工具链。下面示例展示如何安装 Linaro 提供的 ARM 工具链。</p>
+<ol>
+<li>
+<p>下载 Linaro 64 位 ARM 工具链</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://releases.linaro.org/components/toolchain/binaries/latest-7/aarch64-linux-gnu/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+</code></pre></div></li>
+<li>
+<p>解压并安装工具链</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo tar -C /usr/local -xvf gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+</code></pre></div></li>
+<li>
+<p>将工具链添加到系统环境变量</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">echo <span style="color:#e6db74">&#34;export PATH=\$PATH:/usr/local/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin&#34;</span> &gt;&gt; ~/.bashrc 
+source ~/.bashrc   
+</code></pre></div></li>
+<li>
+<p>验证工具链安装</p>
+<p>安装完成后，可以通过以下命令验证工具链是否安装成功。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">aarch64-linux-gnu-gcc --version
+</code></pre></div></li>
+<li>
+<p>使用 ARM 工具链进行交叉编译</p>
+<p>安装完成并验证工具链后，你可以使用这些工具链为 ARM 平台进行交叉编译。例如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">GOARCH<span style="color:#f92672">=</span>arm64 GOOS<span style="color:#f92672">=</span>linux CC<span style="color:#f92672">=</span>aarch64-linux-gnu-gcc go build -o hello-arm64 main.go
+</code></pre></div></li>
+</ol>
+<p>通过这些步骤，你可以在 CentOS 7 amd64 上安装 ARM 工具链，并为 ARM 平台进行交叉编译。</p>
+<h3 id="34-使用-docker-进行多架构编译">3.4 使用 Docker 进行多架构编译</h3>
+<p>Docker 提供了一种方便的方法来进行多平台构建。你可以使用 Docker 的 Buildx 插件来构建不同平台的 Docker 镜像。</p>
+<ol>
+<li>
+<p>安装 Docker 和 Buildx</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker-ce docker-ce-cli containerd.io
+
+sudo systemctl start docker
+sudo systemctl enable docker
+
+<span style="color:#75715e"># 启用 Buildx</span>
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker buildx create --use
+</code></pre></div></li>
+<li>
+<p>创建 Dockerfile</p>
+<p>创建一个简单的 Dockerfile：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#75715e"># 使用多阶段构建</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> golang:1.18 AS builder</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . .<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> CGO_ENABLED<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> GOOS<span style="color:#f92672">=</span>linux GOARCH<span style="color:#f92672">=</span>amd64 go build -o /hello<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e"># 创建最终镜像</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> alpine:latest</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> --from<span style="color:#f92672">=</span>builder /hello /hello<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;/hello&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div></li>
+<li>
+<p>构建多平台 Docker 镜像</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker buildx build --platform linux/amd64,linux/arm64 -t hello:latest --push .
+</code></pre></div></li>
+</ol>
+<h2 id="4-结语">4. 结语</h2>
+<p>通过这篇文章，读者可以全面了解 Golang 的多架构编译功能，掌握如何使用这一功能来实现跨平台部署。同时，通过最佳实践示例，读者可以更加直观地理解 Golang 多架构编译的实际应用场景，为日后的开发工作提供参考和指导。</p>
 
           </div>
           
@@ -405,14 +464,17 @@
     <h4 class="mb-4">目录</h4>
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#1背景">1、背景</a></li>
-    <li><a href="#2云原生">2、云原生</a></li>
-    <li><a href="#3微服务">3、微服务</a></li>
-    <li><a href="#4容器">4、容器</a></li>
-    <li><a href="#5kubernetes">5、Kubernetes</a></li>
-    <li><a href="#6服务网格">6、服务网格</a></li>
-    <li><a href="#7go-语言">7、Go 语言</a></li>
-    <li><a href="#8总结">8、总结</a></li>
+    <li><a href="#1-golang-多架构编译的原理">1. Golang 多架构编译的原理</a></li>
+    <li><a href="#2-如何进行-golang-多架构编译">2. 如何进行 Golang 多架构编译</a></li>
+    <li><a href="#3-最佳实践">3. 最佳实践</a>
+      <ul>
+        <li><a href="#31-多架构编译">3.1 多架构编译</a></li>
+        <li><a href="#32-编写多架构编译脚本">3.2 编写多架构编译脚本</a></li>
+        <li><a href="#33-安装和使用交叉编译工具链">3.3 安装和使用交叉编译工具链</a></li>
+        <li><a href="#34-使用-docker-进行多架构编译">3.4 使用 Docker 进行多架构编译</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-结语">4. 结语</a></li>
   </ul>
 </nav>
   </div>

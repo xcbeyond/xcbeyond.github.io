@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Thu, 08 Feb 2024 14:53:42 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 May 2024 20:28:42 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>深入了解 Golang 多架构编译：交叉编译最佳实践</title>
+      <link>https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/</link>
+      <pubDate>Wed, 29 May 2024 20:28:42 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/</guid>
+      <description>随着软件开发领域的不断发展，我们面临着越来越多的挑战，其中之一是如何在不同的平台和架构上部署我们的应用程序。Golang（Go）作为一种现代化的编程语言，具有出色的跨平台支持，通过其强大的多架构编译功能，可以轻松实现在各种操作系统和硬件架构上的部署。本文将深入探讨 Golang 多架构编译的原理、方法以及示例。
+1. Golang 多架构编译的原理 Golang 的多架构编译功能依赖于两个关键的环境变量：GOOS 和 GOARCH。其中，GOOS 表示目标操作系统，而 GOARCH 表示目标架构。通过设置这两个环境变量，我们可以告诉 Go 编译器在编译过程中要生成的目标平台。</description>
+    </item>
+    
     <item>
       <title>Java应用中各类环境变量的优先级及最佳实践</title>
       <link>https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/</link>
