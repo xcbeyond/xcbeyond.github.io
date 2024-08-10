@@ -27,12 +27,24 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2024-05-29T20:28:42+08:00</lastmod>
+    <lastmod>2024-07-07T22:32:25+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/categories/go/</loc>
-    <lastmod>2024-05-29T20:28:42+08:00</lastmod>
+    <loc>https://xcbeyond.cn/tags/orangepi/</loc>
+    <lastmod>2024-07-07T22:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/</loc>
+    <lastmod>2024-07-07T22:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/</loc>
+    <lastmod>2024-07-07T22:32:25+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2024-07-07T22:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/</loc>
+    <lastmod>2024-07-07T22:32:25+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/go/</loc>
     <lastmod>2024-05-29T20:28:42+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/</loc>
@@ -44,16 +56,10 @@
     <loc>https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/</loc>
     <lastmod>2024-02-08T14:53:42+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2024-02-08T14:53:42+08:00</lastmod>
-  </url><url>
     <loc>https://xcbeyond.cn/tags/%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</loc>
     <lastmod>2024-02-08T14:53:42+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/ansible/</loc>
-    <lastmod>2024-02-07T16:49:37+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/</loc>
     <lastmod>2024-02-07T16:49:37+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/others/learn-more-about-ansible-the-power-to-fully-automate-your-it-environment/</loc>

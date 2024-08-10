@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Wed, 07 Feb 2024 16:49:37 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 07 Jul 2024 22:32:25 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E5%85%B6%E4%BB%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>打造属于你的私人云盘：在 OrangePi AIpro 上搭建个人云盘</title>
+      <link>https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/</link>
+      <pubDate>Sun, 07 Jul 2024 22:32:25 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/</guid>
+      <description>随着数字化时代的到来，数据的存储和管理变得愈发重要。相比于公共云存储服务，搭建一个属于自己的个人云盘不仅能够更好地保护隐私，还可以更灵活地管理数据。
+近期刚好收到了一个 香橙派 AIpro 的开发板，借此机会用来搭建一个属于自己的个人云盘，实在是很开心、很实用。
+本文将带你一步步在 Orange Pi 上搭建属于你的个人云盘，让你随时随地访问和管理自己的数据。
+1. 准备工作 在开始之前，准备以下材料：</description>
+    </item>
+    
     <item>
       <title>深入了解 Ansible：全面掌握自动化 IT 环境的利器</title>
       <link>https://xcbeyond.cn/blog/others/learn-more-about-ansible-the-power-to-fully-automate-your-it-environment/</link>
