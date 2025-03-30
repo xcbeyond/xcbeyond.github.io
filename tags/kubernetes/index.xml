@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on xcbeyond</title>
+    <link>https://xcbeyond.cn/tags/kubernetes/</link>
+    <description>Recent content in kubernetes on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
+    <lastBuildDate>Thu, 27 Mar 2025 17:12:15 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes 中 Java 应用性能调优指南：从容器化特性到 JVM 底层原理的系统化优化</title>
+      <link>https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/</link>
+      <pubDate>Thu, 27 Mar 2025 17:12:15 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/</guid>
+      <description>在云原生架构中，Kubernetes（k8s）已成为部署和管理分布式应用的事实标准。Java 应用作为企业级开发的主流选择，在容器化环境中面临独特的性能挑战：
+ 资源隔离与竞争：容器与虚拟机不同，共享节点资源，需合理分配 CPU/内存以避免资源争抢。 JVM 与容器适配问题：传统 JVM 默认基于物理机资源分配内存，可能导致容器内存超限（OOMKilled）。 动态调度与扩缩容：k8s 的自动扩缩和滚动更新需结合 JVM 特性优化，避免服务中断或性能波动。 微服务通信开销：服务网格、API 网关等基础设施可能引入额外延迟，需针对性优化。  本文从容器资源分配、JVM 调优、k8s 策略、监控诊断等维度，系统化解析 Java 应用的性能优化方法，并提供参数配置示例与风险规避指南。</description>
+    </item>
+    
+  </channel>
+</rss>

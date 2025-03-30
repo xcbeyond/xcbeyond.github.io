@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Kubernetes 中 Java 应用性能调优指南：从容器化特性到 JVM 底层原理的系统化优化 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="在云原生架构中，Kubernetes（k8s）已成为部署和管理分布式应用的事实标准。本文从容器资源分配、JVM 调优、k8s 策略、监控诊断等维度，系统化解析 Java 应用的性能优化方法，并提供参数配置示例与风险规避指南。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Kubernetes 中 Java 应用性能调优指南：从容器化特性到 JVM 底层原理的系统化优化</li>
+        </ul>
+        <p class="text-lighten">在云原生架构中，Kubernetes（k8s）已成为部署和管理分布式应用的事实标准。本文从容器资源分配、JVM 调优、k8s 策略、监控诊断等维度，系统化解析 Java 应用的性能优化方法，并提供参数配置示例与风险规避指南。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/kubernetes-02.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2025-03-27 17:12:15 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/kubernetes"> 
+                  Kubernetes</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在云原生架构中，Kubernetes（k8s）已成为部署和管理分布式应用的事实标准。Java 应用作为企业级开发的主流选择，在容器化环境中面临独特的性能挑战：</p>
+<ol>
+<li><strong>资源隔离与竞争</strong>：容器与虚拟机不同，共享节点资源，需合理分配 CPU/内存以避免资源争抢。</li>
+<li><strong>JVM 与容器适配问题</strong>：传统 JVM 默认基于物理机资源分配内存，可能导致容器内存超限（OOMKilled）。</li>
+<li><strong>动态调度与扩缩容</strong>：k8s 的自动扩缩和滚动更新需结合 JVM 特性优化，避免服务中断或性能波动。</li>
+<li><strong>微服务通信开销</strong>：服务网格、API 网关等基础设施可能引入额外延迟，需针对性优化。</li>
+</ol>
+<p>本文从容器资源分配、JVM 调优、k8s 策略、监控诊断等维度，系统化解析 Java 应用的性能优化方法，并提供参数配置示例与风险规避指南。</p>
+<h2 id="1-容器资源与-jvm-内存调优">1. 容器资源与 JVM 内存调优</h2>
+<p>容器通过 Linux Cgroups 实现资源隔离，但 JVM 在早期版本（Java 8u191 之前）无法感知容器限制，仍读取宿主机内存和 CPU 信息。例如，若宿主机有 64GB 内存，容器限制为 2GB，旧版 JVM 可能错误地按宿主机内存计算堆大小。</p>
+<p><strong>动态内存分配策略</strong>:</p>
+<ul>
+<li>
+<p><strong><code>-XX:MaxRAMPercentage</code></strong>：Java 8u191+ 引入该参数，允许 JVM 基于容器内存限制动态分配堆内存。例如，容器内存限制为 4GB，设置 MaxRAMPercentage=75.0，则堆内存上限为 3GB，剩余 1GB 用于 Metaspace、线程栈等非堆内存。</p>
+</li>
+<li>
+<p><strong>Native Memory 管理</strong>：JVM 自身需要内存（如 JIT 编译缓存、直接内存分配），若堆内存占比过高，可能导致 java.lang.OutOfMemoryError: Metadata space 或堆外内存泄漏。</p>
+</li>
+</ul>
+<h3 id="11-容器资源限制">1.1 容器资源限制</h3>
+<p>Kubernetes 的 <code>requests</code> 和 <code>limits</code> 不仅是为了防止资源耗尽，更是调度器分配节点资源的依据。</p>
+<ul>
+<li>
+<p><strong><code>requests</code></strong>：决定 Pod 的调度优先级和 QoS 类别（Guaranteed/Burstable/BestEffort），供调度器分配资源的依据，需满足应用最低需求。</p>
+</li>
+<li>
+<p><strong><code>limits</code></strong>：通过 Linux Cgroups 限制容器的资源使用上限（硬性上限），超限时触发进程终止（OOMKilled）或 CPU 节流，防止资源耗尽导致节点故障。</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">resources</span>:
+  <span style="color:#f92672">limits</span>:
+    <span style="color:#f92672">memory</span>: <span style="color:#e6db74">&#34;2Gi&#34;</span>
+    <span style="color:#f92672">cpu</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+  <span style="color:#f92672">requests</span>:
+    <span style="color:#f92672">memory</span>: <span style="color:#e6db74">&#34;1.5Gi&#34;</span>
+    <span style="color:#f92672">cpu</span>: <span style="color:#e6db74">&#34;1&#34;</span>
+</code></pre></div><p><strong>推荐值</strong>：</p>
+<ul>
+<li>
+<p><strong>内存</strong>：<code>requests</code> 应为应用稳定运行的最低需求（如压测峰值的 80%），<code>limits</code> 可略高以容忍突发（如 100%~120%）。</p>
+</li>
+<li>
+<p><strong>CPU</strong>：<code>requests</code> 设为稳态负载，<code>limits</code> 允许突发（如 1→2 核），但需注意 CPU 节流可能引入延迟。</p>
+</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<ul>
+<li>
+<p><strong><code>requests</code> 过低</strong>：Pod 调度失败或运行时资源争抢，性能下降。</p>
+</li>
+<li>
+<p><strong><code>limits</code> 缺失</strong>：容器可能因内存溢出被 OOMKilled。</p>
+</li>
+</ul>
+<h3 id="12-jvm-内存参数">1.2 JVM 内存参数</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-XX:MaxRAMPercentage<span style="color:#f92672">=</span>75.0  <span style="color:#75715e"># 堆内存占容器内存的 75%</span>
+-XX:InitialRAMPercentage<span style="color:#f92672">=</span>50.0
+</code></pre></div><p>动态分配堆内存，适配容器资源限制（需 Java 8u191+ 或 Java 10+）。</p>
+<p><strong>推荐值</strong>:</p>
+<ul>
+<li><code>MaxRAMPercentage=75.0</code>：保留 25% 内存给非堆（Metaspace）、JIT 编译等。</li>
+<li>若使用 Java 8，需手动计算并设置 <code>-Xmx</code> 和 <code>-Xms</code>。</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<ul>
+<li>固定值（如 <code>-Xmx4g</code>）：容器内存调整时，JVM 无法自适应，导致资源浪费或 OOM。</li>
+<li><code>MaxRAMPercentage</code> 过高（如 90%）：堆外内存不足，频繁触发 Native Memory 泄漏。</li>
+</ul>
+<h2 id="2-垃圾回收gc优化">2. 垃圾回收（GC）优化</h2>
+<p>垃圾回收（GC）是 Java 自动内存管理的核心，但不当的 GC 策略会导致：</p>
+<ul>
+<li>
+<p>吞吐量下降：GC 线程占用 CPU 时间，业务线程执行时间减少。</p>
+</li>
+<li>
+<p>延迟波动：Stop-The-World（STW）暂停期间，所有业务线程挂起，用户请求超时。</p>
+</li>
+<li>
+<p>内存泄漏假象：若堆外内存未限制，可能被误判为“内存泄漏”，实为 Direct Buffer 未回收。</p>
+</li>
+</ul>
+<h3 id="21-gc-算法选择">2.1 GC 算法选择</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># G1GC（默认）</span>
+-XX:+UseG1GC 
+-XX:MaxGCPauseMillis<span style="color:#f92672">=</span><span style="color:#ae81ff">200</span>
+  
+<span style="color:#75715e"># ZGC（Java 11+）</span>
+-XX:+UseZGC -XX:+ZGenerational
+</code></pre></div><ul>
+<li><strong>G1GC</strong>：平衡吞吐量和延迟，适合大多数应用。</li>
+<li><strong>ZGC/Shenandoah</strong>：亚毫秒级停顿，适合低延迟场景（如实时交易）。</li>
+</ul>
+<p><strong>推荐值</strong>：</p>
+<ul>
+<li>默认使用 G1GC；高版本 Java（11+）可尝试 ZGC。</li>
+<li>延迟敏感型应用优先选择 ZGC。</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<p>高并发场景使用 Serial GC：Full GC 停顿时间过长，服务不可用。</p>
+<h3 id="22-gc-线程与日志">2.2 GC 线程与日志</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-XX:ParallelGCThreads<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>         <span style="color:#75715e"># 并行 GC 线程数</span>
+-Xlog:gc*:file<span style="color:#f92672">=</span>/logs/gc.log     <span style="color:#75715e"># 输出详细 GC 日志</span>
+</code></pre></div><p><strong>推荐值</strong>：</p>
+<ul>
+<li><code>ParallelGCThreads</code> 设为容器 CPU 核数的 25%~50%（避免与业务线程争抢）。</li>
+<li>定期分析 GC 日志，优化堆大小和 GC 策略。</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<ul>
+<li>GC 线程过多：业务线程 CPU 时间片减少，吞吐量下降。</li>
+<li>未开启 GC 日志：无法诊断内存泄漏或频繁 GC 问题。</li>
+</ul>
+<h2 id="3-线程池与连接池优化">3. 线程池与连接池优化</h2>
+<p>Java 应用通常采用线程池处理并发请求，但容器环境中需注意：</p>
+<ul>
+<li>
+<p><strong>资源配额限制</strong>：容器 CPU 核数是逻辑核（如 limits.cpu=2 表示 2 个 vCPU），需根据实际配额设置线程数。</p>
+</li>
+<li>
+<p><strong>连接池的隐性瓶颈</strong>：数据库连接池过小会成为吞吐量天花板，即使业务逻辑优化到极致</p>
+</li>
+</ul>
+<h3 id="31-web-服务器线程池">3.1 Web 服务器线程池</h3>
+<p>（以 Spring Boot Tomcat 为例）：</p>
+<pre><code class="language-properties" data-lang="properties">server.tomcat.threads.max=200    # 最大工作线程数
+server.tomcat.accept-count=100   # 等待队列长度
+</code></pre><p><strong>推荐值</strong>：</p>
+<ul>
+<li>根据压测公式计算：<code>线程数 = (QPS × 平均响应时间) + 缓冲值</code>。</li>
+<li>示例：若 QPS=100，平均响应时间=50ms，则线程数 ≈ 100×0.05=5 + 缓冲值 10 → 15。</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<ul>
+<li>线程数过多：上下文切换开销增大，CPU 利用率降低。</li>
+<li>队列过长：请求延迟增加，用户体验下降。</li>
+</ul>
+<h3 id="32-数据库连接池">3.2 数据库连接池</h3>
+<p>（HikariCP 示例）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">spring.datasource.hikari</span>:
+  <span style="color:#f92672">maximumPoolSize</span>: <span style="color:#ae81ff">20</span>
+  <span style="color:#f92672">connectionTimeout</span>: <span style="color:#ae81ff">3000</span>
+</code></pre></div><p><strong>推荐值</strong>：</p>
+<ul>
+<li>连接数 ≈ (CPU 核心数 × 2) + 磁盘数（适用于 OLTP 场景）。</li>
+<li>超时时间设为略大于 95% 请求的响应时间。</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<ul>
+<li>连接数过少：线程等待连接，吞吐量下降。</li>
+<li>连接数过多：数据库负载过高，查询性能恶化。</li>
+</ul>
+<h2 id="4-kubernetes-调度与扩缩容策略">4. Kubernetes 调度与扩缩容策略</h2>
+<p>Kubernetes 调度器基于节点资源余量和优先级策略分配 Pod。若未合理设置：</p>
+<ul>
+<li>
+<p><strong>资源碎片化</strong>：多个 Pod 的 requests 总和超过节点资源，但无单个 Pod 能调度。</p>
+</li>
+<li>
+<p><strong>“饥饿”现象</strong>：低优先级的 Pod（如 BestEffort QoS）长期无法获取资源。</p>
+</li>
+</ul>
+<p><strong>QoS 类别与驱逐机制</strong>：</p>
+<ul>
+<li>
+<p><strong>QoS 等级</strong>：</p>
+<ul>
+<li>
+<p><code>Guaranteed</code>：<code>requests</code> == <code>limits</code>，优先级最高，几乎不会被驱逐。</p>
+</li>
+<li>
+<p><code>Burstable</code>：<code>requests</code> &lt; <code>limits</code>，资源不足时可能被终止。</p>
+</li>
+<li>
+<p><code>BestEffort</code>：未设置 <code>requests/limits</code>，最先被驱逐。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>HPA 扩缩容</strong>：</p>
+<ul>
+<li>
+<p>冷却时间：通过 <code>--horizontal-pod-autoscaler-downscale-stabilization=5m</code> 避免频繁抖动。</p>
+</li>
+<li>
+<p>自定义指标：如基于 Kafka 消费延迟扩缩 Consumer Pod。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="41-qos-与节点亲和性">4.1 QoS 与节点亲和性</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">resources</span>:
+  <span style="color:#f92672">requests</span>:
+    <span style="color:#f92672">memory</span>: <span style="color:#e6db74">&#34;2Gi&#34;</span>
+    <span style="color:#f92672">cpu</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+  <span style="color:#f92672">limits</span>:
+    <span style="color:#f92672">memory</span>: <span style="color:#e6db74">&#34;2Gi&#34;</span>
+    <span style="color:#f92672">cpu</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+<span style="color:#f92672">affinity</span>:
+  <span style="color:#f92672">nodeAffinity</span>: <span style="color:#ae81ff">...</span> <span style="color:#75715e"># 指定节点标签</span>
+</code></pre></div><ul>
+<li>
+<p><code>Guaranteed</code> QoS（<code>requests == limits</code>）确保 Pod 优先级最高，减少驱逐风险。</p>
+</li>
+<li>
+<p>节点亲和性避免将高负载服务部署到同一节点。</p>
+</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<p>未设置 QoS：资源不足时，Pod 可能被优先驱逐。</p>
+<h3 id="42-水平自动扩缩hpa">4.2 水平自动扩缩（HPA）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">metrics</span>:
+  - <span style="color:#f92672">type</span>: <span style="color:#ae81ff">Resource</span>
+    <span style="color:#f92672">resource</span>:
+      <span style="color:#f92672">name</span>: <span style="color:#ae81ff">cpu</span>
+      <span style="color:#f92672">target</span>:
+        <span style="color:#f92672">type</span>: <span style="color:#ae81ff">Utilization</span>
+        <span style="color:#f92672">averageUtilization</span>: <span style="color:#ae81ff">70</span>
+</code></pre></div><p><strong>推荐值</strong>：</p>
+<ul>
+<li>
+<p>CPU 阈值设为 70%~80%，内存阈值设为 80%~90%。</p>
+</li>
+<li>
+<p>结合自定义指标（如 QPS、错误率）更精准。</p>
+</li>
+</ul>
+<p><strong>不合理配置的影响</strong>：</p>
+<ul>
+<li>
+<p>阈值过低：频繁扩缩容，资源浪费。</p>
+</li>
+<li>
+<p>阈值过高：扩容滞后，服务降级。</p>
+</li>
+</ul>
+<h2 id="5-网络与存储优化">5. 网络与存储优化</h2>
+<p>容器网络通过 CNI 插件（如 Calico、Cilium）实现，但存在额外开销：</p>
+<ul>
+<li>
+<p><strong>协议封装开销</strong>：VXLAN 或 IP-in-IP 增加报文头，降低有效带宽。</p>
+</li>
+<li>
+<p><strong>跨节点通信延迟</strong>：相比同节点 Pod 通信，跨节点延迟可能增加 0.1~1ms。</p>
+</li>
+</ul>
+<p>本地存储与网络策略：</p>
+<ul>
+<li>
+<p>本地 <code>PV</code>（Persistent Volume）：</p>
+<ul>
+<li>
+<p>优势：直接挂载节点磁盘，IO 延迟比网络存储低 10 倍以上。</p>
+</li>
+<li>
+<p>风险：Pod 重启后可能被调度到其他节点，需结合 StatefulSet 使用。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Service Mesh 优化：</p>
+<ul>
+<li>
+<p>Sidecar 注入：为每个 Pod 注入 Envoy 代理，但增加内存消耗（通常 50~100MB）。</p>
+</li>
+<li>
+<p>延迟权衡：通过 ConnectionPool 配置限制 HTTP/2 最大流数，避免代理过载。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="51-网络通信优化">5.1 网络通信优化</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">dnsConfig</span>:
+  <span style="color:#f92672">options</span>:
+    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ndots</span>
+      <span style="color:#f92672">value</span>: <span style="color:#e6db74">&#34;2&#34;</span>
+</code></pre></div><p>减少 DNS 查询延迟（默认 <code>ndots:5</code> 会导致额外查询）。</p>
+<p><strong>推荐值</strong>：</p>
+<ul>
+<li>集群内部服务通信使用短域名（如 <code>service.namespace</code>）。</li>
+</ul>
+<h3 id="52-存储卷选择">5.2 存储卷选择</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">volumes</span>:
+  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">data</span>
+    <span style="color:#f92672">persistentVolumeClaim</span>:
+      <span style="color:#f92672">claimName</span>: <span style="color:#ae81ff">ssd-pvc</span>
+</code></pre></div><p><strong>推荐值</strong>：</p>
+<p>高 IO 应用使用本地 SSD 或 NVMe 存储类。例如：日志分析服务（高 IO 需求），使用本地 SSD 存储（<code>hostPath</code>）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">volumes</span>:
+  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">data</span>
+    <span style="color:#f92672">hostPath</span>: { <span style="color:#f92672">path: /mnt/ssd, type</span>: <span style="color:#ae81ff">Directory }</span>
+</code></pre></div><p><strong>不合理配置的影响</strong>：</p>
+<p>使用网络存储（如 NFS、 Ceph）：写延迟增加 10~100 倍。</p>
+<p>存储性能对比：</p>
+<table>
+<thead>
+<tr>
+<th>存储类型</th>
+<th>读延迟</th>
+<th>写延迟</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本地 SSD</td>
+<td>100μs</td>
+<td>200μs</td>
+<td>高频交易日志</td>
+</tr>
+<tr>
+<td>云盘（ESSD）</td>
+<td>1ms</td>
+<td>2ms</td>
+<td>通用型数据库</td>
+</tr>
+<tr>
+<td>NFS</td>
+<td>10ms</td>
+<td>20ms</td>
+<td>共享配置文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-监控与诊断">6. 监控与诊断</h2>
+<p>可观测性三位一体:</p>
+<ul>
+<li>
+<p>Metrics：量化资源使用率（如 CPU、内存）、应用吞吐量（QPS）。</p>
+</li>
+<li>
+<p>Logs：记录请求链路、错误堆栈。</p>
+</li>
+<li>
+<p>Traces：分析跨服务调用链，定位慢请求根因。</p>
+</li>
+</ul>
+<h3 id="61-集成-prometheus">6.1 集成 Prometheus</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;!-- Spring Boot 依赖 --&gt;</span>
+<span style="color:#f92672">&lt;dependency&gt;</span>
+  <span style="color:#f92672">&lt;groupId&gt;</span>io.micrometer<span style="color:#f92672">&lt;/groupId&gt;</span>
+  <span style="color:#f92672">&lt;artifactId&gt;</span>micrometer-registry-prometheus<span style="color:#f92672">&lt;/artifactId&gt;</span>
+<span style="color:#f92672">&lt;/dependency&gt;</span>
+</code></pre></div><p>监控 JVM 堆内存、线程池、GC 次数等指标。</p>
+<p><strong>推荐值</strong>:</p>
+<ul>
+<li>设置告警规则（如堆内存 &gt;80% 持续 5 分钟）。</li>
+</ul>
+<h3 id="62-诊断工具">6.2 诊断工具</h3>
+<p><strong>关键命令</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl top pod          <span style="color:#75715e"># 实时资源消耗</span>
+jstack &lt;PID&gt;             <span style="color:#75715e"># 线程转储分析死锁</span>
+jmap -dump:format<span style="color:#f92672">=</span>b &lt;PID&gt; <span style="color:#75715e"># 堆转储分析内存泄漏</span>
+</code></pre></div><h2 id="7-启动优化与-jvm-选择">7. 启动优化与 JVM 选择</h2>
+<h3 id="71-类数据共享cds">7.1 类数据共享（CDS）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">-Xshare:on   <span style="color:#75715e"># 启用 CDS</span>
+</code></pre></div><p>减少启动时间 20%~30%（需预先生成共享归档文件）。</p>
+<h3 id="72-graalvm-native-image">7.2 GraalVM Native Image</h3>
+<p>编译为原生二进制，启动时间从秒级降至毫秒级，内存占用减少 50%。</p>
+<p><strong>风险</strong>：需静态分析反射、动态代理等代码，可能需额外配置。</p>
+<h2 id="8-应用层优化">8. 应用层优化</h2>
+<ol>
+<li>
+<p><strong>代码优化</strong>：减少临时对象创建，缓存热点数据（如 Redis）。</p>
+</li>
+<li>
+<p><strong>异步处理</strong>：耗时操作（如文件上传）异步化，避免阻塞主线程。</p>
+</li>
+<li>
+<p><strong>SQL 优化</strong>：添加索引、避免 <code>SELECT *</code>、批量操作替代循环查询。</p>
+</li>
+</ol>
+<h2 id="9-总结调优路径与风险控制">9. 总结：调优路径与风险控制</h2>
+<h3 id="91-调优步骤">9.1 调优步骤</h3>
+<ol>
+<li>
+<p><strong>基线测试</strong>：记录优化前的吞吐量、延迟、资源使用率。</p>
+</li>
+<li>
+<p><strong>逐项调整</strong>：按优先级依次优化容器资源 → JVM → 线程池 → k8s 策略。</p>
+</li>
+<li>
+<p><strong>压测验证</strong>：使用 JMeter 或 Gatling 模拟真实流量，对比结果。</p>
+</li>
+<li>
+<p><strong>监控上线</strong>：生产环境灰度发布，持续观察指标。</p>
+</li>
+</ol>
+<h3 id="92-关键风险点">9.2 关键风险点</h3>
+<table>
+<thead>
+<tr>
+<th><strong>优化类别</strong></th>
+<th><strong>风险</strong></th>
+<th><strong>规避措施</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器内存限制</td>
+<td>JVM 堆内存超出容器限制</td>
+<td>使用 <code>MaxRAMPercentage</code> 动态分配</td>
+</tr>
+<tr>
+<td>GC 算法</td>
+<td>低延迟场景误用 ParallelGC</td>
+<td>优先选择 ZGC/Shenandoah</td>
+</tr>
+<tr>
+<td>线程池大小</td>
+<td>线程数过多导致 CPU 争抢</td>
+<td>基于压测公式计算并验证</td>
+</tr>
+<tr>
+<td>HPA 扩缩容</td>
+<td>阈值不合理引发频繁扩缩</td>
+<td>结合历史负载数据动态调整</td>
+</tr>
+</tbody>
+</table>
+<p>通过系统化的调优和持续监控，Java 应用在 Kubernetes 环境中可实现高吞吐、低延迟、高可用的运行状态。</p>
+<h3 id="93-性能调优的哲学">9.3 性能调优的哲学</h3>
+<p><strong>性能优化不是一蹴而就的工程，而是一个持续迭代的过程</strong>：</p>
+<ol>
+<li>
+<p><strong>理解系统瓶颈</strong>：80% 的性能问题由 20% 的配置错误导致。</p>
+</li>
+<li>
+<p><strong>避免过度优化</strong>：调优需权衡复杂度与收益，例如将 API 延迟从 100ms 优化到 90ms 可能投入巨大，但用户体验提升有限。</p>
+</li>
+<li>
+<p><strong>拥抱云原生特性</strong>：结合 Kubernetes 的弹性、Service Mesh 的精细化流量管理，构建自适应系统。</p>
+</li>
+</ol>
+<p>通过本文的多维度剖析，开发者可将理论转化为实践，在容器化环境中释放 Java 应用的真正潜力。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/java" class="d-block pb-3 mt-3">Java</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/ansible">Ansible</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/java">Java</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes">Kubernetes</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/linux">Linux</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/orangepi">Orangepi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%91%bd%e4%bb%a4">命令</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">环境变量</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kubernetes-02.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/">
+          <h5 class="mt-0">Kubernetes 中 Java 应用性能调优指南：从容器化特性到 JVM 底层原理的系统化优化</h5>
+        </a>
+        2025-03-27 17:12:15
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/orangepi.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/">
+          <h5 class="mt-0">打造属于你的私人云盘：在 OrangePi AIpro 上搭建个人云盘</h5>
+        </a>
+        2024-07-07 22:32:25
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-build.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/">
+          <h5 class="mt-0">深入了解 Golang 多架构编译：交叉编译最佳实践</h5>
+        </a>
+        2024-05-29 20:28:42
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/post-4.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/">
+          <h5 class="mt-0">Java应用中各类环境变量的优先级及最佳实践</h5>
+        </a>
+        2024-02-08 14:53:42
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/learn-more-about-ansible-the-power-to-fully-automate-your-it-environment/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/ansible.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/learn-more-about-ansible-the-power-to-fully-automate-your-it-environment/">
+          <h5 class="mt-0">深入了解 Ansible：全面掌握自动化 IT 环境的利器</h5>
+        </a>
+        2024-02-07 16:49:37
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/performance/common-commands-for-java-performance-analysis/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/java.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/performance/common-commands-for-java-performance-analysis/">
+          <h5 class="mt-0">Java性能分析中常用命令和工具</h5>
+        </a>
+        2023-08-19 21:21:08
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-容器资源与-jvm-内存调优">1. 容器资源与 JVM 内存调优</a>
+      <ul>
+        <li><a href="#11-容器资源限制">1.1 容器资源限制</a></li>
+        <li><a href="#12-jvm-内存参数">1.2 JVM 内存参数</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-垃圾回收gc优化">2. 垃圾回收（GC）优化</a>
+      <ul>
+        <li><a href="#21-gc-算法选择">2.1 GC 算法选择</a></li>
+        <li><a href="#22-gc-线程与日志">2.2 GC 线程与日志</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-线程池与连接池优化">3. 线程池与连接池优化</a>
+      <ul>
+        <li><a href="#31-web-服务器线程池">3.1 Web 服务器线程池</a></li>
+        <li><a href="#32-数据库连接池">3.2 数据库连接池</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-kubernetes-调度与扩缩容策略">4. Kubernetes 调度与扩缩容策略</a>
+      <ul>
+        <li><a href="#41-qos-与节点亲和性">4.1 QoS 与节点亲和性</a></li>
+        <li><a href="#42-水平自动扩缩hpa">4.2 水平自动扩缩（HPA）</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-网络与存储优化">5. 网络与存储优化</a>
+      <ul>
+        <li><a href="#51-网络通信优化">5.1 网络通信优化</a></li>
+        <li><a href="#52-存储卷选择">5.2 存储卷选择</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-监控与诊断">6. 监控与诊断</a>
+      <ul>
+        <li><a href="#61-集成-prometheus">6.1 集成 Prometheus</a></li>
+        <li><a href="#62-诊断工具">6.2 诊断工具</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-启动优化与-jvm-选择">7. 启动优化与 JVM 选择</a>
+      <ul>
+        <li><a href="#71-类数据共享cds">7.1 类数据共享（CDS）</a></li>
+        <li><a href="#72-graalvm-native-image">7.2 GraalVM Native Image</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-应用层优化">8. 应用层优化</a></li>
+    <li><a href="#9-总结调优路径与风险控制">9. 总结：调优路径与风险控制</a>
+      <ul>
+        <li><a href="#91-调优步骤">9.1 调优步骤</a></li>
+        <li><a href="#92-关键风险点">9.2 关键风险点</a></li>
+        <li><a href="#93-性能调优的哲学">9.3 性能调优的哲学</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2025 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>

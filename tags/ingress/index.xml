@@ -6,7 +6,7 @@
     <description>Recent content in ingress on xcbeyond</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <copyright>Copyright &amp;copy; 2021-2023 xcbeyond 版权所有.</copyright>
+    <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
     <lastBuildDate>Wed, 05 Apr 2023 00:13:10 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/ingress/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何通过 kubernetes ingress 或者 istio ingressgateway 来暴露 TCP 的服务</title>
