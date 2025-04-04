@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Thu, 27 Mar 2025 17:12:15 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Apr 2025 18:00:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在Linux中安装、配置和挂载NFS的完整指南</title>
+      <link>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</link>
+      <pubDate>Fri, 04 Apr 2025 18:00:29 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</guid>
+      <description>一、NFS简介 NFS（Network File System） 是一种分布式文件系统协议，允许用户通过网络在不同主机间共享文件和目录。它适用于局域网环境，常用于服务器集群、数据共享等场景。本文详细介绍NFS服务端与客户端的安装、配置及挂载流程。
+二、NFS服务端配置 1. 安装NFS服务 根据 Linux 发行版选择命令：</description>
+    </item>
+    
     <item>
       <title>Kubernetes 中 Java 应用性能调优指南：从容器化特性到 JVM 底层原理的系统化优化</title>
       <link>https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/</link>

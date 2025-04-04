@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>运维 on xcbeyond</title>
+    <link>https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/</link>
+    <description>Recent content in 运维 on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
+    <lastBuildDate>Fri, 04 Apr 2025 18:00:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在Linux中安装、配置和挂载NFS的完整指南</title>
+      <link>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</link>
+      <pubDate>Fri, 04 Apr 2025 18:00:29 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</guid>
+      <description>一、NFS简介 NFS（Network File System） 是一种分布式文件系统协议，允许用户通过网络在不同主机间共享文件和目录。它适用于局域网环境，常用于服务器集群、数据共享等场景。本文详细介绍NFS服务端与客户端的安装、配置及挂载流程。
+二、NFS服务端配置 1. 安装NFS服务 根据 Linux 发行版选择命令：</description>
+    </item>
+    
+  </channel>
+</rss>
