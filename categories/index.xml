@@ -7,22 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Fri, 04 Apr 2025 18:00:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Apr 2025 08:29:34 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>kubernetes</title>
+      <link>https://xcbeyond.cn/categories/kubernetes/</link>
+      <pubDate>Thu, 24 Apr 2025 08:29:34 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/categories/kubernetes/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>运维</title>
       <link>https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/</link>
       <pubDate>Fri, 04 Apr 2025 18:00:29 +0800</pubDate>
       
       <guid>https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>kubernetes</title>
-      <link>https://xcbeyond.cn/categories/kubernetes/</link>
-      <pubDate>Thu, 27 Mar 2025 17:12:15 +0800</pubDate>
-      
-      <guid>https://xcbeyond.cn/categories/kubernetes/</guid>
       <description></description>
     </item>
     

@@ -27,15 +27,24 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2025-04-04T18:00:29+08:00</lastmod>
+    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/tags/nfs/</loc>
-    <lastmod>2025-04-04T18:00:29+08:00</lastmod>
+    <loc>https://xcbeyond.cn/tags/hostnetwork/</loc>
+    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
+    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-hostnetwork-in-kubernetes/</loc>
+    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2025-04-04T18:00:29+08:00</lastmod>
+    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/nfs/</loc>
     <lastmod>2025-04-04T18:00:29+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</loc>
@@ -45,9 +54,6 @@
     <lastmod>2025-04-04T18:00:29+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/kubernetes/</loc>
-    <lastmod>2025-03-27T17:12:15+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
     <lastmod>2025-03-27T17:12:15+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/</loc>

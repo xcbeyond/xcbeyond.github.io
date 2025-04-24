@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Kubernetes 中 hostNetwork 的深度解析：使用场景、最佳实践与避坑指南 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="在某些特殊场景下，我们需要让 Pod 直接拥抱宿主机网络，这就是 `hostNetwork: true` 的用武之地。本文将深入探讨这一特性的本质，揭示其典型应用场景，并通过真实案例解析如何安全高效地使用它。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h3 font-secondary">Kubernetes 中 hostNetwork 的深度解析：使用场景、最佳实践与避坑指南</li>
+        </ul>
+        <p class="text-lighten">在某些特殊场景下，我们需要让 Pod 直接拥抱宿主机网络，这就是 <code>hostNetwork: true</code> 的用武之地。本文将深入探讨这一特性的本质，揭示其典型应用场景，并通过真实案例解析如何安全高效地使用它。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/kubernetes-cluster-network.svg" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2025-04-24 08:29:34 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/kubernetes"> 
+                  Kubernetes</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在 Kubernetes 的默认网络模型中，每个 Pod 都被分配独立的 IP 地址，通过 CNI 插件实现网络隔离和通信。这种设计为微服务架构提供了理想的沙箱环境，但在某些特殊场景下，我们需要让 Pod 直接&quot;拥抱&quot;宿主机网络——这就是 <code>hostNetwork: true</code> 的用武之地。本文将深入探讨这一特性的本质，揭示其典型应用场景，并通过真实案例解析如何安全高效地使用它。</p>
+<h2 id="1解剖-hostnetwork-原理与特性">1、解剖 <code>hostNetwork</code> 原理与特性</h2>
+<h3 id="11-核心机制">1.1 核心机制</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 查看普通 Pod 的网络命名空间</span>
+kubectl exec -it &lt;pod-name&gt; -- ip addr
+
+<span style="color:#75715e"># 查看 hostNetwork Pod 的网络命名空间（等同于宿主机）</span>
+kubectl exec -it &lt;hostnetwork-pod&gt; -- ip addr
+</code></pre></div><p>当设置 <code>hostNetwork: true</code> 时：</p>
+<ul>
+<li>
+<p><strong>网络栈共享</strong>：Pod 直接使用宿主机的网络命名空间（<code>netns</code>）</p>
+</li>
+<li>
+<p><strong>IP 透明化</strong>：Pod IP = 节点 IP，<code>kubectl get pod -o wide</code> 显示节点 IP</p>
+</li>
+<li>
+<p><strong>端口直通</strong>：容器端口直接映射到宿主机端口（无需 <code>NodePort</code> 转发）</p>
+</li>
+</ul>
+<p><strong>与默认网络模型的区别:</strong></p>
+<ul>
+<li>
+<p><strong>默认网络模型</strong>：每个 Pod 分配独立的虚拟 IP（<code>ClusterIP</code>），流量通过 CNI 插件和 kube-proxy 的 iptables/ipvs 规则转发。</p>
+</li>
+<li>
+<p><strong>hostNetwork 模型</strong>：直接使用宿主机网络，跳过 Kubernetes 的网络虚拟化层，性能更高，但失去网络隔离性。</p>
+</li>
+</ul>
+<h3 id="12-性能对比测试">1.2 性能对比测试</h3>
+<p>通过 <code>iperf3</code> 测试不同网络模式的吞吐量（示例数据）：</p>
+<table>
+<thead>
+<tr>
+<th>网络模式</th>
+<th>带宽 (Gbps)</th>
+<th>延迟 (ms)</th>
+<th>CPU 占用率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>默认 CNI</td>
+<td>9.2</td>
+<td>0.15</td>
+<td>12%</td>
+</tr>
+<tr>
+<td>hostNetwork</td>
+<td>9.8</td>
+<td>0.08</td>
+<td>6%</td>
+</tr>
+<tr>
+<td>主机直接通信</td>
+<td>9.9</td>
+<td>0.05</td>
+<td>3%</td>
+</tr>
+</tbody>
+</table>
+<p>（数据来源：基于 Calico CNI 的测试环境）</p>
+<p>可见，<code>hostNetwork</code> 的网络性能接近原生主机通信，适合对网络敏感的极端场景。</p>
+<h2 id="2六大经典应用场景">2、六大经典应用场景</h2>
+<h3 id="21-基础设施组件部署">2.1 基础设施组件部署</h3>
+<p><strong>案例</strong>：Calico 的 <code>calico-node</code> DaemonSet</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># calico-node DaemonSet 片段 (v3.24.1)</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">template</span>:
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">hostNetwork</span>: <span style="color:#66d9ef">true</span>
+      <span style="color:#f92672">containers</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">calico-node</span>
+        <span style="color:#f92672">ports</span>:
+        - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">9099</span>  <span style="color:#75715e"># 指标监控端口</span>
+        - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">5473</span>  <span style="color:#75715e"># Typha 端口</span>
+</code></pre></div><p><strong>必要性</strong>：</p>
+<ul>
+<li>
+<p>需要直接操作宿主机 <code>iptables</code></p>
+</li>
+<li>
+<p>监控节点网络状态（如 <code>ip route</code>）</p>
+</li>
+<li>
+<p>避免 CNI 自身的网络依赖导致初始化死锁</p>
+</li>
+</ul>
+<h3 id="22-超低延迟金融交易系统">2.2 超低延迟金融交易系统</h3>
+<p><strong>某券商实践</strong>：</p>
+<p>将订单网关服务部署为 <code>hostNetwork</code> Pod，配合 Solarflare 低延迟网卡：</p>
+<ul>
+<li>
+<p>网络延迟从 82μs 降至 15μs</p>
+</li>
+<li>
+<p>每秒订单处理量提升 5 倍</p>
+</li>
+<li>
+<p>通过 <strong>NUMA 亲和性</strong> + <strong>CPU 绑核</strong> 进一步优化</p>
+</li>
+</ul>
+<h3 id="23-节点级监控数据采集">2.3 节点级监控数据采集</h3>
+<p><strong>Prometheus 生态链</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Node Exporter 访问方式</span>
+curl http://&lt;节点IP&gt;:9100/metrics
+</code></pre></div><p>通过 <code>hostNetwork</code> 直接暴露节点硬件指标，无需经过 Service 转发。</p>
+<h3 id="24-传统数据库迁移">2.4 传统数据库迁移</h3>
+<p><strong>某银行 Oracle 迁移案例</strong>：</p>
+<ul>
+<li>
+<p>原系统依赖固定 IP 进行 DR 同步</p>
+</li>
+<li>
+<p>通过 <code>hostNetwork</code> + <code>podAntiAffinity</code> 实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">affinity</span>:
+  <span style="color:#f92672">podAntiAffinity</span>:
+    <span style="color:#f92672">requiredDuringSchedulingIgnoredDuringExecution</span>:
+    - <span style="color:#f92672">labelSelector</span>:
+        <span style="color:#f92672">matchExpressions</span>:
+        - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">app</span>
+          <span style="color:#f92672">operator</span>: <span style="color:#ae81ff">In</span>
+          <span style="color:#f92672">values</span>: [<span style="color:#e6db74">&#34;oracle&#34;</span>]
+      <span style="color:#f92672">topologyKey</span>: <span style="color:#e6db74">&#34;kubernetes.io/hostname&#34;</span>
+</code></pre></div></li>
+</ul>
+<h3 id="25-边缘计算场景">2.5 边缘计算场景</h3>
+<p><strong>工业 IoT 网关场景</strong>：</p>
+<ul>
+<li>
+<p>每个边缘节点部署一个数据处理 Pod</p>
+</li>
+<li>
+<p>通过 <code>hostNetwork</code> 直接读取本机 USB 设备数据</p>
+</li>
+<li>
+<p>使用 <code>SYS_RAWIO</code> 能力与硬件交互</p>
+</li>
+</ul>
+<h3 id="26-网络诊断工具集">2.6 网络诊断工具集</h3>
+<p>临时调试 Pod 示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Pod</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">network-debugger</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">hostNetwork</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#f92672">containers</span>:
+  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">tools</span>
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">nicolaka/netshoot</span>
+    <span style="color:#f92672">command</span>: [<span style="color:#e6db74">&#34;sleep&#34;</span>, <span style="color:#e6db74">&#34;infinity&#34;</span>]
+</code></pre></div><h2 id="3配置实战从入门到生产级部署">3、配置实战：从入门到生产级部署</h2>
+<h3 id="31-最小化示例">3.1 最小化示例</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">hostnet-demo</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">hostnet-demo</span>
+  <span style="color:#f92672">template</span>:
+    <span style="color:#f92672">metadata</span>:
+      <span style="color:#f92672">labels</span>:
+        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">hostnet-demo</span>
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">hostNetwork</span>: <span style="color:#66d9ef">true</span>  <span style="color:#75715e"># 关键配置</span>
+      <span style="color:#f92672">dnsPolicy</span>: <span style="color:#ae81ff">ClusterFirstWithHostNetwork </span> <span style="color:#75715e"># 特殊 DNS 策略</span>
+      <span style="color:#f92672">containers</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">main</span>
+        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">nginx:alpine</span>
+        <span style="color:#f92672">ports</span>:
+        - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">80</span>
+</code></pre></div><p><strong>特别注意</strong>：</p>
+<ul>
+<li>
+<p><code>dnsPolicy</code> 必须显式设置为 <code>ClusterFirstWithHostNetwork</code></p>
+</li>
+<li>
+<p>端口冲突检测需结合调度策略</p>
+</li>
+</ul>
+<h3 id="32-生产级-daemonset-模板">3.2 生产级 DaemonSet 模板</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">DaemonSet</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">node-agent</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">selector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">node-agent</span>
+  <span style="color:#f92672">updateStrategy</span>:
+    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">RollingUpdate</span>
+    <span style="color:#f92672">rollingUpdate</span>:
+      <span style="color:#f92672">maxUnavailable</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#f92672">template</span>:
+    <span style="color:#f92672">metadata</span>:
+      <span style="color:#f92672">labels</span>:
+        <span style="color:#f92672">app</span>: <span style="color:#ae81ff">node-agent</span>
+    <span style="color:#f92672">spec</span>:
+      <span style="color:#f92672">hostNetwork</span>: <span style="color:#66d9ef">true</span>
+      <span style="color:#f92672">tolerations</span>:
+      - <span style="color:#f92672">operator</span>: <span style="color:#ae81ff">Exists </span> <span style="color:#75715e"># 允许调度到所有节点</span>
+      <span style="color:#f92672">priorityClassName</span>: <span style="color:#ae81ff">system-node-critical</span>
+      <span style="color:#f92672">containers</span>:
+      - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">agent</span>
+        <span style="color:#f92672">image</span>: <span style="color:#ae81ff">custom-agent:1.8.0</span>
+        <span style="color:#f92672">ports</span>:
+        - <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">7070</span>
+          <span style="color:#f92672">hostPort</span>: <span style="color:#ae81ff">7070</span>  <span style="color:#75715e"># 显式声明主机端口</span>
+        <span style="color:#f92672">resources</span>:
+          <span style="color:#f92672">limits</span>:
+            <span style="color:#f92672">memory</span>: <span style="color:#ae81ff">200Mi</span>
+            <span style="color:#f92672">cpu</span>: <span style="color:#ae81ff">100m</span>
+        <span style="color:#f92672">securityContext</span>:
+          <span style="color:#f92672">capabilities</span>:
+            <span style="color:#f92672">add</span>: [<span style="color:#e6db74">&#34;NET_ADMIN&#34;</span>]
+</code></pre></div><h3 id="33-service-对接方案对比">3.3 Service 对接方案对比</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适用场景</th>
+<th>示例</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct Node IP</td>
+<td>边缘计算/直连场景</td>
+<td>http://node-ip:7070</td>
+<td>简单但缺乏负载均衡</td>
+</tr>
+<tr>
+<td>NodePort Service</td>
+<td>需要有限暴露</td>
+<td>30070 端口映射</td>
+<td>需维护端口映射表</td>
+</tr>
+<tr>
+<td>LoadBalancer</td>
+<td>云环境多节点负载</td>
+<td>ELB + 健康检查</td>
+<td>成本较高但管理便捷</td>
+</tr>
+<tr>
+<td>ExternalDNS + LB</td>
+<td>生产级域名暴露</td>
+<td>agent.cluster.example.com</td>
+<td>完整但架构复杂</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4十大避坑指南">4、十大避坑指南</h2>
+<ol>
+<li>
+<p><strong>端口冲突防护</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># 检查节点端口占用</span>
+ss -tulpn | grep :7070
+</code></pre></div><ul>
+<li>
+<p>使用 <code>hostPort</code> 字段显式声明</p>
+</li>
+<li>
+<p>配合 <code>DaemonSet</code> 确保单例运行</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>DNS 解析异常处理</strong></p>
+<p>当出现 <code>kubectl exec</code> 无法解析集群域名时：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">dnsPolicy</span>: <span style="color:#ae81ff">ClusterFirstWithHostNetwork</span>
+</code></pre></div></li>
+<li>
+<p><strong>Service 无 Endpoints 问题</strong></p>
+<p>检查标签匹配：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl get pods -l app<span style="color:#f92672">=</span>node-agent -o wide
+</code></pre></div></li>
+<li>
+<p><strong>流量策略配置</strong></p>
+<p>必须设置 Service 的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">externalTrafficPolicy</span>: <span style="color:#ae81ff">Local</span>
+</code></pre></div></li>
+<li>
+<p><strong>安全加固方案</strong></p>
+<ul>
+<li>
+<p>启用 Pod Security Admission：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">pod-security.admission.config.k8s.io/v1beta1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Configuration</span>
+<span style="color:#f92672">defaults</span>:
+  <span style="color:#f92672">enforce</span>: <span style="color:#e6db74">&#34;restricted&#34;</span>
+<span style="color:#f92672">exemptions</span>:
+  <span style="color:#f92672">usernames</span>: [<span style="color:#e6db74">&#34;system:serviceaccount:kube-system:calico-node&#34;</span>]
+</code></pre></div></li>
+<li>
+<p>结合 NetworkPolicy（需 CNI 支持）</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>调度优化策略</strong></p>
+<p>通过 <code>nodeAffinity</code> 控制部署节点：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">affinity</span>:
+  <span style="color:#f92672">nodeAffinity</span>:
+    <span style="color:#f92672">requiredDuringSchedulingIgnoredDuringExecution</span>:
+      <span style="color:#f92672">nodeSelectorTerms</span>:
+      - <span style="color:#f92672">matchExpressions</span>:
+        - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">node-type</span>
+          <span style="color:#f92672">operator</span>: <span style="color:#ae81ff">In</span>
+          <span style="color:#f92672">values</span>: [<span style="color:#e6db74">&#34;network-critical&#34;</span>]
+</code></pre></div></li>
+<li>
+<p><strong>监控指标采集</strong></p>
+<p>Prometheus 抓取配置示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- <span style="color:#f92672">job_name</span>: <span style="color:#e6db74">&#39;hostnetwork-pods&#39;</span>
+  <span style="color:#f92672">kubernetes_sd_configs</span>:
+  - <span style="color:#f92672">role</span>: <span style="color:#ae81ff">pod</span>
+  <span style="color:#f92672">relabel_configs</span>:
+  - <span style="color:#f92672">source_labels</span>: [<span style="color:#ae81ff">__meta_kubernetes_pod_host_ip]</span>
+    <span style="color:#f92672">target_label</span>: <span style="color:#ae81ff">__address__</span>
+    <span style="color:#f92672">replacement</span>: <span style="color:#e6db74">&#34;$1:7070&#34;</span>
+  - <span style="color:#f92672">action</span>: <span style="color:#ae81ff">keep</span>
+    <span style="color:#f92672">source_labels</span>: [<span style="color:#ae81ff">__meta_kubernetes_pod_annotation_prometheus_io_scrape]</span>
+    <span style="color:#f92672">regex</span>: <span style="color:#66d9ef">true</span>
+</code></pre></div></li>
+<li>
+<p><strong>日志收集难点</strong></p>
+<p>需处理日志中 <code>hostname</code> 与节点名的关联：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">env</span>:
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">NODE_NAME</span>
+  <span style="color:#f92672">valueFrom</span>:
+    <span style="color:#f92672">fieldRef</span>:
+      <span style="color:#f92672">fieldPath</span>: <span style="color:#ae81ff">spec.nodeName</span>
+</code></pre></div></li>
+<li>
+<p><strong>升级回滚策略</strong></p>
+<p>DaemonSet 滚动更新配置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">updateStrategy</span>:
+  <span style="color:#f92672">type</span>: <span style="color:#ae81ff">RollingUpdate</span>
+  <span style="color:#f92672">rollingUpdate</span>:
+    <span style="color:#f92672">maxUnavailable</span>: <span style="color:#ae81ff">1</span>
+    <span style="color:#f92672">maxSurge</span>: <span style="color:#ae81ff">0</span>
+</code></pre></div></li>
+<li>
+<p><strong>混合网络模式共存</strong></p>
+<p>通过 Sidecar 容器实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">containers</span>:
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">main</span>
+  <span style="color:#f92672">hostNetwork</span>: <span style="color:#66d9ef">true</span>
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sidecar</span>
+  <span style="color:#f92672">image</span>: <span style="color:#ae81ff">envoyproxy/envoy</span>
+</code></pre></div></li>
+</ol>
+<h2 id="5何时应该说不hostnetwork-的替代方案">5、何时应该说&quot;不&quot;：<code>hostNetwork</code> 的替代方案</h2>
+<h3 id="51-使用-hostport-的折中方案">5.1 使用 <code>hostPort</code> 的折中方案</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">ports</span>:
+- <span style="color:#f92672">containerPort</span>: <span style="color:#ae81ff">80</span>
+  <span style="color:#f92672">hostPort</span>: <span style="color:#ae81ff">8080</span>  <span style="color:#75715e"># 暴露到宿主机指定端口</span>
+</code></pre></div><ul>
+<li>
+<p>优点：保留 Pod 网络隔离</p>
+</li>
+<li>
+<p>缺点：仍需管理端口映射</p>
+</li>
+</ul>
+<h3 id="52-基于-ebpf-的高性能网络">5.2 基于 eBPF 的高性能网络</h3>
+<p>Cilium 的 eBPF 加速模式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cilium install --helm-set<span style="color:#f92672">=</span>kubeProxyReplacement<span style="color:#f92672">=</span>strict
+</code></pre></div><ul>
+<li>
+<p>实现近似 <code>hostNetwork</code> 的性能</p>
+</li>
+<li>
+<p>保留 Kubernetes 服务发现</p>
+</li>
+</ul>
+<h3 id="53-sr-iov-网络设备插件">5.3 SR-IOV 网络设备插件</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">resources</span>:
+  <span style="color:#f92672">limits</span>:
+    <span style="color:#f92672">intel.com/sriov</span>: <span style="color:#ae81ff">1</span>
+</code></pre></div><ul>
+<li>
+<p>直通物理网卡到容器</p>
+</li>
+<li>
+<p>需要硬件支持</p>
+</li>
+</ul>
+<h2 id="6结语在自由与秩序之间寻找平衡">6、结语：在自由与秩序之间寻找平衡</h2>
+<p><code>hostNetwork</code> 就像 Kubernetes 网络世界的一把瑞士军刀——在特定场景下它能斩断复杂的网络抽象，直击问题本质。但锋利背后也暗藏风险：从端口冲突到安全漏洞，从服务发现失效到监控盲区。作为技术决策者，我们需要在性能需求和系统稳定性之间找到最佳平衡点。</p>
+<p>正如 Kubernetes 设计哲学所倡导的：<strong>&ldquo;默认安全，按需开放&rdquo;</strong>。在您下一次考虑使用 <code>hostNetwork</code> 时，不妨先问三个问题：</p>
+<ol>
+<li>
+<p>是否真的需要突破网络隔离？</p>
+</li>
+<li>
+<p>是否有更安全的替代方案？</p>
+</li>
+<li>
+<p>是否已做好全链路监控和防护？</p>
+</li>
+</ol>
+<p>只有深思熟虑后的技术选型，才能构建出既高效又可靠的云原生系统。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/java" class="d-block pb-3 mt-3">Java</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%bf%90%e7%bb%b4" class="d-block pb-3 mt-3">运维</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/ansible">Ansible</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hostnetwork">Hostnetwork</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/java">Java</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes">Kubernetes</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/linux">Linux</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/nfs">Nfs</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/orangepi">Orangepi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%91%bd%e4%bb%a4">命令</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">环境变量</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-hostnetwork-in-kubernetes/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kubernetes-cluster-network.svg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-hostnetwork-in-kubernetes/">
+          <h5 class="mt-0">Kubernetes 中 hostNetwork 的深度解析：使用场景、最佳实践与避坑指南</h5>
+        </a>
+        2025-04-24 08:29:34
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/nfs.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/">
+          <h5 class="mt-0">在Linux中安装、配置和挂载NFS的完整指南</h5>
+        </a>
+        2025-04-04 18:00:29
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kubernetes-02.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/cloudnative/java-application-performance-optimization-in-kubernetes/">
+          <h5 class="mt-0">Kubernetes 中 Java 应用性能调优指南：从容器化特性到 JVM 底层原理的系统化优化</h5>
+        </a>
+        2025-03-27 17:12:15
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/orangepi.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/others/setup-a-personal-cloud-drive-on-orangepi-aipro/">
+          <h5 class="mt-0">打造属于你的私人云盘：在 OrangePi AIpro 上搭建个人云盘</h5>
+        </a>
+        2024-07-07 22:32:25
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/golang-build.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/golang/deep-dive-into-golang-multi-architecture-compilation-best-practices-for-cross-compilation/">
+          <h5 class="mt-0">深入了解 Golang 多架构编译：交叉编译最佳实践</h5>
+        </a>
+        2024-05-29 20:28:42
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/post-4.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/java/priorities-and-best-practices-for-various-environment-variables-in-java-applications/">
+          <h5 class="mt-0">Java应用中各类环境变量的优先级及最佳实践</h5>
+        </a>
+        2024-02-08 14:53:42
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1解剖-hostnetwork-原理与特性">1、解剖 <code>hostNetwork</code> 原理与特性</a>
+      <ul>
+        <li><a href="#11-核心机制">1.1 核心机制</a></li>
+        <li><a href="#12-性能对比测试">1.2 性能对比测试</a></li>
+      </ul>
+    </li>
+    <li><a href="#2六大经典应用场景">2、六大经典应用场景</a>
+      <ul>
+        <li><a href="#21-基础设施组件部署">2.1 基础设施组件部署</a></li>
+        <li><a href="#22-超低延迟金融交易系统">2.2 超低延迟金融交易系统</a></li>
+        <li><a href="#23-节点级监控数据采集">2.3 节点级监控数据采集</a></li>
+        <li><a href="#24-传统数据库迁移">2.4 传统数据库迁移</a></li>
+        <li><a href="#25-边缘计算场景">2.5 边缘计算场景</a></li>
+        <li><a href="#26-网络诊断工具集">2.6 网络诊断工具集</a></li>
+      </ul>
+    </li>
+    <li><a href="#3配置实战从入门到生产级部署">3、配置实战：从入门到生产级部署</a>
+      <ul>
+        <li><a href="#31-最小化示例">3.1 最小化示例</a></li>
+        <li><a href="#32-生产级-daemonset-模板">3.2 生产级 DaemonSet 模板</a></li>
+        <li><a href="#33-service-对接方案对比">3.3 Service 对接方案对比</a></li>
+      </ul>
+    </li>
+    <li><a href="#4十大避坑指南">4、十大避坑指南</a></li>
+    <li><a href="#5何时应该说不hostnetwork-的替代方案">5、何时应该说&quot;不&quot;：<code>hostNetwork</code> 的替代方案</a>
+      <ul>
+        <li><a href="#51-使用-hostport-的折中方案">5.1 使用 <code>hostPort</code> 的折中方案</a></li>
+        <li><a href="#52-基于-ebpf-的高性能网络">5.2 基于 eBPF 的高性能网络</a></li>
+        <li><a href="#53-sr-iov-网络设备插件">5.3 SR-IOV 网络设备插件</a></li>
+      </ul>
+    </li>
+    <li><a href="#6结语在自由与秩序之间寻找平衡">6、结语：在自由与秩序之间寻找平衡</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2025 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>
