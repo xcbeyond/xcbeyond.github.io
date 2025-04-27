@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Thu, 24 Apr 2025 08:29:34 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 27 Apr 2025 09:55:20 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes RBAC 深入解析：权限体系详解、配置与排查</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-rabc-in-kubernetes/</link>
+      <pubDate>Sun, 27 Apr 2025 09:55:20 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-rabc-in-kubernetes/</guid>
+      <description>在云原生时代，Kubernetes 已成为容器编排的事实标准，但其强大的灵活性也带来了复杂的安全挑战。集群中的每一个操作——从部署应用到查看日志，从管理节点到访问敏感配置——都依赖于精细的权限控制。若权限管理不当，轻则导致应用功能异常，重则引发数据泄露甚至集群瘫痪。
+RBAC（基于角色的访问控制） 作为 Kubernetes 安全体系的核心，是平衡灵活性与安全性的关键工具。然而，许多开发者和管理员在实践中常陷入两大误区：
+  过度授权：为便利直接绑定高权限角色（如 cluster-admin），埋下安全隐患；</description>
+    </item>
+    
     <item>
       <title>Kubernetes 中 hostNetwork 的深度解析：使用场景、最佳实践与避坑指南</title>
       <link>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-hostnetwork-in-kubernetes/</link>

@@ -27,21 +27,27 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
+    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
+    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-rabc-in-kubernetes/</loc>
+    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/rbac/</loc>
+    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/</loc>
+    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/hostnetwork/</loc>
     <lastmod>2025-04-24T08:29:34+08:00</lastmod>
   </url><url>
-    <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
-    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
-  </url><url>
     <loc>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-hostnetwork-in-kubernetes/</loc>
-    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2025-04-24T08:29:34+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/blog/</loc>
     <lastmod>2025-04-24T08:29:34+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/nfs/</loc>
