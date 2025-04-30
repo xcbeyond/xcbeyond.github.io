@@ -27,21 +27,27 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
-    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
+    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/kubernetes/the-guide-to-kubernetes-image-pull-authentication/</loc>
+    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/</loc>
+    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/</loc>
+    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-rabc-in-kubernetes/</loc>
     <lastmod>2025-04-27T09:55:20+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/rbac/</loc>
-    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2025-04-27T09:55:20+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/blog/</loc>
     <lastmod>2025-04-27T09:55:20+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/hostnetwork/</loc>
@@ -150,9 +156,6 @@
     <lastmod>2022-05-14T21:40:14+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/%E5%AE%B9%E5%99%A8/</loc>
-    <lastmod>2022-05-14T21:40:14+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/</loc>
     <lastmod>2022-05-14T21:40:14+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/devops/</loc>

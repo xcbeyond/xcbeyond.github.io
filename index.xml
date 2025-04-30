@@ -63,6 +63,15 @@
     </item>
     
     <item>
+      <title>Kubernetes 镜像拉取认证完全指南：8 种实战方法解决私有仓库访问难题</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/the-guide-to-kubernetes-image-pull-authentication/</link>
+      <pubDate>Wed, 30 Apr 2025 09:51:43 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/the-guide-to-kubernetes-image-pull-authentication/</guid>
+      <description>在 Kubernetes 集群中，容器镜像的拉取是 Pod 启动的关键步骤。当镜像存储在私有仓库（如 Docker Hub 私有库、Harbor、AWS ECR 等）时，Kubernetes 需要提供认证凭据才能访问。若认证配置错误，会导致 ErrImagePull 或 ImagePullBackOff 等错误。镜像拉取认证的核心目标是：</description>
+    </item>
+    
+    <item>
       <title>Kubernetes RBAC 深入解析：权限体系详解、配置与排查</title>
       <link>https://xcbeyond.cn/blog/kubernetes/deep-analysis-of-rabc-in-kubernetes/</link>
       <pubDate>Sun, 27 Apr 2025 09:55:20 +0800</pubDate>
