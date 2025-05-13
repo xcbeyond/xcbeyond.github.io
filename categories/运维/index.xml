@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Fri, 04 Apr 2025 18:00:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 13 May 2025 08:56:41 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CentOS 7 内核升级指南：解决兼容性问题并提升性能</title>
+      <link>https://xcbeyond.cn/blog/operations/centos-kernel-upgrade/</link>
+      <pubDate>Tue, 13 May 2025 08:56:41 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/operations/centos-kernel-upgrade/</guid>
+      <description>CentOS 7 默认搭载的 3.10.x 版本内核虽然稳定，但随着硬件和软件技术的快速发展，可能面临以下问题：
+  硬件兼容性不足：新型 CPU、GPU 或存储设备驱动缺失。</description>
+    </item>
+    
     <item>
       <title>在Linux中安装、配置和挂载NFS的完整指南</title>
       <link>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</link>

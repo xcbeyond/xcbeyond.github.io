@@ -27,18 +27,27 @@
     <lastmod>2030-03-09T15:27:17+06:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/</loc>
-    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
+    <lastmod>2025-05-13T08:56:41+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/centos/</loc>
+    <lastmod>2025-05-13T08:56:41+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/operations/centos-kernel-upgrade/</loc>
+    <lastmod>2025-05-13T08:56:41+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/tags/</loc>
+    <lastmod>2025-05-13T08:56:41+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/blog/</loc>
+    <lastmod>2025-05-13T08:56:41+08:00</lastmod>
+  </url><url>
+    <loc>https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/</loc>
+    <lastmod>2025-05-13T08:56:41+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/categories/kubernetes/</loc>
     <lastmod>2025-04-30T09:51:43+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/kubernetes/the-guide-to-kubernetes-image-pull-authentication/</loc>
-    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/tags/</loc>
-    <lastmod>2025-04-30T09:51:43+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/blog/</loc>
     <lastmod>2025-04-30T09:51:43+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/%E9%95%9C%E5%83%8F/</loc>
@@ -60,9 +69,6 @@
     <lastmod>2025-04-04T18:00:29+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/blog/operations/installing-configuring-and-mounting-nfs-in-linux-guide/</loc>
-    <lastmod>2025-04-04T18:00:29+08:00</lastmod>
-  </url><url>
-    <loc>https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/</loc>
     <lastmod>2025-04-04T18:00:29+08:00</lastmod>
   </url><url>
     <loc>https://xcbeyond.cn/tags/kubernetes/</loc>
