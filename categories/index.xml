@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Tue, 13 May 2025 08:56:41 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 30 May 2025 08:30:01 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java</title>
+      <link>https://xcbeyond.cn/categories/java/</link>
+      <pubDate>Fri, 30 May 2025 08:30:01 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/categories/java/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>运维</title>
       <link>https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/</link>
@@ -41,15 +50,6 @@
       <pubDate>Wed, 29 May 2024 20:28:42 +0800</pubDate>
       
       <guid>https://xcbeyond.cn/categories/go/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>java</title>
-      <link>https://xcbeyond.cn/categories/java/</link>
-      <pubDate>Thu, 08 Feb 2024 14:53:42 +0800</pubDate>
-      
-      <guid>https://xcbeyond.cn/categories/java/</guid>
       <description></description>
     </item>
     

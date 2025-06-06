@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JDK17 on xcbeyond</title>
+    <link>https://xcbeyond.cn/tags/jdk17/</link>
+    <description>Recent content in JDK17 on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
+    <lastBuildDate>Fri, 30 May 2025 08:30:01 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/jdk17/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从 JDK 8 到 JDK 17：Swagger 升级迁移指南</title>
+      <link>https://xcbeyond.cn/blog/java/jdk17/</link>
+      <pubDate>Fri, 30 May 2025 08:30:01 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/java/jdk17/</guid>
+      <description>随着 Java 生态向 JDK 17 及 Jakarta EE 的演进，许多项目面临从 JDK 8 升级的挑战，其中 Swagger（API 文档工具）的兼容性调整尤为关键。本文将从 技术栈差异、升级迁移步骤、常见问题 等多个维度，解析 JDK 8（SpringFox）向 JDK 17（SpringDoc/Knife4j）的升级路径。</description>
+    </item>
+    
+  </channel>
+</rss>
