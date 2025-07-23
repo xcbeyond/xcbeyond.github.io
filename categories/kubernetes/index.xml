@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Wed, 30 Apr 2025 09:51:43 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Jul 2025 14:55:23 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何从Kubernetes集群中安全移除节点</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/</link>
+      <pubDate>Wed, 23 Jul 2025 14:55:23 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/</guid>
+      <description>在 Kubernetes 集群的生命周期中，节点维护是不可避免的操作。常见场景包括：
+  硬件升级或更换
+  缩减集群规模以优化资源利用率
+  故障节点替换</description>
+    </item>
+    
     <item>
       <title>Kubernetes 镜像拉取认证完全指南：8 种实战方法解决私有仓库访问难题</title>
       <link>https://xcbeyond.cn/blog/kubernetes/the-guide-to-kubernetes-image-pull-authentication/</link>
