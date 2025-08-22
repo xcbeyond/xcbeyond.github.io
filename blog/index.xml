@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Wed, 23 Jul 2025 14:55:23 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Aug 2025 16:59:03 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes 集群卸载指南</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/</link>
+      <pubDate>Fri, 22 Aug 2025 16:59:03 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/</guid>
+      <description>在 Kubernetes 的运维过程中，有时需要彻底卸载集群及相关依赖（如 Docker、Containerd）以便重新部署或者清理测试环境。以下内容提供了详细步骤和一键卸载脚本。
+1、卸载步骤 1.1 停止并移除节点 在 Master 节点执行：</description>
+    </item>
+    
     <item>
       <title>如何从Kubernetes集群中安全移除节点</title>
       <link>https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/</link>
