@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Fri, 22 Aug 2025 16:59:03 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 20 Sep 2025 19:52:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>容器化部署</title>
+      <link>https://xcbeyond.cn/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E9%83%A8%E7%BD%B2/</link>
+      <pubDate>Sat, 20 Sep 2025 19:52:29 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/%E5%AE%B9%E5%99%A8%E5%8C%96%E9%83%A8%E7%BD%B2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>经验</title>
+      <link>https://xcbeyond.cn/tags/%E7%BB%8F%E9%AA%8C/</link>
+      <pubDate>Sat, 20 Sep 2025 19:52:29 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/tags/%E7%BB%8F%E9%AA%8C/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>安装部署</title>
       <link>https://xcbeyond.cn/tags/%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2/</link>

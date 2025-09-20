@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Fri, 22 Aug 2025 16:59:03 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 20 Sep 2025 19:52:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>业务系统容器化部署的经验与注意事项</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/experiences-and-considerations-for-containerized-deployment/</link>
+      <pubDate>Sat, 20 Sep 2025 19:52:29 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/experiences-and-considerations-for-containerized-deployment/</guid>
+      <description>随着容器技术的成熟，越来越多企业开始将业务系统迁移到容器化平台（如 Kubernetes）。容器化带来了环境一致性、快速交付、弹性伸缩等优势，但在业务系统场景下，仍需谨慎规划和设计。本文结合实际经验，总结了业务系统容器化部署过程中的关键注意事项和最佳实践，覆盖架构设计、部署运维、安全合规以及团队协作等多个维度，供企业参考。
+1、架构与应用设计层面 1.1 无状态优先，有状态谨慎   无状态服务设计：
+业务系统中可容器化的服务应尽量无状态，所有会话或状态信息通过外部存储（Redis、数据库、对象存储）管理。这样可以实现任意节点扩缩容和快速恢复。
+例如：</description>
+    </item>
+    
     <item>
       <title>Kubernetes 集群卸载指南</title>
       <link>https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/</link>
