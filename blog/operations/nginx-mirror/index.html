@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Nginx Mirror 模块实现流量镜像，把生产流量复制到测试环境 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="本文讲解如何使用 Nginx 原生的 mirror 模块实现流量镜像，包含原理、配置示例、按条件/按比例镜像以及生产注意事项。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h2 font-secondary">Nginx Mirror 模块实现流量镜像，把生产流量复制到测试环境</li>
+        </ul>
+        <p class="text-lighten">本文讲解如何使用 Nginx 原生的 mirror 模块实现流量镜像，包含原理、配置示例、按条件/按比例镜像以及生产注意事项。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/nginx-mirror.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2025-10-23 09:00:29 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/%e8%bf%90%e7%bb%b4"> 
+                  运维</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在微服务与持续交付场景中，流量镜像（Traffic Mirroring） 是评估新版本、压测与采集数据的重要手段。本文讲解如何使用 Nginx 原生的 mirror 模块实现流量镜像，包含原理、配置示例、按条件/按比例镜像以及生产注意事项。</p>
+<h2 id="1什么是流量镜像">1、什么是流量镜像</h2>
+<p><strong>流量镜像</strong> 是指在真实用户访问业务系统时，<strong>将请求同时复制一份</strong>，<strong>异步</strong>地发送到另一个后端系统进行处理，而不影响主请求的响应。</p>
+<p>简单理解就是：</p>
+<blockquote>
+<p>用户 → A 系统（主处理）</p>
+<p>同时 → B 系统（镜像分析）</p>
+</blockquote>
+<p>镜像请求不会返回给用户，也不会影响原业务的性能。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>异步非阻塞</td>
+<td>不影响主业务延迟</td>
+</tr>
+<tr>
+<td>简洁配置</td>
+<td>内置原生模块，无需第三方插件</td>
+</tr>
+<tr>
+<td>灵活控制</td>
+<td>支持路径、变量、比例条件</td>
+</tr>
+<tr>
+<td>场景广泛</td>
+<td>灰度发布、压测验证、安全检测等</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2常见应用场景">2、常见应用场景</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔄 灰度验证</td>
+<td>将部分真实流量镜像到新版本系统，用于功能验证</td>
+</tr>
+<tr>
+<td>⚙️ 性能测试</td>
+<td>在真实环境下评估新服务性能</td>
+</tr>
+<tr>
+<td>🧾 日志审计</td>
+<td>将请求内容镜像至日志采集系统</td>
+</tr>
+<tr>
+<td>🛡️ 安全分析</td>
+<td>将请求镜像到安全检测系统（防攻击 / 敏感检测）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3nginx-mirror-模块简介">3、Nginx Mirror 模块简介</h2>
+<p><code>ngx_http_mirror_module</code> 模块从 <strong>Nginx 1.13.4</strong> 起正式引入，支持 HTTP 请求级别的镜像。
+该模块默认已集成于官方 Nginx 发行版中，无需单独编译。</p>
+<h3 id="主要指令">主要指令</h3>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>作用</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mirror</code></td>
+<td>指定镜像请求目标（location 或 URL）</td>
+<td><code>http</code>、<code>server</code>、<code>location</code></td>
+</tr>
+<tr>
+<td><code>mirror_request_body</code></td>
+<td>是否复制请求体（body）</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4nginx-mirror-工作原理">4、Nginx Mirror 工作原理</h2>
+<p><img src="./nginx-mirror.png" alt="原理图"></p>
+<p>Nginx 在收到真实请求时：</p>
+<ol>
+<li>正常转发到主后端；</li>
+<li>同时异步发出一个镜像请求到指定目标；</li>
+<li>镜像请求的结果会被丢弃，不影响主请求。</li>
+</ol>
+<h2 id="5基本配置示例">5、基本配置示例</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">http</span> {
+    <span style="color:#f92672">server</span> {
+        <span style="color:#f92672">listen</span> <span style="color:#ae81ff">80</span>;
+
+        <span style="color:#f92672">location</span> <span style="color:#e6db74">/</span> {
+            <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://main_backend</span>;
+
+            <span style="color:#75715e"># 开启流量镜像
+</span><span style="color:#75715e"></span>            <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_backend</span>;
+            <span style="color:#f92672">mirror_request_body</span> <span style="color:#66d9ef">on</span>;
+        }
+
+        <span style="color:#75715e"># 镜像请求处理逻辑
+</span><span style="color:#75715e"></span>        <span style="color:#f92672">location</span> = <span style="color:#e6db74">/mirror_backend</span> {
+            <span style="color:#f92672">internal</span>;  <span style="color:#75715e"># 仅供内部调用
+</span><span style="color:#75715e"></span>            <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://test_backend</span>;
+        }
+    }
+}
+</code></pre></div><p>说明：</p>
+<ul>
+<li><code>mirror</code>：指定镜像请求目标；</li>
+<li><code>mirror_request_body on</code>：复制请求体；</li>
+<li><code>internal</code>：防止外部直接访问镜像接口；</li>
+<li>镜像请求是<strong>异步</strong>执行的，不影响主请求的响应速度。</li>
+</ul>
+<h2 id="6进阶用法多目标镜像">6、进阶用法：多目标镜像</h2>
+<p>支持将同一请求复制到多个后端系统：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">location</span> <span style="color:#e6db74">/</span> {
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://main_backend</span>;
+
+    <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_a</span>;
+    <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_b</span>;
+    <span style="color:#f92672">mirror_request_body</span> <span style="color:#66d9ef">on</span>;
+}
+
+<span style="color:#66d9ef">location</span> = <span style="color:#e6db74">/mirror_a</span> {
+    <span style="color:#f92672">internal</span>;
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://gray_backend</span>;
+}
+
+<span style="color:#66d9ef">location</span> = <span style="color:#e6db74">/mirror_b</span> {
+    <span style="color:#f92672">internal</span>;
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://log_collector</span>;
+}
+</code></pre></div><h2 id="7按条件镜像灰度比例控制">7、按条件镜像（灰度/比例控制）</h2>
+<p>在生产环境中，我们通常希望<strong>按条件或比例镜像</strong>，而不是全部请求。</p>
+<h3 id="71-按请求路径镜像">7.1 按请求路径镜像</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">location</span> <span style="color:#e6db74">/api/</span> {
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://main_backend</span>;
+
+    <span style="color:#f92672">if</span> <span style="color:#e6db74">(</span>$request_uri ~ <span style="color:#e6db74">&#34;^/api/test&#34;)</span> {
+        <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_backend</span>;
+    }
+}
+</code></pre></div><h3 id="72-按规则控制使用-map">7.2 按规则控制（使用 <code>map</code>）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">map</span> $request_uri $enable_mirror {
+    <span style="color:#f92672">default</span>     <span style="color:#ae81ff">0</span>;
+    <span style="color:#f92672">~^/api/test</span> <span style="color:#ae81ff">1</span>;
+}
+
+<span style="color:#66d9ef">location</span> <span style="color:#e6db74">/api/</span> {
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://main_backend</span>;
+    <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_backend</span> <span style="color:#e6db74">if=</span>$enable_mirror;
+}
+</code></pre></div><h3 id="73-按比例随机镜像灰度场景">7.3 按比例随机镜像（灰度场景）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">map</span> $request_id $enable_mirror {
+    <span style="color:#f92672">default</span>     <span style="color:#ae81ff">0</span>;
+    <span style="color:#f92672">~^[0-9]*[13579]$</span> <span style="color:#ae81ff">1</span>;  <span style="color:#75715e"># 模拟约 50% 流量
+</span><span style="color:#75715e"></span>}
+
+<span style="color:#66d9ef">location</span> <span style="color:#e6db74">/</span> {
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://main_backend</span>;
+    <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_backend</span> <span style="color:#e6db74">if=</span>$enable_mirror;
+}
+</code></pre></div><h2 id="8性能与注意事项">8、性能与注意事项</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🚀 性能</td>
+<td>镜像请求异步执行，对主请求影响极小</td>
+</tr>
+<tr>
+<td>🧱 限制</td>
+<td>镜像响应结果不会被使用，也不会出现在日志中</td>
+</tr>
+<tr>
+<td>⚠️ 风险</td>
+<td>若镜像目标不可达，会增加 Nginx 异步队列压力</td>
+</tr>
+<tr>
+<td>🧠 建议</td>
+<td>大体量流量建议独立部署 Nginx 作为“流量复制层”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9日志与验证">9、日志与验证</h2>
+<p>可以为镜像目标服务单独设置日志，验证是否接收到流量：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">location</span> = <span style="color:#e6db74">/mirror_backend</span> {
+    <span style="color:#f92672">internal</span>;
+    <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://test_backend</span>;
+    <span style="color:#f92672">access_log</span> <span style="color:#e6db74">/var/log/nginx/mirror_access.log</span>;
+}
+</code></pre></div><p>或使用 <code>tcpdump</code> 抓包验证：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">tcpdump -i eth0 host test_backend -n
+</code></pre></div><h2 id="10完整生产级模板">10、完整生产级模板</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-nginx" data-lang="nginx"><span style="color:#66d9ef">http</span> {
+    <span style="color:#f92672">upstream</span> <span style="color:#e6db74">main_backend</span> {
+        <span style="color:#f92672">server</span> 10.0.0.1:<span style="color:#ae81ff">8080</span>;
+    }
+
+    <span style="color:#f92672">upstream</span> <span style="color:#e6db74">mirror_backend</span> {
+        <span style="color:#f92672">server</span> 10.0.0.2:<span style="color:#ae81ff">8080</span>;
+    }
+
+    <span style="color:#f92672">map</span> $request_uri $enable_mirror {
+        <span style="color:#f92672">default</span>     <span style="color:#ae81ff">0</span>;
+        <span style="color:#f92672">~^/api/v1</span>   <span style="color:#ae81ff">1</span>;
+    }
+
+    <span style="color:#f92672">server</span> {
+        <span style="color:#f92672">listen</span> <span style="color:#ae81ff">80</span>;
+
+        <span style="color:#f92672">location</span> <span style="color:#e6db74">/</span> {
+            <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://main_backend</span>;
+            <span style="color:#f92672">mirror</span> <span style="color:#e6db74">/mirror_backend</span> <span style="color:#e6db74">if=</span>$enable_mirror;
+            <span style="color:#f92672">mirror_request_body</span> <span style="color:#66d9ef">on</span>;
+        }
+
+        <span style="color:#f92672">location</span> = <span style="color:#e6db74">/mirror_backend</span> {
+            <span style="color:#f92672">internal</span>;
+            <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://mirror_backend</span>;
+            <span style="color:#f92672">access_log</span> <span style="color:#e6db74">/var/log/nginx/mirror_access.log</span>;
+        }
+    }
+}
+</code></pre></div><h2 id="11结语">11、结语</h2>
+<p>Nginx Mirror 模块提供了一个<strong>低成本、高灵活度</strong>的流量复制机制，非常适合在微服务架构中快速搭建灰度验证与测试环境。</p>
+<ul>
+<li>异步非阻塞，不影响主业务延迟；</li>
+<li>支持 body、header、任意方法的镜像；</li>
+<li>通过 map、变量或 Lua 可实现灵活灰度策略；</li>
+<li>在高流量场景应注意镜像目标容量和网络带宽。</li>
+</ul>
+<p>如果需要实现「带比例、灰度开关、统计监控」的生产级流量镜像方案，可结合 Nginx + Lua/OpenResty 或 Nginx + Kafka 实现异步投递。</p>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/java" class="d-block pb-3 mt-3">Java</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%bf%90%e7%bb%b4" class="d-block pb-3 mt-3">运维</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/ansible">Ansible</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/centos">Centos</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hostnetwork">Hostnetwork</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/java">Java</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/jdk17">Jdk17</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes">Kubernetes</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/linux">Linux</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/nfs">Nfs</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/nginx">Nginx</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/orangepi">Orangepi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/rbac">Rbac</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/swagger">Swagger</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%91%bd%e4%bb%a4">命令</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%b9%e5%99%a8%e5%8c%96%e9%83%a8%e7%bd%b2">容器化部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">环境变量</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%bb%8f%e9%aa%8c">经验</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/operations/nginx-mirror/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/nginx-mirror.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/operations/nginx-mirror/">
+          <h5 class="mt-0">Nginx Mirror 模块实现流量镜像，把生产流量复制到测试环境</h5>
+        </a>
+        2025-10-23 09:00:29
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/experiences-and-considerations-for-containerized-deployment/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/container-deploy.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/experiences-and-considerations-for-containerized-deployment/">
+          <h5 class="mt-0">业务系统容器化部署的经验与注意事项</h5>
+        </a>
+        2025-09-20 19:52:29
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/clean-k8s-cluster.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/">
+          <h5 class="mt-0">Kubernetes 集群卸载指南</h5>
+        </a>
+        2025-08-22 16:59:03
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kubernetes-03.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/">
+          <h5 class="mt-0">如何从Kubernetes集群中安全移除节点</h5>
+        </a>
+        2025-07-23 14:55:23
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/java/from-jdk8-to-jdk17-swagger-upgrade-and-migration-guide/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/jdk17-upgrade-swagger.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/java/from-jdk8-to-jdk17-swagger-upgrade-and-migration-guide/">
+          <h5 class="mt-0">从 JDK 8 到 JDK 17：Swagger 升级迁移指南</h5>
+        </a>
+        2025-05-30 08:30:01
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/operations/centos-kernel-upgrade/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/linux-kernel-upgrade.jpeg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/operations/centos-kernel-upgrade/">
+          <h5 class="mt-0">CentOS 7 内核升级指南：解决兼容性问题并提升性能</h5>
+        </a>
+        2025-05-13 08:56:41
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1什么是流量镜像">1、什么是流量镜像</a></li>
+    <li><a href="#2常见应用场景">2、常见应用场景</a></li>
+    <li><a href="#3nginx-mirror-模块简介">3、Nginx Mirror 模块简介</a>
+      <ul>
+        <li><a href="#主要指令">主要指令</a></li>
+      </ul>
+    </li>
+    <li><a href="#4nginx-mirror-工作原理">4、Nginx Mirror 工作原理</a></li>
+    <li><a href="#5基本配置示例">5、基本配置示例</a></li>
+    <li><a href="#6进阶用法多目标镜像">6、进阶用法：多目标镜像</a></li>
+    <li><a href="#7按条件镜像灰度比例控制">7、按条件镜像（灰度/比例控制）</a>
+      <ul>
+        <li><a href="#71-按请求路径镜像">7.1 按请求路径镜像</a></li>
+        <li><a href="#72-按规则控制使用-map">7.2 按规则控制（使用 <code>map</code>）</a></li>
+        <li><a href="#73-按比例随机镜像灰度场景">7.3 按比例随机镜像（灰度场景）</a></li>
+      </ul>
+    </li>
+    <li><a href="#8性能与注意事项">8、性能与注意事项</a></li>
+    <li><a href="#9日志与验证">9、日志与验证</a></li>
+    <li><a href="#10完整生产级模板">10、完整生产级模板</a></li>
+    <li><a href="#11结语">11、结语</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2025 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>

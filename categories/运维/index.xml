@@ -7,7 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
-    <lastBuildDate>Tue, 13 May 2025 08:56:41 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 23 Oct 2025 09:00:29 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/categories/%E8%BF%90%E7%BB%B4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Nginx Mirror 模块实现流量镜像，把生产流量复制到测试环境</title>
+      <link>https://xcbeyond.cn/blog/operations/nginx-mirror/</link>
+      <pubDate>Thu, 23 Oct 2025 09:00:29 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/operations/nginx-mirror/</guid>
+      <description>在微服务与持续交付场景中，流量镜像（Traffic Mirroring） 是评估新版本、压测与采集数据的重要手段。本文讲解如何使用 Nginx 原生的 mirror 模块实现流量镜像，包含原理、配置示例、按条件/按比例镜像以及生产注意事项。
+1、什么是流量镜像 流量镜像 是指在真实用户访问业务系统时，将请求同时复制一份，异步地发送到另一个后端系统进行处理，而不影响主请求的响应。</description>
+    </item>
+    
     <item>
       <title>CentOS 7 内核升级指南：解决兼容性问题并提升性能</title>
       <link>https://xcbeyond.cn/blog/operations/centos-kernel-upgrade/</link>
