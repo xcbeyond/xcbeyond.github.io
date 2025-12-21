@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Readiness on xcbeyond</title>
+    <link>https://xcbeyond.cn/tags/readiness/</link>
+    <description>Recent content in Readiness on xcbeyond</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Copyright &amp;copy; 2021-2025 xcbeyond 版权所有.</copyright>
+    <lastBuildDate>Sun, 21 Dec 2025 21:10:36 +0800</lastBuildDate><atom:link href="https://xcbeyond.cn/tags/readiness/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kubernetes 中的 Readiness 与 Liveness：别再把探针用反了</title>
+      <link>https://xcbeyond.cn/blog/kubernetes/kubernetes-liveness-readiness/</link>
+      <pubDate>Sun, 21 Dec 2025 21:10:36 +0800</pubDate>
+      
+      <guid>https://xcbeyond.cn/blog/kubernetes/kubernetes-liveness-readiness/</guid>
+      <description>在 Kubernetes 中，健康检查（Probe） 是保障服务稳定运行的核心能力之一。
+但在实际使用中，Readiness 和 Liveness 经常被混用、误用，轻则导致流量抖动，重则引发 Pod 频繁重启、雪崩效应。</description>
+    </item>
+    
+  </channel>
+</rss>

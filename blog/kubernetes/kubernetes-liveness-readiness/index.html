@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+  <meta charset="utf-8">
+  
+  <title>Kubernetes 中的 Readiness 与 Liveness：别再把探针用反了 | xcbeyond</title>
+  
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description"
+    content="用好 Readiness 和 Liveness，是 Kubernetes 可靠性和服务稳定性的基石。">
+  
+  <meta name="author" content="xcbeyond">
+  <meta name="generator" content="Hugo 0.81.0" />
+  <!-- multilingual SEO optimizations -->
+  
+  <!-- baidu-site-verification -->
+  <meta name="baidu-site-verification" content="code-uBVGWgwQY4" />
+
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/slick/slick.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/animate/animate.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/venobox/venobox.css">
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/plugins/themify-icons/themify-icons.css">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://xcbeyond.cn/scss/style.css" media="screen">
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="https://xcbeyond.cn/images/favicon.png" type="image/x-icon">
+
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?cfe04dc165f36b6fa1cd42bfabe5424f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+</head><body>
+<header class="header">
+  
+  
+  
+  <div class="navigation w-100 ">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <a class="navbar-brand" href="/"><img class="img-fluid"
+            src="https://xcbeyond.cn/images/logo.png" alt="xcbeyond"></a>
+        <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse text-center" id="navigation">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn">首页</a>
+            </li>
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/blog">博客</a>
+            </li>
+            
+            
+            
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                文档
+              </a>
+              <div class="dropdown-menu">
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/golang-handbook">Golang 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/istio-handbook">Istio 实践手册</a>
+                
+                <a class="dropdown-item" href="https://xcbeyond.cn/kubernetes-handbook">Kubernetes 实践手册</a>
+                
+              </div>
+            </li>
+            
+            
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://xcbeyond.cn/about">关于</a>
+            </li>
+            
+            
+          </ul>
+
+          
+          
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+	
+<section class="page-title-section overlay" style="background-image: url('/'),url('/images/backgrounds/page-title.jpg');" >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-inline custom-breadcrumb">
+          
+          <li class="list-inline-item text-white h2 font-secondary">Kubernetes 中的 Readiness 与 Liveness：别再把探针用反了</li>
+        </ul>
+        <p class="text-lighten">用好 Readiness 和 Liveness，是 Kubernetes 可靠性和服务稳定性的基石。</p>
+      </div>
+    </div>
+  </div>
+</section>
+	
+
+
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 order-2 order-lg-1">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <img src="/images/blog/Kubernetes-Liveness-Readiness.png" alt="blog-thumb" class="img-fluid w-100">
+          </div>
+          <div class="col-12">
+            <ul class="list-inline">
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">作者
+                  :</span><a
+                  href="/author/xcbeyond">Xcbeyond</a></li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">发表于
+                  :</span>2025-12-21 21:10:36 </li>
+
+              <li class="list-inline-item mr-4 mb-3 mb-md-0 text-light"><span class="font-weight-bold mr-2">分类
+                  :</span><a
+                  href="/categories/kubernetes"> 
+                  Kubernetes</a> </li>
+
+              
+
+            </ul>
+          </div>
+          
+          <div class="col-12 my-4">
+            <div class="border-bottom"></div>
+          </div>
+          
+          <div class="col-12 mb-5 content">
+            <p>在 Kubernetes 中，<strong>健康检查（Probe）</strong> 是保障服务稳定运行的核心能力之一。</p>
+<p>但在实际使用中，<strong>Readiness 和 Liveness 经常被混用、误用</strong>，轻则导致流量抖动，重则引发 Pod 频繁重启、雪崩效应。</p>
+<p>本文将从<strong>设计目的、工作机制、差异、示例、最佳实践、进阶玩法</strong>全方位讲解，并结合 Spring Boot 案例给出完整配置。</p>
+<h2 id="1为什么需要-readiness-和-liveness">1、为什么需要 Readiness 和 Liveness？</h2>
+<p>在没有健康检查之前，K8S 只能知道：</p>
+<blockquote>
+<p>Pod 是否存在、容器是否在运行</p>
+</blockquote>
+<p>但这远远不够：</p>
+<ul>
+<li>应用启动慢，但容器已经 Running</li>
+<li>应用卡死（死循环、线程阻塞），但进程还活着</li>
+<li>依赖数据库 / MQ 不可用，但服务仍在对外接流量</li>
+</ul>
+<p><strong>Readiness 与 Liveness 就是为了解决这些问题而设计的。</strong></p>
+<h2 id="2readiness-probe我现在能接流量吗">2、Readiness Probe：我现在能接流量吗？</h2>
+<h3 id="21-核心作用">2.1 核心作用</h3>
+<blockquote>
+<p><strong>判断 Pod 是否“就绪”接收流量</strong></p>
+</blockquote>
+<ul>
+<li>❌ 失败 → Pod <strong>从 Service Endpoints 中移除</strong></li>
+<li>✅ 成功 → Pod <strong>重新加入负载均衡</strong></li>
+<li>⚠️ 不会重启容器</li>
+</ul>
+<h3 id="22-典型使用场景">2.2 典型使用场景</h3>
+<ul>
+<li>应用启动过程中（Spring Boot 初始化）</li>
+<li>依赖的数据库 / Redis / MQ 不可用</li>
+<li>服务被限流、熔断、自动降级</li>
+<li><strong>优雅下线</strong>（配合 preStop）</li>
+</ul>
+<h3 id="23-示例配置http-探针">2.3 示例配置（HTTP 探针）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">readinessProbe</span>:
+  <span style="color:#f92672">httpGet</span>:
+    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/actuator/health/readiness</span>
+    <span style="color:#f92672">port</span>: <span style="color:#ae81ff">8080</span>
+  <span style="color:#f92672">initialDelaySeconds</span>: <span style="color:#ae81ff">10</span>
+  <span style="color:#f92672">periodSeconds</span>: <span style="color:#ae81ff">5</span>
+  <span style="color:#f92672">timeoutSeconds</span>: <span style="color:#ae81ff">2</span>
+  <span style="color:#f92672">failureThreshold</span>: <span style="color:#ae81ff">3</span>
+</code></pre></div><h3 id="24-spring-boot-readiness-实现示例">2.4 Spring Boot Readiness 实现示例</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ReadinessHealthIndicator</span> <span style="color:#66d9ef">implements</span> HealthIndicator <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Health <span style="color:#a6e22e">health</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>dbAvailable<span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> cacheAvailable<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> Health<span style="color:#f92672">.</span><span style="color:#a6e22e">up</span><span style="color:#f92672">().</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> Health<span style="color:#f92672">.</span><span style="color:#a6e22e">down</span><span style="color:#f92672">().</span><span style="color:#a6e22e">withDetail</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;reason&#34;</span><span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;dependency unavailable&#34;</span><span style="color:#f92672">).</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><ul>
+<li><strong>依赖异常 → readiness down</strong></li>
+<li><strong>服务仍可存活，等待依赖恢复</strong></li>
+<li><strong>结合 preStop 实现优雅下线</strong></li>
+</ul>
+<h2 id="3liveness-probe我是不是活着">3、Liveness Probe：我是不是“活着”？</h2>
+<h3 id="31-核心作用">3.1 核心作用</h3>
+<blockquote>
+<p><strong>判断容器是否处于“不可恢复的异常状态”</strong></p>
+</blockquote>
+<ul>
+<li>❌ 失败 → <strong>直接重启容器</strong></li>
+<li>✅ 成功 → 正常运行</li>
+</ul>
+<h3 id="32-典型使用场景">3.2 典型使用场景</h3>
+<ul>
+<li>线程死锁</li>
+<li>死循环</li>
+<li>内存泄漏导致应用无响应</li>
+<li>JVM 卡死但进程未退出</li>
+</ul>
+<p>⚠️ <strong>不适合</strong>：</p>
+<ul>
+<li>数据库不可用</li>
+<li>外部依赖短暂异常</li>
+</ul>
+<h3 id="33-示例配置http-探针">3.3 示例配置（HTTP 探针）</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">livenessProbe</span>:
+  <span style="color:#f92672">httpGet</span>:
+    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/actuator/health/liveness</span>
+    <span style="color:#f92672">port</span>: <span style="color:#ae81ff">8080</span>
+  <span style="color:#f92672">initialDelaySeconds</span>: <span style="color:#ae81ff">60</span>
+  <span style="color:#f92672">periodSeconds</span>: <span style="color:#ae81ff">10</span>
+  <span style="color:#f92672">timeoutSeconds</span>: <span style="color:#ae81ff">2</span>
+  <span style="color:#f92672">failureThreshold</span>: <span style="color:#ae81ff">3</span>
+</code></pre></div><h3 id="34-spring-boot-liveness-示例">3.4 Spring Boot Liveness 示例</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Component</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LivenessHealthIndicator</span> <span style="color:#66d9ef">implements</span> HealthIndicator <span style="color:#f92672">{</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> Health <span style="color:#a6e22e">health</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>threadPoolAlive<span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> mainLoopAlive<span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> Health<span style="color:#f92672">.</span><span style="color:#a6e22e">up</span><span style="color:#f92672">().</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> Health<span style="color:#f92672">.</span><span style="color:#a6e22e">down</span><span style="color:#f92672">().</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><h2 id="4readiness-vs-liveness-核心区别">4、Readiness vs Liveness 核心区别</h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Readiness</th>
+<th>Liveness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关注点</td>
+<td>能否接流量</td>
+<td>是否需要重启</td>
+</tr>
+<tr>
+<td>失败后果</td>
+<td>从 Service 摘除</td>
+<td>容器重启</td>
+</tr>
+<tr>
+<td>是否影响 Pod 生命周期</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>适合依赖异常</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+</tr>
+<tr>
+<td>适合进程死锁</td>
+<td>❌ 否</td>
+<td>✅ 是</td>
+</tr>
+</tbody>
+</table>
+<p>一句话总结：<strong>Readiness 控制“流量”，Liveness 控制“生死”</strong></p>
+<h2 id="5readiness--prestop-实现真正的优雅下线">5、Readiness + preStop 实现真正的优雅下线</h2>
+<p>在滚动升级或缩容时，如果 Pod 立即被删除，可能导致请求被中断。
+结合 Readiness + preStop 可以实现 <strong>优雅下线</strong>：</p>
+<ol>
+<li><strong>preStop Hook</strong> 触发 Pod 进入“即将退出”状态</li>
+<li><strong>Readiness Down</strong> → Pod 被从 Service 中摘除，停止接流量</li>
+<li><strong>等待请求完成</strong> → 再真正停止容器</li>
+</ol>
+<p><strong>示例配置</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">lifecycle</span>:
+  <span style="color:#f92672">preStop</span>:
+    <span style="color:#f92672">exec</span>:
+      <span style="color:#f92672">command</span>: [<span style="color:#e6db74">&#34;/bin/sh&#34;</span>, <span style="color:#e6db74">&#34;-c&#34;</span>, <span style="color:#e6db74">&#34;sleep 10&#34;</span>]
+<span style="color:#f92672">readinessProbe</span>:
+  <span style="color:#f92672">httpGet</span>:
+    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/actuator/health/readiness</span>
+    <span style="color:#f92672">port</span>: <span style="color:#ae81ff">8080</span>
+</code></pre></div><ul>
+<li><code>sleep 10</code> 表示给 Pod 10 秒时间处理现有请求</li>
+<li>Readiness Down 后不会再接新流量</li>
+</ul>
+<h2 id="6结合-spring-boot-actuator-的完整配置">6、结合 Spring Boot Actuator 的完整配置</h2>
+<p>Spring Boot 2.x 提供了 <strong>Liveness / Readiness 指标分离</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">management</span>:
+  <span style="color:#f92672">endpoints</span>:
+    <span style="color:#f92672">web</span>:
+      <span style="color:#f92672">exposure</span>:
+        <span style="color:#f92672">include</span>: <span style="color:#ae81ff">health</span>
+  <span style="color:#f92672">health</span>:
+    <span style="color:#f92672">livenessstate</span>:
+      <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
+    <span style="color:#f92672">readinessstate</span>:
+      <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
+</code></pre></div><ul>
+<li><code>/actuator/health/liveness</code> → 只关注进程</li>
+<li><code>/actuator/health/readiness</code> → 关注依赖服务（DB、Redis、MQ 等）</li>
+<li>配合 K8S 探针使用，保证健康检查逻辑清晰、准确</li>
+</ul>
+<h2 id="7生产环境探针参数调优指南">7、生产环境探针参数调优指南</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>建议值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>initialDelaySeconds</td>
+<td>Liveness: 60~120s<!-- raw HTML omitted -->Readiness: 10~30s</td>
+<td>应用启动慢，避免误判</td>
+</tr>
+<tr>
+<td>periodSeconds</td>
+<td>5~15s</td>
+<td>探针检查间隔</td>
+</tr>
+<tr>
+<td>timeoutSeconds</td>
+<td>1~5s</td>
+<td>请求超时</td>
+</tr>
+<tr>
+<td>failureThreshold</td>
+<td>3~5</td>
+<td>连续失败次数才判定失败</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原则</strong>：</p>
+<ul>
+<li>Liveness → 慎重重启，避免雪崩</li>
+<li>Readiness → 快速摘除不健康 Pod，保护流量</li>
+<li>对慢启动的 Java/Spring Boot 应用，<strong>initialDelaySeconds 一定要比启动时间长</strong></li>
+</ul>
+<h2 id="8总结">8、总结</h2>
+<ul>
+<li><strong>Readiness = 流量开关</strong></li>
+<li><strong>Liveness = 生死判定</strong></li>
+<li><strong>优雅下线 = Readiness + preStop</strong></li>
+<li><strong>生产调优 = initialDelaySeconds / periodSeconds / failureThreshold 配合应用特性</strong></li>
+</ul>
+<blockquote>
+<p>用好 Readiness 和 Liveness，是 Kubernetes 可靠性和服务稳定性的基石。</p>
+</blockquote>
+
+          </div>
+          
+          
+          <div class="col-12">
+            
+            
+<div id="gitalk-container"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script>
+	window.onload = function() {
+        const gitalk = new Gitalk({
+        clientID: 'c10f597904f9726fdd0e',
+        clientSecret: '7e2bcbbd69c3b6369893995ff81aec88e4b53800',
+        repo: 'xcbeyond.github.io',
+        owner: 'xcbeyond',
+        admin: ['xcbeyond'],
+        id: location.pathname, 
+        distractionFreeMode: false 
+      });
+      (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+          document.getElementById('gitalk-container').innerHTML = 'Gitalk comments not available by default when the website is previewed locally.';
+          return;
+        }
+        gitalk.render('gitalk-container');
+      })();
+    }
+</script>
+          </div>
+          
+        </div>
+      </div>
+      <!-- sidebar -->
+<aside class="col-lg-4 order-1 order-lg-2">
+  <!-- categories -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">分类</h4>
+    <ul class="list-unstyled">
+      <li class="border-bottom"><a href="/categories/go" class="d-block pb-3 mt-3">Go</a></li>
+      <li class="border-bottom"><a href="/categories/java" class="d-block pb-3 mt-3">Java</a></li>
+      <li class="border-bottom"><a href="/categories/kubernetes" class="d-block pb-3 mt-3">Kubernetes</a></li>
+      <li class="border-bottom"><a href="/categories/mysql" class="d-block pb-3 mt-3">Mysql</a></li>
+      <li class="border-bottom"><a href="/categories/service-mesh" class="d-block pb-3 mt-3">Service mesh</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%b8%ad%e5%8f%b0" class="d-block pb-3 mt-3">中台</a></li>
+      <li class="border-bottom"><a href="/categories/%e4%ba%91%e5%8e%9f%e7%94%9f" class="d-block pb-3 mt-3">云原生</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%85%b6%e4%bb%96" class="d-block pb-3 mt-3">其他</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%ae%b9%e5%99%a8" class="d-block pb-3 mt-3">容器</a></li>
+      <li class="border-bottom"><a href="/categories/%e5%be%ae%e6%9c%8d%e5%8a%a1" class="d-block pb-3 mt-3">微服务</a></li>
+      <li class="border-bottom"><a href="/categories/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96" class="d-block pb-3 mt-3">性能优化</a></li>
+      <li class="border-bottom"><a href="/categories/%e7%a8%8b%e5%ba%8f%e4%ba%ba%e7%94%9f" class="d-block pb-3 mt-3">程序人生</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%af%84%e6%b5%8b" class="d-block pb-3 mt-3">评测</a></li>
+      <li class="border-bottom"><a href="/categories/%e8%bf%90%e7%bb%b4" class="d-block pb-3 mt-3">运维</a></li>
+    </ul>
+  </div>
+  <!-- tags -->
+  <div class="bg-white mb-5">
+    <h4 class="mb-4">标签</h4>
+    <ul class="list-inline tag-list">
+      <li class="list-inline-item mb-2"><a href="/tags/ansible">Ansible</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/centos">Centos</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/cobra">Cobra</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/devops">Devops</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/docker">Docker</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/dockerfile">Dockerfile</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/gateway">Gateway</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/go%e8%af%ad%e8%a8%80%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Go语言从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hostnetwork">Hostnetwork</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/hugo">Hugo</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/infoq">Infoq</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/ingress">Ingress</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/istio">Istio</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/java">Java</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/jdk17">Jdk17</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes">Kubernetes</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/kubernetes%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a">Kubernetes从入门到精通</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/linux">Linux</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/liveness">Liveness</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/markdown">Markdown</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/mysql%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">Mysql性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/nfs">Nfs</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/nginx">Nginx</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/orangepi">Orangepi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/pkg">Pkg</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/rbac">Rbac</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/readiness">Readiness</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/service-mesh">Service mesh</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/spring-cloud">Spring cloud</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/swagger">Swagger</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/tcp">Tcp</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/website">Website</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/yapi">Yapi</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e4%ba%91%e6%95%88">云效</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%91%bd%e4%bb%a4">命令</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%89%e8%a3%85%e9%83%a8%e7%bd%b2">安装部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e5%ae%b9%e5%99%a8%e5%8c%96%e9%83%a8%e7%bd%b2">容器化部署</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%80%a7%e8%83%bd%e4%bc%98%e5%8c%96">性能优化</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e6%9c%8d%e5%8a%a1%e6%8b%86%e5%88%86">服务拆分</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f">环境变量</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%9b%98%e7%82%b92021">盘点2021</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%b4%a2%e5%bc%95">索引</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e7%bb%8f%e9%aa%8c">经验</a></li>
+      <li class="list-inline-item mb-2"><a href="/tags/%e9%95%9c%e5%83%8f">镜像</a></li>
+    </ul>
+  </div>
+  <!-- latest post -->
+  <div class="bg-white">
+    <h4 class="mb-4">最新文章</h4>
+    <!-- post-item -->
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/kubernetes-liveness-readiness/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/Kubernetes-Liveness-Readiness.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/kubernetes-liveness-readiness/">
+          <h5 class="mt-0">Kubernetes 中的 Readiness 与 Liveness：别再把探针用反了</h5>
+        </a>
+        2025-12-21 21:10:36
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/operations/nginx-mirror/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/nginx-mirror.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/operations/nginx-mirror/">
+          <h5 class="mt-0">Nginx Mirror 模块实现流量镜像，把生产流量复制到测试环境</h5>
+        </a>
+        2025-10-23 09:00:29
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/experiences-and-considerations-for-containerized-deployment/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/container-deploy.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/experiences-and-considerations-for-containerized-deployment/">
+          <h5 class="mt-0">业务系统容器化部署的经验与注意事项</h5>
+        </a>
+        2025-09-20 19:52:29
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/clean-k8s-cluster.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/clean-k8s-cluster/">
+          <h5 class="mt-0">Kubernetes 集群卸载指南</h5>
+        </a>
+        2025-08-22 16:59:03
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/kubernetes-03.jpg"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/kubernetes/how-to-safely-remove-a-node-from-kubernetes-cluster/">
+          <h5 class="mt-0">如何从Kubernetes集群中安全移除节点</h5>
+        </a>
+        2025-07-23 14:55:23
+      </div>
+    </div>
+    
+    <div class="media border-bottom border-color pb-3 mb-3">
+      <a href="https://xcbeyond.cn/blog/java/from-jdk8-to-jdk17-swagger-upgrade-and-migration-guide/"><img class="mr-3 post-thumb-sm" src="https://xcbeyond.cn/images/blog/jdk17-upgrade-swagger.png"></a>
+      <div class="media-body">
+        <a href="https://xcbeyond.cn/blog/java/from-jdk8-to-jdk17-swagger-upgrade-and-migration-guide/">
+          <h5 class="mt-0">从 JDK 8 到 JDK 17：Swagger 升级迁移指南</h5>
+        </a>
+        2025-05-30 08:30:01
+      </div>
+    </div>
+    
+  </div>
+  <!-- toc -->
+  
+  <div class="bg-white px-4 py-5 box-shadow mb-5 sticky-top">
+    <h4 class="mb-4">目录</h4>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1为什么需要-readiness-和-liveness">1、为什么需要 Readiness 和 Liveness？</a></li>
+    <li><a href="#2readiness-probe我现在能接流量吗">2、Readiness Probe：我现在能接流量吗？</a>
+      <ul>
+        <li><a href="#21-核心作用">2.1 核心作用</a></li>
+        <li><a href="#22-典型使用场景">2.2 典型使用场景</a></li>
+        <li><a href="#23-示例配置http-探针">2.3 示例配置（HTTP 探针）</a></li>
+        <li><a href="#24-spring-boot-readiness-实现示例">2.4 Spring Boot Readiness 实现示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#3liveness-probe我是不是活着">3、Liveness Probe：我是不是“活着”？</a>
+      <ul>
+        <li><a href="#31-核心作用">3.1 核心作用</a></li>
+        <li><a href="#32-典型使用场景">3.2 典型使用场景</a></li>
+        <li><a href="#33-示例配置http-探针">3.3 示例配置（HTTP 探针）</a></li>
+        <li><a href="#34-spring-boot-liveness-示例">3.4 Spring Boot Liveness 示例</a></li>
+      </ul>
+    </li>
+    <li><a href="#4readiness-vs-liveness-核心区别">4、Readiness vs Liveness 核心区别</a></li>
+    <li><a href="#5readiness--prestop-实现真正的优雅下线">5、Readiness + preStop 实现真正的优雅下线</a></li>
+    <li><a href="#6结合-spring-boot-actuator-的完整配置">6、结合 Spring Boot Actuator 的完整配置</a></li>
+    <li><a href="#7生产环境探针参数调优指南">7、生产环境探针参数调优指南</a></li>
+    <li><a href="#8总结">8、总结</a></li>
+  </ul>
+</nav>
+  </div>
+</aside>
+<!-- /sidebar -->
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  
+  
+  
+  
+  
+  <div class="copyright py-4 bg-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7 text-sm-left text-center">
+          <p class="mb-0">Copyright © 2021-2025 xcbeyond 版权所有.
+            
+          </p>
+        </div>
+        <div class="col-sm-5 text-sm-right text-center">
+          <ul class="list-inline">
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://xcbeyond.blog.csdn.net/"><i class="ti-facebook text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://mp.weixin.qq.com/s/Wr0RS2BBXTSJI82pck2aXw"><i class="ti-instagram text-primary"></i></a></li>
+            
+            <li class="list-inline-item"><a class="d-inline-block p-2" href="https://github.com/xcbeyond"><i class="ti-github text-primary"></i></a></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- Google Map API -->
+
+
+<!-- JS Plugins -->
+
+<script src="https://xcbeyond.cn/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/slick/slick.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://xcbeyond.cn/plugins/filterizr/jquery.filterizr.min.js"></script>
+
+
+<!-- Main Script -->
+
+<script src="https://xcbeyond.cn/js/script.min.js"></script>
+
+<!-- google analitycs -->
+
+
+
+
+
+
+
+</body>
+
+</html>
